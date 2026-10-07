@@ -2,29 +2,32 @@
 
 /* ───────────────────────── Design tokens ───────────────────────── */
 @theme {
-  /* Colour */
-  --color-ivory: #f2e3e1;
-  --color-paper: #f7ecea;
-  --color-bone: #e9d3cf;
-  --color-sand: #e4cbc6;
-  --color-beige: #cfaea9;
-  --color-ink: #3b111c;
-  --color-charcoal: #4c2730;
-  --color-muted: #5f444b;
-  --color-faint: #725a60; /* ≥4.5:1 on blush (AA for small text) */
-  --color-line: #dfc6c2;
-  --color-line-dark: #4e1f2a;
-  --color-night: #2a0b13;
-  --color-champagne: #c29b62;
-  --color-champagne-soft: #e4cba2;
-  /* Burgundy family — primary actions and accents */
-  --color-burgundy: #6d1a2b;
+  /* Colour — burgundy luxury theme.
+     Roles: "ivory" = canvas/surface, "ink" = foreground. Inside the deepest feature sections (.on-dark / bg-night)
+     the two roles flip back (see "Feature sections" below) so light-on-dark components keep working. */
+  --color-ivory: #2c0c15;          /* canvas — deep burgundy */
+  --color-paper: #36101b;          /* raised sections & panels */
+  --color-bone: #431622;           /* image placeholders, chips */
+  --color-sand: #4d1a28;           /* deeper blocks */
+  --color-beige: #8a4a5a;          /* hover borders */
+  --color-ink: #f5ebe1;            /* foreground — warm cream */
+  --color-charcoal: #e9d8cc;       /* long-form text */
+  --color-muted: #d2b8ad;          /* secondary text */
+  --color-faint: #ab8f88;          /* metadata — ≥4.5:1 on canvas, paper and bone */
+  --color-line: #5c2433;           /* hairlines */
+  --color-line-dark: #4a1a26;
+  --color-night: #1a0609;          /* feature sections, top bar, footer — darkest wine */
+  --color-champagne: #c9a46a;      /* antique gold — primary actions & accents */
+  --color-champagne-soft: #e8d2a6;
+  --color-burgundy: #7a1f33;       /* brand burgundy for highlights */
   --color-burgundy-deep: #521220;
-  --color-claret: #8f2a3e;
-  --color-rose: #b8848c;
-  --color-success: #3f6b4f;
-  --color-error: #b42318;
-  --color-warning: #8a5a17;
+  --color-claret: #a33a50;
+  --color-rose: #c99aa2;
+  --color-cream: #f5ebe1;          /* fixed light — never flips */
+  --color-wine: #1a0609;           /* fixed dark — never flips */
+  --color-success: #93c9a3;
+  --color-error: #f0897b;
+  --color-warning: #e5b866;
 
   /* Type */
   --font-serif: var(--font-display), "Cormorant Garamond", Georgia, serif;
@@ -49,8 +52,8 @@
   --radius-pill: 999px;
 
   /* Elevation — used sparingly: floating UI only, never cards */
-  --shadow-float: 0 18px 50px -24px rgb(42 11 19 / 0.35);
-  --shadow-lift: 0 30px 60px -30px rgb(42 11 19 / 0.45);
+  --shadow-float: 0 18px 50px -24px rgb(10 2 4 / 0.6);
+  --shadow-lift: 0 30px 60px -30px rgb(10 2 4 / 0.7);
 
   /* Layout */
   --container-site: 1680px;
@@ -89,6 +92,14 @@
   }
 }
 
+/* ───────────────────────── Feature sections ─────────────────────────
+   The deepest sections (top bar, footer, campaign, film, banners, overlays on photographs) use
+   bg-night with light-on-dark components. Inside them "ivory" means cream again and "ink" means wine. */
+.on-dark, [class*="bg-night"] {
+  --color-ivory: #f5ebe1;
+  --color-ink: #1a0609;
+}
+
 /* ───────────────────────── Base ───────────────────────── */
 @layer base {
   html {
@@ -103,7 +114,7 @@
     line-height: 1.6;
     letter-spacing: 0.005em;
   }
-  ::selection { background: var(--color-burgundy); color: var(--color-ivory); }
+  ::selection { background: var(--color-champagne); color: var(--color-wine); }
   :focus-visible { outline: 1.5px solid var(--color-ink); outline-offset: 3px; }
   .on-dark :focus-visible, .bg-night :focus-visible { outline-color: var(--color-ivory); }
   button { cursor: pointer; }
@@ -192,7 +203,7 @@
   &:hover { text-decoration-color: currentColor; }
 }
 @utility skeleton {
-  background: linear-gradient(90deg, #e9d3cf 0px, #f3e3e0 160px, #e9d3cf 320px);
+  background: linear-gradient(90deg, #3a1220 0px, #4a1a2a 160px, #3a1220 320px);
   background-size: 800px 100%;
   animation: var(--animate-shimmer);
 }
@@ -235,17 +246,18 @@
   .btn-sm { height: 2.6rem; padding-inline: 1.25rem; font-size: 10.5px; }
   .btn-block { width: 100%; }
 
-  .btn-primary { background: var(--color-burgundy); color: var(--color-ivory); border-color: var(--color-burgundy); }
-  .btn-primary::before { background: var(--color-burgundy-deep); }
-  .btn-primary:hover:not(:disabled) { color: var(--color-champagne-soft); }
+  /* Primary: antique gold on wine — the one warm, bright element on every screen */
+  .btn-primary { background: var(--color-champagne); color: var(--color-wine); border-color: var(--color-champagne); }
+  .btn-primary::before { background: var(--color-champagne-soft); }
+  .btn-primary:hover:not(:disabled) { color: var(--color-wine); border-color: var(--color-champagne-soft); }
 
   .btn-outline { background: transparent; color: var(--color-ink); border-color: var(--color-ink); }
-  .btn-outline::before { background: var(--color-burgundy); }
-  .btn-outline:hover:not(:disabled) { color: var(--color-ivory); border-color: var(--color-burgundy); }
+  .btn-outline::before { background: var(--color-ink); }
+  .btn-outline:hover:not(:disabled) { color: var(--color-ivory); border-color: var(--color-ink); }
 
   .btn-light { background: var(--color-ivory); color: var(--color-ink); border-color: var(--color-ivory); }
-  .btn-light::before { background: var(--color-burgundy); }
-  .btn-light:hover:not(:disabled) { color: var(--color-ivory); border-color: var(--color-burgundy); }
+  .btn-light::before { background: var(--color-champagne); }
+  .btn-light:hover:not(:disabled) { color: var(--color-wine); border-color: var(--color-champagne); }
 
   .btn-ghost-light { background: transparent; color: var(--color-ivory); border-color: color-mix(in srgb, var(--color-ivory) 60%, transparent); }
   .btn-ghost-light::before { background: var(--color-ivory); }
@@ -269,7 +281,7 @@
   .field[aria-invalid="true"] { border-color: var(--color-error); }
   textarea.field { height: auto; padding-block: 0.85rem; resize: vertical; min-height: 8rem; }
   select.field {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%233b111c' stroke-width='1.2'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23f5ebe1' stroke-width='1.2'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 1rem center;
     padding-right: 2.5rem;
@@ -287,8 +299,8 @@
     place-content: center;
     transition: background 200ms, border-color 200ms;
   }
-  .check:checked { background: var(--color-burgundy); border-color: var(--color-burgundy); }
-  .check:checked::after { content: ""; width: 0.55rem; height: 0.3rem; border-left: 1.5px solid #fff; border-bottom: 1.5px solid #fff; transform: rotate(-45deg) translateY(-1px); }
+  .check:checked { background: var(--color-champagne); border-color: var(--color-champagne); }
+  .check:checked::after { content: ""; width: 0.55rem; height: 0.3rem; border-left: 1.5px solid var(--color-wine); border-bottom: 1.5px solid var(--color-wine); transform: rotate(-45deg) translateY(-1px); }
   .check[type="radio"] { border-radius: 999px; }
   .check[type="radio"]:checked::after { width: 0.4rem; height: 0.4rem; border: 0; background: #fff; border-radius: 999px; transform: none; }
 
@@ -352,9 +364,9 @@
 
 /* ───────────────────────── Cursor label (desktop, fine pointers) ───────────────────────── */
 .cursor-label { position: fixed; left: 0; top: 0; z-index: var(--z-cursor); pointer-events: none; will-change: transform; }
-.cursor-label > span { display: grid; place-items: center; width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 999px; background: var(--color-burgundy); color: var(--color-ivory); font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; transform: scale(0); opacity: 0; transition: transform var(--duration-component) var(--ease-lux), opacity var(--duration-micro); }
+.cursor-label > span { display: grid; place-items: center; width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 999px; background: var(--color-champagne); color: var(--color-wine); font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; transform: scale(0); opacity: 0; transition: transform var(--duration-component) var(--ease-lux), opacity var(--duration-micro); }
 .cursor-label.is-on > span { transform: scale(1); opacity: 1; }
-.cursor-label.on-light > span { background: var(--color-ivory); color: var(--color-ink); }
+.cursor-label.on-light > span { background: var(--color-cream); color: var(--color-wine); }
 
 /* Floating-label fields */
 .ffield { position: relative; }
@@ -379,8 +391,8 @@
 /* Faint paper grain — a tactile, printed feel without an image request */
 .grain { isolation: isolate; }
 .grain::before {
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0.5; mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.22 0 0 0 0 0.26 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0.55; mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.92 0 0 0 0 0.86 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Hairline that draws from the point to its note */

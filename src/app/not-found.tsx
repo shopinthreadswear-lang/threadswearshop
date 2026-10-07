@@ -32,7 +32,7 @@ export default function NotFound() {
           </div>
           <div className="relative aspect-[4/5] overflow-hidden bg-bone">
             <Image src={IMG.rackDark} alt="" fill sizes="50vw" className="img-grade object-cover" />
-            <span className="absolute bottom-6 right-6 font-serif text-[120px] leading-none text-ivory/90">404</span>
+            <span className="absolute bottom-6 right-6 font-serif text-[120px] leading-none text-cream/90">404</span>
           </div>
         </section>
       </main>

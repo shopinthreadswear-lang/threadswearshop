@@ -86,8 +86,8 @@ export function HeroCollage() {
             </span>
           </button>
 
-          <h1 id="hero-title" className="text-center font-sans text-[clamp(2.3rem,6.2vw,5.6rem)] font-bold leading-[1.02] tracking-[-0.04em] text-ink">
-            <LineReveal lines={["The New Standard in", "Shirts, Tees & Tailoring"]} baseDelay={100} step={110} />
+          <h1 id="hero-title" className="text-center font-serif text-[clamp(2.6rem,6.6vw,6.2rem)] font-normal leading-[0.98] tracking-[-0.015em] text-ink">
+            <LineReveal lines={["The New Standard in", <>Shirts, Tees &amp; <em className="font-serif italic text-champagne">Tailoring</em></>]} baseDelay={100} step={110} />
           </h1>
 
           <a href="#reviews" className="group mx-auto flex flex-col items-center gap-2 lg:items-end" aria-label="Rated 4.8 out of 5 by 2,400+ customers — read reviews">
@@ -112,9 +112,9 @@ export function HeroCollage() {
               <div key="center" className="flex flex-col items-center gap-3">
                 <Sparkle size={22} className="text-champagne" style={{ animation: "fade-in 900ms var(--ease-lux) 500ms both" }} />
                 <PhotoCard c={CENTER} delay={420} className="w-full" />
-                <Link href="/collections" className="group mt-1 inline-flex w-full items-center justify-center gap-2 rounded-full bg-burgundy px-6 py-3.5 text-[13.5px] font-semibold text-ivory transition-colors duration-300 hover:bg-burgundy-deep" style={{ animation: "fade-up 900ms var(--ease-lux) 560ms both" }}>
+                <Link href="/collections" className="group mt-1 inline-flex w-full items-center justify-center gap-2 rounded-full bg-champagne px-6 py-3.5 text-[13.5px] font-semibold text-wine transition-colors duration-300 hover:bg-champagne-soft" style={{ animation: "fade-up 900ms var(--ease-lux) 560ms both" }}>
                   Explore Collections
-                  <ArrowRight size={14} className="-rotate-45 text-champagne-soft transition-transform duration-300 group-hover:rotate-0" />
+                  <ArrowRight size={14} className="-rotate-45 text-wine transition-transform duration-300 group-hover:rotate-0" />
                 </Link>
               </div>
             ) : (
@@ -135,8 +135,8 @@ export function HeroCollage() {
             ))}
           </div>
           <div className="mt-6 flex items-center gap-3">
-            <Link href="/collections" className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-burgundy px-6 py-3.5 text-[13.5px] font-semibold text-ivory">
-              Explore Collections <ArrowRight size={14} className="-rotate-45 text-champagne-soft" />
+            <Link href="/collections" className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-champagne px-6 py-3.5 text-[13.5px] font-semibold text-wine">
+              Explore Collections <ArrowRight size={14} className="-rotate-45 text-wine" />
             </Link>
             <button type="button" onClick={() => setFilm(true)} aria-label="Watch the lookbook" className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-ink">
               <svg width="11" height="13" viewBox="0 0 12 14" aria-hidden>

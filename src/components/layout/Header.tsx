@@ -85,13 +85,13 @@ export function Header() {
       <div
         className={cn("fixed inset-x-0 top-0 z-50 transition-transform duration-500 ease-[var(--ease-lux)]", scrolled && "-translate-y-9")}
         onMouseLeave={scheduleClose}
-        style={{ "--count-fg": transparent ? "var(--color-ink)" : "var(--color-ivory)" } as React.CSSProperties}
+        style={{ "--count-fg": transparent ? "var(--color-wine)" : "var(--color-ivory)" } as React.CSSProperties}
       >
         <AnnouncementBar dark={transparent} />
         <header
           className={cn(
             "relative transition-[background-color,color,height,border-color,backdrop-filter] duration-500 ease-[var(--ease-lux)]",
-            transparent ? "border-b border-transparent bg-transparent text-ivory" : "border-b border-line bg-ivory/[0.96] text-ink backdrop-blur-md",
+            transparent ? "border-b border-transparent bg-transparent text-cream" : "border-b border-line bg-ivory/[0.96] text-ink backdrop-blur-md",
           )}
         >
           {transparent && <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-night/35 to-transparent" />}

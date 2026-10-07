@@ -200,7 +200,7 @@ export function MegaMenu({ which }: { which: MenuKey }) {
         <Link href="/collections/new-season" className="group/c relative block aspect-[16/11] overflow-hidden bg-bone">
           <Image src={IMG.manBrownJacket} alt="New Season campaign" fill sizes="360px" className="img-grade object-cover transition-transform duration-[1400ms] ease-[var(--ease-lux)] group-hover/c:scale-105" />
           <div className="absolute inset-0 bg-gradient-to-t from-night/60 via-transparent" />
-          <div className="absolute bottom-4 left-4 text-ivory">
+          <div className="absolute bottom-4 left-4 text-cream">
             <p className="eyebrow text-[10.5px] opacity-80">Autumn / Winter ’26</p>
             <p className="mt-1 font-serif text-[22px]">New Season</p>
           </div>

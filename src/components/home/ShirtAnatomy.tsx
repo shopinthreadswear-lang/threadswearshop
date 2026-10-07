@@ -81,7 +81,7 @@ export function ShirtAnatomy() {
 
               {/* Hairline to the note (desktop) */}
               <svg aria-hidden className="pointer-events-none absolute inset-0 hidden h-full w-full md:block" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <line key={active} x1={d.x * 100} y1={d.y * 100} x2={edgeX * 100} y2={cardY * 100} stroke="#f2e3e1" strokeWidth="1" vectorEffect="non-scaling-stroke" pathLength={100} strokeDasharray="100" className="anatomy-line" />
+                <line key={active} x1={d.x * 100} y1={d.y * 100} x2={edgeX * 100} y2={cardY * 100} stroke="#f5ebe1" strokeWidth="1" vectorEffect="non-scaling-stroke" pathLength={100} strokeDasharray="100" className="anatomy-line" />
               </svg>
               <div
                 key={`note-${active}`}

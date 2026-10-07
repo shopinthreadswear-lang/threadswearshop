@@ -3,16 +3,16 @@
 /* ───────────────────────── Design tokens ───────────────────────── */
 @theme {
   /* Colour */
-  --color-ivory: #f8f3f1;
-  --color-paper: #fcf9f8;
-  --color-bone: #f1e6e3;
-  --color-sand: #ecdcd8;
-  --color-beige: #d8c2be;
+  --color-ivory: #f2e3e1;
+  --color-paper: #f7ecea;
+  --color-bone: #e9d3cf;
+  --color-sand: #e4cbc6;
+  --color-beige: #cfaea9;
   --color-ink: #3b111c;
   --color-charcoal: #4c2730;
-  --color-muted: #664c52;
-  --color-faint: #7a6368; /* ≥4.5:1 on rose ivory (AA for small text) */
-  --color-line: #e8d9d5;
+  --color-muted: #5f444b;
+  --color-faint: #725a60; /* ≥4.5:1 on blush (AA for small text) */
+  --color-line: #dfc6c2;
   --color-line-dark: #4e1f2a;
   --color-night: #2a0b13;
   --color-champagne: #c29b62;
@@ -192,7 +192,7 @@
   &:hover { text-decoration-color: currentColor; }
 }
 @utility skeleton {
-  background: linear-gradient(90deg, #f0e4e1 0px, #f8f0ee 160px, #f0e4e1 320px);
+  background: linear-gradient(90deg, #e9d3cf 0px, #f3e3e0 160px, #e9d3cf 320px);
   background-size: 800px 100%;
   animation: var(--animate-shimmer);
 }

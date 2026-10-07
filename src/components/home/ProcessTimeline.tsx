@@ -113,7 +113,7 @@ export function ProcessTimeline() {
 
               <div className="relative mt-auto grid grid-cols-12 items-end gap-8">
                 {/* Giant outlined numeral */}
-                <p aria-hidden className="col-span-5 select-none font-serif leading-[0.8] text-transparent" style={{ fontSize: "clamp(8rem, 15vw, 14.5rem)", WebkitTextStroke: "1px rgb(248 243 241 / 0.55)" }}>
+                <p aria-hidden className="col-span-5 select-none font-serif leading-[0.8] text-transparent" style={{ fontSize: "clamp(8rem, 15vw, 14.5rem)", WebkitTextStroke: "1px rgb(242 227 225 / 0.55)" }}>
                   <span key={step.n} className="inline-block" style={{ animation: "fade-up 800ms var(--ease-lux) both" }}>
                     {step.n}
                   </span>
@@ -165,7 +165,7 @@ export function ProcessTimeline() {
             <li key={p.n} className="relative aspect-[3/4] w-[80vw] max-w-[380px] shrink-0 snap-start overflow-hidden">
               <Image src={p.image} alt={`${p.title}: ${p.detail}`} fill sizes="80vw" className="img-grade object-cover" />
               <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-night via-night/40 to-night/10" />
-              <p aria-hidden className="absolute left-4 top-2 font-serif text-[96px] leading-none text-transparent" style={{ WebkitTextStroke: "1px rgb(248 243 241 / 0.7)" }}>
+              <p aria-hidden className="absolute left-4 top-2 font-serif text-[96px] leading-none text-transparent" style={{ WebkitTextStroke: "1px rgb(242 227 225 / 0.7)" }}>
                 {p.n}
               </p>
               <div className="absolute inset-x-0 bottom-0 p-5">

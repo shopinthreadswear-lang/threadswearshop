@@ -112,7 +112,7 @@ export function HeroCollage() {
               <div key="center" className="flex flex-col items-center gap-3">
                 <Sparkle size={22} className="text-champagne" style={{ animation: "fade-in 900ms var(--ease-lux) 500ms both" }} />
                 <PhotoCard c={CENTER} delay={420} className="w-full" />
-                <Link href="/collections" className="group mt-1 inline-flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-3.5 text-[13.5px] font-semibold text-ivory transition-colors duration-300 hover:bg-charcoal" style={{ animation: "fade-up 900ms var(--ease-lux) 560ms both" }}>
+                <Link href="/collections" className="group mt-1 inline-flex w-full items-center justify-center gap-2 rounded-full bg-burgundy px-6 py-3.5 text-[13.5px] font-semibold text-ivory transition-colors duration-300 hover:bg-burgundy-deep" style={{ animation: "fade-up 900ms var(--ease-lux) 560ms both" }}>
                   Explore Collections
                   <ArrowRight size={14} className="-rotate-45 text-champagne-soft transition-transform duration-300 group-hover:rotate-0" />
                 </Link>
@@ -135,7 +135,7 @@ export function HeroCollage() {
             ))}
           </div>
           <div className="mt-6 flex items-center gap-3">
-            <Link href="/collections" className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-ink px-6 py-3.5 text-[13.5px] font-semibold text-ivory">
+            <Link href="/collections" className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-burgundy px-6 py-3.5 text-[13.5px] font-semibold text-ivory">
               Explore Collections <ArrowRight size={14} className="-rotate-45 text-champagne-soft" />
             </Link>
             <button type="button" onClick={() => setFilm(true)} aria-label="Watch the lookbook" className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-ink">

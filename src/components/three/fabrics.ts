@@ -167,7 +167,8 @@ export const FABRICS: FabricPreset[] = [
   },
 ];
 
-export const CTA_CLOTH: FabricPreset = { ...FABRICS[4], id: "cta", amplitude: 0.85, weaveRepeat: 8 };
+/** Closing section: burgundy suede, in the brand colour. */
+export const CTA_CLOTH: FabricPreset = { ...FABRICS[4], id: "cta", color: "#5a1424", sheenColor: "#e0a3ad", amplitude: 0.85, weaveRepeat: 8 };
 
 /** Map a product's materials to the closest fabric preset (used on product pages). */
 export function fabricForMaterial(materials: string): FabricPreset {

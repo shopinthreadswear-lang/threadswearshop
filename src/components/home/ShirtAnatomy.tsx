@@ -77,11 +77,11 @@ export function ShirtAnatomy() {
                 <Image src={ANATOMY.image} alt={`${product.name}, worn — annotated with six construction details`} fill sizes="(max-width: 1024px) 100vw, 58vw" className="img-grade object-cover" />
               </div>
               {/* Spotlight follows the active detail (registered custom properties transition smoothly) */}
-              <div aria-hidden className="pointer-events-none absolute inset-0" style={{ transition: "--sx 900ms var(--ease-lux), --sy 900ms var(--ease-lux)", "--sx": `${d.x * 100}%`, "--sy": `${d.y * 100}%`, background: "radial-gradient(circle at var(--sx) var(--sy), transparent 0%, transparent 13%, rgb(12 12 12 / 0.32) 46%)" } as React.CSSProperties} />
+              <div aria-hidden className="pointer-events-none absolute inset-0" style={{ transition: "--sx 900ms var(--ease-lux), --sy 900ms var(--ease-lux)", "--sx": `${d.x * 100}%`, "--sy": `${d.y * 100}%`, background: "radial-gradient(circle at var(--sx) var(--sy), transparent 0%, transparent 13%, rgb(42 11 19 / 0.34) 46%)" } as React.CSSProperties} />
 
               {/* Hairline to the note (desktop) */}
               <svg aria-hidden className="pointer-events-none absolute inset-0 hidden h-full w-full md:block" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <line key={active} x1={d.x * 100} y1={d.y * 100} x2={edgeX * 100} y2={cardY * 100} stroke="#f5f3ee" strokeWidth="1" vectorEffect="non-scaling-stroke" pathLength={100} strokeDasharray="100" className="anatomy-line" />
+                <line key={active} x1={d.x * 100} y1={d.y * 100} x2={edgeX * 100} y2={cardY * 100} stroke="#f8f3f1" strokeWidth="1" vectorEffect="non-scaling-stroke" pathLength={100} strokeDasharray="100" className="anatomy-line" />
               </svg>
               <div
                 key={`note-${active}`}

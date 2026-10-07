@@ -75,7 +75,7 @@ supabase/schema.sql    Production PostgreSQL schema with RLS
 
 ### Experience layer (3D, motion, interaction)
 
-**Homepage story:** Intro (gallery-wall hero: headline, five columns of people in the clothes, lookbook film from the play badge) → New Arrivals → What We Make → The Cloth (3D) → Signature → Most Wanted → How It's Made → Collections (pinned horizontal) → Shop the Look → Why (evidence) → Reviews → Journal → Community → Start (3D). Main chapters carry `data-section`, which drives the right-hand wayfinding rail (`SectionIndex`).
+**Homepage:** six quiet sections — hero (headline + photo collage), Shop by Category, New Arrivals, one editorial feature (Signature Collection), Best Sellers, and a promise strip.
 
 **3D (`src/components/three/`)**
 - `ClothScene` is one R3F scene used in two places: the fabric swatch (The Cloth section and the PDP viewer) and the closing CTA (suede). Folds, a pointer "press" ripple and analytic normals are computed in the **vertex shader** (injected into `MeshPhysicalMaterial` with its cloth `sheen` model), so the CPU does no per-frame geometry work.

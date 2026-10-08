@@ -11,6 +11,7 @@ import { InTheWild } from "@/components/home/InTheWild";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { Reveal } from "@/components/ui/Reveal";
 import { Doodle } from "@/components/doodles/Doodle";
+import { SpringHeading } from "@/components/motion/Scroll";
 import { bestSellers, newArrivals } from "@/data/products";
 import { pageMeta } from "@/lib/seo";
 
@@ -33,13 +34,10 @@ export default function HomePage() {
       {/* The shelf */}
       <section aria-labelledby="shelf-title" className="relative overflow-x-clip py-20 md:py-28">
         <div className="container-site">
-          <Reveal className="relative mx-auto mb-10 max-w-2xl text-center md:mb-14">
-            <h2 id="shelf-title" className="display-md text-burgundy">
-              Not-so-ordinary shirts, tees <br className="hidden sm:block" />
-              and <em className="italic">everyday tailoring</em>
-            </h2>
-            <Doodle name="sparkle" className="absolute -right-2 -top-6 hidden w-10 text-ochre sm:block" strokeWidth={2} />
-          </Reveal>
+          <div className="relative mx-auto mb-10 max-w-2xl text-center md:mb-14">
+            <SpringHeading id="shelf-title" className="display-md mx-auto max-w-[22ch] text-burgundy" parts={["Not-so-ordinary shirts, tees and", { em: "everyday tailoring" }]} />
+            <Doodle name="sparkle" className="spin-slow absolute -right-2 -top-6 hidden w-10 text-ochre [animation-duration:9s] sm:block" strokeWidth={2} />
+          </div>
           <Spotlight ids={bestSellers().slice(0, 7).map((p) => p.id)} />
         </div>
       </section>
@@ -51,9 +49,7 @@ export default function HomePage() {
       <section aria-labelledby="na-title" className="border-t border-line py-20 md:py-28">
         <div className="container-site">
           <Reveal className="mb-10 flex flex-col items-center gap-5 text-center md:mb-14">
-            <h2 id="na-title" className="display-md text-burgundy">
-              Fresh off the <em className="italic">cutting table</em>
-            </h2>
+            <SpringHeading id="na-title" className="display-md text-burgundy" parts={["Fresh off the", { em: "cutting table" }]} />
             <Link href="/new-arrivals" className="btn btn-outline btn-sm">
               All new arrivals
             </Link>

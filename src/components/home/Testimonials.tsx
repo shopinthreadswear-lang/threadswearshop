@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { SpringHeading } from "@/components/motion/Scroll";
 import { featuredReviews } from "@/data/reviews";
 import { getProduct, imagesFor } from "@/data/products";
 import { ArrowLeft, ArrowRight, Star } from "@/components/ui/Icons";
@@ -30,33 +32,53 @@ function Card({ r, tone }: { r: (typeof featuredReviews)[number]; tone: string }
 
 /** Two notes from customers either side of the piece they wrote about. */
 export function Testimonials() {
-  const [i, setI] = useState(0);
+  const [[i, dir], setState] = useState<[number, number]>([0, 1]);
   const n = featuredReviews.length;
   const a = featuredReviews[i];
   const b = featuredReviews[(i + 1) % n];
   const p = getProduct(a.slug);
-  const go = (d: number) => setI((x) => (x + d + n) % n);
+  const go = (d: number) => setState(([x]) => [(x + d + n) % n, d]);
+  // Variants take the direction as `custom`, so a leaving card exits the way the reader paged, not the way it arrived.
+  const card = (delay: number) => ({
+    custom: dir,
+    initial: "enter",
+    animate: "center",
+    exit: "exit",
+    variants: {
+      enter: (d: number) => ({ x: d * 90, rotate: d * 6, opacity: 0, scale: 0.94 }),
+      center: { x: 0, rotate: 0, opacity: 1, scale: 1, transition: { type: "spring" as const, stiffness: 170, damping: 20, delay } },
+      exit: (d: number) => ({ x: d * -90, rotate: d * -5, opacity: 0, scale: 0.96, transition: { duration: 0.25, delay: delay / 2 } }),
+    },
+  });
   const arrow = "grid h-11 w-11 shrink-0 place-items-center rounded-full border-2 border-burgundy text-burgundy transition-colors duration-300 hover:bg-burgundy hover:text-cream";
 
   return (
-    <section aria-labelledby="notes-title" className="py-20 md:py-28">
+    <section aria-labelledby="notes-title" className="overflow-x-clip py-20 md:py-28">
       <div className="container-site">
-        <h2 id="notes-title" className="display-md mb-12 text-center text-burgundy md:mb-16">
-          Notes from the <em className="italic">fitting room</em>
-        </h2>
+        <SpringHeading id="notes-title" className="display-md mb-12 text-center text-burgundy md:mb-16" parts={["Notes from the", { em: "fitting room" }]} />
         <div className="grid items-center gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-8 lg:gap-12" aria-live="polite">
-          <div key={`a${i}`} className="animate-fade-up">
-            <Card r={a} tone={TONES[0]} />
+          <div className="grid">
+            <AnimatePresence mode="popLayout" initial={false} custom={dir}>
+              <motion.div key={`a${i}`} className="[grid-area:1/1]" {...card(0)}>
+                <Card r={a} tone={TONES[0]} />
+              </motion.div>
+            </AnimatePresence>
           </div>
           <div className="relative mx-auto hidden w-40 md:block lg:w-52">
             {p && (
-              <div key={p.id} className="bob relative aspect-[4/5] animate-fade-in overflow-hidden rounded-[18px] border-[5px] border-paper shadow-[0_24px_40px_-24px_rgb(62_33_23/0.6)]" style={{ "--r": "-6deg" } as React.CSSProperties}>
-                <Image src={imagesFor(p)[0]} alt={p.name} fill sizes="208px" className="object-cover" />
-              </div>
+              <motion.div key={p.id} initial={{ scale: 0.6, rotate: -25, opacity: 0 }} animate={{ scale: 1, rotate: 0, opacity: 1 }} transition={{ type: "spring", stiffness: 220, damping: 14 }}>
+                <div className="bob relative aspect-[4/5] overflow-hidden rounded-[18px] border-[5px] border-paper shadow-[0_24px_40px_-24px_rgb(62_33_23/0.6)]" style={{ "--r": "-6deg" } as React.CSSProperties}>
+                  <Image src={imagesFor(p)[0]} alt={p.name} fill sizes="208px" className="object-cover" />
+                </div>
+              </motion.div>
             )}
           </div>
-          <div key={`b${i}`} className="animate-fade-up [animation-delay:120ms] max-md:hidden">
-            <Card r={b} tone={TONES[1]} />
+          <div className="grid max-md:hidden">
+            <AnimatePresence mode="popLayout" initial={false} custom={dir}>
+              <motion.div key={`b${i}`} className="[grid-area:1/1]" {...card(0.08)}>
+                <Card r={b} tone={TONES[1]} />
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
         <div className="mt-10 flex items-center justify-center gap-4">

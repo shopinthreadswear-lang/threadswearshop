@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 import { Doodle } from "@/components/doodles/Doodle";
+import { Parallax, SpringHeading } from "@/components/motion/Scroll";
 import { IMG } from "@/data/images";
 import { cn } from "@/lib/cn";
 
@@ -42,10 +43,7 @@ export function LookCircles() {
     <section aria-labelledby="looks-title" className="relative overflow-hidden py-20 md:py-28">
       <div className="container-site relative md:h-[min(70vw,860px)]">
         <Reveal className="relative z-10 text-center md:absolute md:left-[30%] md:top-[14%] md:w-[40%]">
-          <h2 id="looks-title" className="display-md text-burgundy">
-            Looks that’ll make <br className="hidden sm:block" />
-            you look <em className="italic">good</em>
-          </h2>
+          <SpringHeading id="looks-title" className="display-md mx-auto max-w-[14ch] text-burgundy" parts={["Looks that’ll make you look", { em: "good" }]} />
           <Link href="/collections" className="btn btn-primary btn-sm mt-7">
             All looks
           </Link>
@@ -54,7 +52,9 @@ export function LookCircles() {
         <ul className="mt-14 grid grid-cols-1 gap-12 px-[8%] sm:grid-cols-2 sm:px-0 md:contents">
           {LOOKS.map((l, i) => (
             <Reveal as="li" key={l.id} delay={i * 120} className={cn("mx-auto w-[78%] sm:w-full md:absolute md:mx-0", l.pos, l.size, i === 2 && "sm:col-span-2 sm:mx-auto sm:w-1/2")}>
-              <Circle look={l} />
+              <Parallax speed={[0.12, 0.3, -0.18][i]} rotate={[8, -10, 6][i]}>
+                <Circle look={l} />
+              </Parallax>
             </Reveal>
           ))}
         </ul>

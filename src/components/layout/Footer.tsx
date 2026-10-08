@@ -8,6 +8,8 @@ import { Facebook, Instagram, Pinterest, Youtube } from "@/components/ui/Icons";
 import { CookieSettingsLink } from "@/components/common/CookieBanner";
 import { Doodle, type DoodleName } from "@/components/doodles/Doodle";
 import { FooterMeta } from "./FooterMeta";
+import { BounceLetters } from "@/components/motion/Scroll";
+import { Reveal } from "@/components/ui/Reveal";
 
 /** The tailor's bench, scattered along the bottom of every page: [doodle, width class, rotation, vertical nudge]. */
 const BENCH: [DoodleName, string, number, string][] = [
@@ -95,19 +97,17 @@ export function Footer() {
 
       {/* Sign */}
       <div className="container-site pt-14 md:pt-20">
-        <p aria-hidden className="sign-word select-none text-balance text-center text-[clamp(3.2rem,11.6vw,13rem)]">
-          Made to be worn
-        </p>
+        <BounceLetters text="Made to be worn" className="sign-word select-none text-balance text-center text-[clamp(3.2rem,11.6vw,13rem)]" />
       </div>
 
       {/* The bench */}
-      <div aria-hidden className="container-site flex flex-wrap items-start justify-center gap-x-6 gap-y-4 pb-10 pt-12 text-burgundy md:flex-nowrap md:justify-between md:gap-x-4 md:pb-14">
+      <Reveal aria-hidden className="container-site flex flex-wrap items-start justify-center gap-x-6 gap-y-4 pb-10 pt-12 text-burgundy md:flex-nowrap md:justify-between md:gap-x-4 md:pb-14">
         {BENCH.map(([name, w, r, mt], i) => (
-          <div key={name} className={`${w} ${mt} shrink-0 transition-transform duration-500 ease-[var(--ease-lux)] hover:-translate-y-1.5 ${i > 9 ? "max-md:hidden" : ""}`} style={{ rotate: `${r}deg` }}>
-            <Doodle name={name} strokeWidth={1.5} />
+          <div key={name} className={`${w} ${mt} shrink-0 transition-[rotate,translate] duration-500 ease-[cubic-bezier(0.34,1.6,0.5,1)] rotate-[var(--rot)] hover:-translate-y-2 hover:rotate-0 ${i > 9 ? "max-md:hidden" : ""}`} style={{ "--rot": `${r}deg` } as React.CSSProperties}>
+            <Doodle name={name} strokeWidth={1.5} draw delay={i * 110} />
           </div>
         ))}
-      </div>
+      </Reveal>
 
       <div className="container-site flex flex-col items-start justify-between gap-5 border-t border-line py-7 md:flex-row md:items-center">
         <Wordmark compact className="text-burgundy" />

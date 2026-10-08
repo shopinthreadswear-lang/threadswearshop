@@ -1,3 +1,4 @@
+import { VelocityMarquee } from "@/components/motion/Scroll";
 import { cn } from "@/lib/cn";
 
 /** Where each cloth comes from, set as a row of little shop-sign marks (each with its own type treatment). */
@@ -12,8 +13,8 @@ const MAKERS: [string, string, string][] = [
 ];
 
 export function MakersStrip() {
-  const row = (hidden: boolean) => (
-    <ul aria-hidden={hidden || undefined} className="flex shrink-0 items-center">
+  const row = (
+    <ul className="flex shrink-0 items-center">
       {MAKERS.map(([what, where, cls]) => (
         <li key={where} className="flex flex-col items-center px-8 text-burgundy md:px-12">
           <span className={cn("whitespace-nowrap leading-none", cls)}>{where}</span>
@@ -23,12 +24,9 @@ export function MakersStrip() {
     </ul>
   );
   return (
-    <section aria-label="Where our clothes are made" className="ticker-wrap overflow-hidden border-y border-line py-10 [--ticker-dur:55s]">
+    <section aria-label="Where our clothes are made" className="border-y border-line py-10">
       <p className="sr-only">Cotton from Tiruppur, cut and sewn in Mumbai, linen from Kolkata, wool from Ludhiana, suede from Kanpur, indigo from Ahmedabad and buttons from Moradabad.</p>
-      <div className="ticker" aria-hidden>
-        {row(false)}
-        {row(true)}
-      </div>
+      <VelocityMarquee speed={1.4}>{row}</VelocityMarquee>
     </section>
   );
 }

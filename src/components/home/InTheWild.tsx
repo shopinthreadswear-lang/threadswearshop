@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Reveal } from "@/components/ui/Reveal";
+import { DealIn, SpringHeading } from "@/components/motion/Scroll";
 import { Instagram } from "@/components/ui/Icons";
 import { IMG } from "@/data/images";
 import { site } from "@/lib/site";
@@ -16,12 +16,10 @@ export function InTheWild() {
   return (
     <section aria-labelledby="wild-title" className="overflow-hidden pb-24 pt-20 md:pb-32 md:pt-28">
       <div className="container-site">
-        <h2 id="wild-title" className="display-md mb-12 text-center text-burgundy md:mb-16">
-          Threads Ware <em className="italic">in the wild</em>
-        </h2>
+        <SpringHeading id="wild-title" className="display-md mb-12 text-center text-burgundy md:mb-16" parts={["Threads Ware", { em: "in the wild" }]} />
         <ul className="no-scrollbar -mx-[var(--spacing-gutter)] flex snap-x snap-mandatory gap-5 overflow-x-auto px-[var(--spacing-gutter)] py-4 md:mx-0 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:px-0 lg:gap-12">
           {SHOTS.map((s, i) => (
-            <Reveal as="li" key={s.alt} delay={i * 110} className="relative w-[72vw] shrink-0 snap-center md:w-auto">
+            <DealIn as="li" key={s.alt} index={i} className="relative w-[72vw] shrink-0 snap-center md:w-auto">
               <a href={site.social.instagram} target="_blank" rel="noopener noreferrer" aria-label={`${s.alt} — see more on Instagram`} className={cn("group block overflow-hidden rounded-[22px] border-[6px] border-paper shadow-[0_24px_44px_-28px_rgb(62_33_23/0.55)] transition-transform duration-700 ease-[var(--ease-lux)] hover:rotate-0", s.tilt)}>
                 <div className="relative aspect-[4/5]">
                   <Image src={s.img} alt="" fill sizes="(max-width:768px) 72vw, 30vw" className="object-cover transition-transform duration-[1200ms] ease-[var(--ease-lux)] group-hover:scale-[1.05]" style={{ objectPosition: s.focus }} />
@@ -32,7 +30,7 @@ export function InTheWild() {
                   <Instagram size={14} /> @threadsware
                 </span>
               )}
-            </Reveal>
+            </DealIn>
           ))}
         </ul>
       </div>

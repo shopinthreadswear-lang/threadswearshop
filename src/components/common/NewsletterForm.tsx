@@ -38,7 +38,7 @@ export function NewsletterForm({ source = "footer", light = false, className, on
   if (state === "done")
     return (
       <p className={cn("flex items-start gap-3 text-[14px]", light ? "text-ivory" : "text-ink", className)} role="status">
-        <Check size={18} className="mt-0.5 shrink-0 text-champagne" /> {msg}
+        <Check size={18} className={cn("mt-0.5 shrink-0", light ? "text-champagne-soft" : "text-burgundy")} /> {msg}
       </p>
     );
 

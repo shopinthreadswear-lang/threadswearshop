@@ -75,7 +75,7 @@ supabase/schema.sql    Production PostgreSQL schema with RLS
 
 ### Experience layer (3D, motion, interaction)
 
-**Homepage:** six quiet sections — hero (headline + photo collage), Shop by Category, New Arrivals, one editorial feature (Signature Collection), Best Sellers, and a promise strip.
+**Homepage:** laid out like a well-loved shop — full-bleed cover photo, an ochre ribbon of promises, a centre-stage product shelf (swipe / arrow keys), an oxblood story block, outfit circles with their names set around the rim, new arrivals, customer notes, a makers strip, an espresso delivery map of India and "in the wild" snapshots. Pen-line doodles (`src/components/doodles/Doodle.tsx`) draw themselves in the margins and fill the footer under the "Made to be worn" sign.
 
 **3D (`src/components/three/`)**
 - `ClothScene` is one R3F scene used in two places: the fabric swatch (The Cloth section and the PDP viewer) and the closing CTA (suede). Folds, a pointer "press" ripple and analytic normals are computed in the **vertex shader** (injected into `MeshPhysicalMaterial` with its cloth `sheen` model), so the CPU does no per-frame geometry work.
@@ -87,7 +87,7 @@ supabase/schema.sql    Production PostgreSQL schema with RLS
 
 ### Design system
 
-Tokens live in `src/app/globals.css` (`@theme`): colour (ivory `#F5F3EE`, ink `#111111`, muted `#66625D`, night `#0C0C0C`, champagne accents), typography (Cormorant Garamond display + Manrope UI, via `next/font`), spacing (`--spacing-gutter`, `--spacing-section`), container widths, motion (`--ease-lux`, 200–700ms), and component classes (`.btn-*`, `.field`, `.check`, `.prose-tw`). Mixed photography is unified with a single `img-grade` filter. `prefers-reduced-motion` disables all animation, and Framer Motion respects it via `MotionConfig`.
+Tokens live in `src/app/globals.css` (`@theme`): colour (butter-cream canvas `#F8EFDF`, oxblood `#7A1C2A`, ochre `#E2A93B`, bottle green `#25412F`, espresso `#3E2117`, ink `#2A1A14`), typography (Fraunces display, DM Mono labels and buttons, Manrope body, via `next/font`), spacing (`--spacing-gutter`, `--spacing-section`), container widths, motion (`--ease-lux`, 200–700ms), and component classes (`.btn-*`, `.field`, `.check`, `.prose-tw`). Mixed photography is unified with a single `img-grade` filter. `prefers-reduced-motion` disables all animation, and Framer Motion respects it via `MotionConfig`.
 
 ### Security
 

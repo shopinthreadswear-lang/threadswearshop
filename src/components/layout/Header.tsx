@@ -13,7 +13,7 @@ import { BagIcon, HeartIcon, SearchIcon, UserIcon } from "@/components/ui/Icons"
 import { useStore } from "@/components/providers/StoreProvider";
 import { cn } from "@/lib/cn";
 
-const OVERLAY_ROUTES = ["/about", "/our-story"];
+const OVERLAY_ROUTES = ["/", "/about", "/our-story"];
 
 const NAV: { label: string; href: string; menu?: MenuKey; wideOnly?: boolean }[] = [
   { label: "Shop", href: "/shop", menu: "shop" },
@@ -85,9 +85,9 @@ export function Header() {
       <div
         className={cn("fixed inset-x-0 top-0 z-50 transition-transform duration-500 ease-[var(--ease-lux)]", scrolled && "-translate-y-9")}
         onMouseLeave={scheduleClose}
-        style={{ "--count-fg": transparent ? "var(--color-wine)" : "var(--color-ivory)" } as React.CSSProperties}
+        style={{ "--count-fg": transparent ? "var(--color-wine)" : "var(--color-cream)" } as React.CSSProperties}
       >
-        <AnnouncementBar dark={transparent} />
+        <AnnouncementBar />
         <header
           className={cn(
             "relative transition-[background-color,color,height,border-color,backdrop-filter] duration-500 ease-[var(--ease-lux)]",
@@ -110,7 +110,7 @@ export function Header() {
                       <li key={n.href} className={cn(n.wideOnly && "hidden min-[1520px]:block")} onMouseEnter={() => (n.menu ? openMenu(n.menu) : scheduleClose())}>
                         {n.menu ? (
                           <span className="flex items-center">
-                            <Link href={n.href} aria-current={active ? "page" : undefined} className={cn("link-u whitespace-nowrap py-1 text-[10.5px] font-semibold uppercase tracking-[0.16em]", menu === n.menu && "[background-size:100%_1px]")}>
+                            <Link href={n.href} aria-current={active ? "page" : undefined} className={cn("link-u whitespace-nowrap py-1 font-mono text-[11.5px] font-medium uppercase tracking-[0.1em]", menu === n.menu && "[background-size:100%_1px]")}>
                               {n.label}
                             </Link>
                             <button
@@ -125,7 +125,7 @@ export function Header() {
                             </button>
                           </span>
                         ) : (
-                          <Link href={n.href} aria-current={active ? "page" : undefined} className="link-u whitespace-nowrap py-1 text-[10.5px] font-semibold uppercase tracking-[0.16em]">
+                          <Link href={n.href} aria-current={active ? "page" : undefined} className="link-u whitespace-nowrap py-1 font-mono text-[11.5px] font-medium uppercase tracking-[0.1em]">
                             {n.label}
                           </Link>
                         )}
@@ -138,14 +138,14 @@ export function Header() {
 
             {/* Center */}
             <Link href="/" aria-label="Threads Ware — home" className="justify-self-center">
-              <Wordmark compact={scrolled} />
+              <Wordmark compact={scrolled} className={transparent ? undefined : "text-burgundy"} />
             </Link>
 
             {/* Right */}
             <div className="flex items-center justify-end gap-0.5 md:gap-2">
               <button type="button" onClick={() => setSearchOpen(true)} className="hidden items-center gap-2 p-2 lg:flex" aria-label="Search">
                 <SearchIcon />
-                <span className="hidden text-[10.5px] font-semibold uppercase tracking-[0.16em] min-[1520px]:inline">Search</span>
+                <span className="hidden font-mono text-[11.5px] font-medium uppercase tracking-[0.1em] min-[1520px]:inline">Search</span>
               </button>
               <Link href={user ? "/account" : "/account/login"} className="hidden p-2 md:block" aria-label={user ? `Account — ${user.firstName}` : "Sign in"}>
                 <UserIcon />

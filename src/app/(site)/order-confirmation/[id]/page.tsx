@@ -27,7 +27,7 @@ export default async function ConfirmationPage({ params, searchParams }: Props) 
   return (
     <div className="container-site pb-24 pt-12 md:pt-20">
       <div className="mx-auto max-w-3xl text-center">
-        <Monogram size={56} className="mx-auto text-champagne" />
+        <Monogram size={56} className="mx-auto text-burgundy" />
         <p className="eyebrow mt-8 flex items-center justify-center gap-2 text-success">
           <Check size={14} /> Order Confirmed
         </p>

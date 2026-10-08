@@ -44,7 +44,7 @@ export default function OurStoryPage() {
           <ol className="grid gap-px bg-line md:grid-cols-3">
             {TIMELINE.map(([y, t, d], i) => (
               <Reveal as="li" key={y} delay={(i % 3) * 90} className="bg-paper p-8 md:p-10">
-                <p className="font-serif text-[52px] leading-none text-champagne">{y}</p>
+                <p className="font-serif text-[52px] leading-none text-burgundy">{y}</p>
                 <h3 className="mt-5 font-serif text-[24px]">{t}</h3>
                 <p className="mt-3 text-[14px] leading-relaxed text-muted">{d}</p>
               </Reveal>

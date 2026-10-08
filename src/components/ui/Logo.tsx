@@ -1,19 +1,18 @@
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 
-/** Typographic wordmark. Wide-tracked serif caps with a hairline divider — works in black, white, embossed and on packaging. */
+/** Stacked wordmark — "Threads" over an italic "Ware", in the soft display serif, like a shop sign. */
 export function Wordmark({ className, compact = false }: { className?: string; compact?: boolean }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center font-serif font-medium uppercase leading-none whitespace-nowrap transition-[font-size,letter-spacing] duration-500 ease-[var(--ease-lux)]",
-        compact ? "text-[15px] tracking-[0.24em] sm:text-[19px] sm:tracking-[0.3em] md:text-[22px]" : "text-[16px] tracking-[0.24em] sm:text-[21px] sm:tracking-[0.32em] md:text-[27px] md:tracking-[0.36em]",
+        "inline-flex flex-col items-center font-serif font-semibold leading-[0.8] tracking-[-0.03em] whitespace-nowrap [font-variation-settings:'SOFT'_100,'WONK'_1] transition-[font-size] duration-500 ease-[var(--ease-lux)]",
+        compact ? "text-[19px] md:text-[22px]" : "text-[21px] sm:text-[24px] md:text-[29px]",
         className,
       )}
     >
-      Threads
-      <span aria-hidden className="mx-[0.42em] inline-block h-[0.8em] w-px bg-current opacity-50" />
-      Ware
+      <span>Threads</span>
+      <span className="italic">Ware</span>
     </span>
   );
 }

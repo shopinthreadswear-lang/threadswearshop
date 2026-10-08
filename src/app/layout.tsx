@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { DM_Mono, Fraunces, Manrope } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers/Providers";
 import { CartDrawer } from "@/components/cart/CartDrawer";
@@ -17,8 +17,9 @@ import { JsonLd } from "@/components/ui/JsonLd";
 import { absoluteUrl, site } from "@/lib/site";
 import { IMG } from "@/data/images";
 
-const display = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500", "600"], style: ["normal", "italic"], variable: "--font-display", display: "swap" });
+const display = Fraunces({ subsets: ["latin"], style: ["normal", "italic"], axes: ["SOFT", "WONK", "opsz"], variable: "--font-display", display: "swap" });
 const body = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-body", display: "swap" });
+const label = DM_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-label", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#2c0c15",
+  themeColor: "#f8efdf",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -50,7 +51,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IN" className={`${display.variable} ${body.variable}`}>
+    <html lang="en-IN" className={`${display.variable} ${body.variable} ${label.variable}`}>
       <head>
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="" />
       </head>

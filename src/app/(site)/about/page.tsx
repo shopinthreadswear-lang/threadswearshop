@@ -47,7 +47,7 @@ export default function AboutPage() {
               <Image src={p.image} alt={p.title} fill sizes="(max-width:768px) 100vw, 50vw" className="img-grade object-cover" />
             </Reveal>
             <Reveal className={i % 2 ? "md:order-1" : ""}>
-              <p className="font-serif text-[60px] leading-none text-champagne">{p.n}</p>
+              <p className="font-serif text-[60px] leading-none text-burgundy">{p.n}</p>
               <h2 className="display-md mt-6">{p.title}</h2>
               <p className="mt-6 max-w-md text-[16px] leading-relaxed text-charcoal">{p.text}</p>
             </Reveal>

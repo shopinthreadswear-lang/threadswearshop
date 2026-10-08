@@ -19,7 +19,7 @@ export function FabricViewer({ materials, name, colorHex }: { materials: string;
           <span className="block text-[13.5px]">See the cloth in 3D</span>
           <span className="block text-[12px] text-muted">{base.name} — {base.spec}</span>
         </span>
-        <Sparkle size={18} className="text-champagne transition-transform duration-500 group-hover:rotate-45" />
+        <Sparkle size={18} className="text-burgundy transition-transform duration-500 group-hover:rotate-45" />
       </button>
       <Modal open={open} onClose={() => setOpen(false)} title={`The cloth — ${name}`} wide>
         <div className="grid gap-8 md:grid-cols-2">

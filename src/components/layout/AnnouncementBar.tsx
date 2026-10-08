@@ -11,7 +11,7 @@ const MESSAGES = [
   { text: "The Autumn / Winter ’26 collection is here", href: "/collections/new-season" },
 ];
 
-export function AnnouncementBar({ dark }: { dark: boolean }) {
+export function AnnouncementBar() {
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
   useEffect(() => {
@@ -21,7 +21,7 @@ export function AnnouncementBar({ dark }: { dark: boolean }) {
   }, [paused]);
   return (
     <div
-      className={cn("relative h-9 overflow-hidden text-[10.5px] font-medium uppercase tracking-[0.12em] transition-colors duration-500 sm:text-[10.5px] sm:tracking-[0.2em]", dark ? "bg-night text-ivory/85" : "bg-night text-ivory/85")}
+      className={cn("relative h-9 overflow-hidden bg-burgundy font-mono text-[10.5px] font-medium uppercase tracking-[0.08em] text-cream transition-colors duration-500 sm:text-[11px] sm:tracking-[0.12em]")}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       role="region"
@@ -35,7 +35,7 @@ export function AnnouncementBar({ dark }: { dark: boolean }) {
           tabIndex={idx === i ? 0 : -1}
           aria-hidden={idx !== i}
           className={cn(
-            "absolute inset-0 flex items-center justify-center px-4 text-center transition-[opacity,transform] duration-700 ease-[var(--ease-lux)] hover:text-ivory",
+            "absolute inset-0 flex items-center justify-center px-4 text-center transition-[opacity,transform] duration-700 ease-[var(--ease-lux)] hover:text-champagne-soft",
             idx === i ? "translate-y-0 opacity-100" : idx === (i - 1 + MESSAGES.length) % MESSAGES.length ? "-translate-y-full opacity-0" : "translate-y-full opacity-0",
           )}
         >

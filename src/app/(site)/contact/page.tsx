@@ -36,7 +36,7 @@ export default function ContactPage() {
           return (
             <li key={t as string} className="bg-ivory">
               <a href={h as string} className="group block h-full p-7 transition-colors hover:bg-paper" {...((h as string).startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
-                <I size={22} className="text-champagne" />
+                <I size={22} className="text-burgundy" />
                 <p className="label-sm mt-6">{t as string}</p>
                 <p className="mt-2 font-serif text-[21px] group-hover:underline">{v as string}</p>
                 <p className="mt-1 text-[12.5px] text-muted">{d as string}</p>

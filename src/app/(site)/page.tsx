@@ -4,6 +4,7 @@ import { Ticker } from "@/components/home/Ticker";
 import { Spotlight } from "@/components/home/Spotlight";
 import { WelcomeBlock } from "@/components/home/WelcomeBlock";
 import { LookCircles } from "@/components/home/LookCircles";
+import { LookBuilder } from "@/components/home/LookBuilder";
 import { Testimonials } from "@/components/home/Testimonials";
 import { MakersStrip } from "@/components/home/MakersStrip";
 import { DeliveryMap } from "@/components/home/DeliveryMap";
@@ -12,7 +13,7 @@ import { ProductGrid } from "@/components/product/ProductGrid";
 import { Reveal } from "@/components/ui/Reveal";
 import { Doodle } from "@/components/doodles/Doodle";
 import { SpringHeading } from "@/components/motion/Scroll";
-import { bestSellers, newArrivals } from "@/data/products";
+import { bestSellers, newArrivals, products } from "@/data/products";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
@@ -25,6 +26,9 @@ export const metadata = pageMeta({
  * Homepage, laid out like a well-loved shop: a cover photo, a ribbon of promises, one shelf, colour blocks
  * for the story and delivery, outfits, customer notes, and snapshots — with pen doodles in the margins.
  */
+/** Lettered-size pieces in the given categories, best-reviewed first — the builder's three rails. */
+const layer = (cats: string[]) => products.filter((p) => cats.includes(p.category) && p.sizes.includes("M")).sort((a, b) => b.reviewCount - a.reviewCount).map((p) => p.id);
+
 export default function HomePage() {
   return (
     <>
@@ -44,6 +48,7 @@ export default function HomePage() {
 
       <WelcomeBlock />
       <LookCircles />
+      <LookBuilder outer={layer(["jackets", "coats"])} mid={layer(["shirts", "knitwear", "polos", "sweatshirts-hoodies"])} base={layer(["t-shirts"])} />
 
       {/* New this season */}
       <section aria-labelledby="na-title" className="border-t border-line py-20 md:py-28">

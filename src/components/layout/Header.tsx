@@ -154,7 +154,7 @@ export function Header() {
                 <HeartIcon />
                 {hydrated && <Count n={wishlist.length} />}
               </Link>
-              <button type="button" onClick={() => setCartOpen(true)} className="relative -mr-2 grid h-11 w-11 place-items-center" aria-label={`Shopping bag${hydrated && cartCount ? `, ${cartCount} items` : ""}`}>
+              <button type="button" data-bag-target onClick={() => setCartOpen(true)} className="relative -mr-2 grid h-11 w-11 place-items-center" aria-label={`Shopping bag${hydrated && cartCount ? `, ${cartCount} items` : ""}`}>
                 <BagIcon />
                 {hydrated && <Count n={cartCount} />}
               </button>

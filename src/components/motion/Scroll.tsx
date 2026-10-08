@@ -4,6 +4,7 @@ import { Fragment, useRef, useState, type ReactNode } from "react";
 import { motion, useAnimationFrame, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, useVelocity, wrap } from "framer-motion";
 import { Doodle } from "@/components/doodles/Doodle";
 import { cn } from "@/lib/cn";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 
 /**
  * Scroll-linked drift. The element travels `speed`×200px across its time on screen (positive = slower than the page,
@@ -159,5 +160,38 @@ export function DealIn({ children, index = 0, className, as = "div" }: { childre
     >
       {children}
     </M>
+  );
+}
+
+/**
+ * Something you can pick up: with a mouse it can be dragged and tossed (it keeps momentum and stays where it lands);
+ * a click after a drag is swallowed so dropping a photo doesn't also open its link. Touch keeps normal scrolling.
+ */
+export function Draggable({ children, className, tilt = 0, shadow = true }: { children: ReactNode; className?: string; tilt?: number; shadow?: boolean }) {
+  const fine = useMediaQuery("(hover: hover) and (pointer: fine)");
+  const reduce = useReducedMotion();
+  const dragged = useRef(false);
+  if (!fine || reduce) return <div className={className}>{children}</div>;
+  return (
+    <motion.div
+      className={cn("cursor-grab touch-none active:cursor-grabbing", className)}
+      drag
+      dragMomentum
+      dragElastic={0.18}
+      dragTransition={{ power: 0.25, timeConstant: 260 }}
+      whileDrag={{ scale: 1.06, rotate: tilt + 4, zIndex: 30, ...(shadow ? { boxShadow: "0 40px 60px -30px rgb(62 33 23 / 0.55)" } : {}) }}
+      onDragStart={() => (dragged.current = true)}
+      onClickCapture={(e) => {
+        if (dragged.current) {
+          e.preventDefault();
+          e.stopPropagation();
+          dragged.current = false;
+        }
+      }}
+      onPointerDown={() => (dragged.current = false)}
+      style={{ position: "relative" }}
+    >
+      {children}
+    </motion.div>
   );
 }

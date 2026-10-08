@@ -8,7 +8,7 @@ import { Facebook, Instagram, Pinterest, Youtube } from "@/components/ui/Icons";
 import { CookieSettingsLink } from "@/components/common/CookieBanner";
 import { Doodle, type DoodleName } from "@/components/doodles/Doodle";
 import { FooterMeta } from "./FooterMeta";
-import { BounceLetters } from "@/components/motion/Scroll";
+import { BounceLetters, Draggable } from "@/components/motion/Scroll";
 import { Reveal } from "@/components/ui/Reveal";
 
 /** The tailor's bench, scattered along the bottom of every page: [doodle, width class, rotation, vertical nudge]. */
@@ -104,7 +104,9 @@ export function Footer() {
       <Reveal aria-hidden className="container-site flex flex-wrap items-start justify-center gap-x-6 gap-y-4 pb-10 pt-12 text-burgundy md:flex-nowrap md:justify-between md:gap-x-4 md:pb-14">
         {BENCH.map(([name, w, r, mt], i) => (
           <div key={name} className={`${w} ${mt} shrink-0 transition-[rotate,translate] duration-500 ease-[cubic-bezier(0.34,1.6,0.5,1)] rotate-[var(--rot)] hover:-translate-y-2 hover:rotate-0 ${i > 9 ? "max-md:hidden" : ""}`} style={{ "--rot": `${r}deg` } as React.CSSProperties}>
-            <Doodle name={name} strokeWidth={1.5} draw delay={i * 110} />
+            <Draggable shadow={false}>
+              <Doodle name={name} strokeWidth={1.5} draw delay={i * 110} />
+            </Draggable>
           </div>
         ))}
       </Reveal>

@@ -32,7 +32,7 @@ export function ProductGallery({ images, name }: { images: string[]; name: strin
   return (
     <>
       {/* Mobile: swipe gallery */}
-      <div className="relative md:hidden">
+      <div data-pdp-media className="relative md:hidden">
         <div ref={track} onScroll={onScroll} className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto" aria-roledescription="carousel" aria-label={`${name} images`}>
           {images.map((src, i) => (
             <button key={src + i} type="button" onClick={() => setLightbox(i)} className="relative aspect-[3/4] w-full shrink-0 snap-center bg-bone" aria-label={`Open image ${i + 1} of ${images.length} fullscreen`}>
@@ -58,6 +58,7 @@ export function ProductGallery({ images, name }: { images: string[]; name: strin
             type="button"
             onClick={() => setLightbox(i)}
             data-cursor="Zoom"
+            data-pdp-media={i === 0 ? "" : undefined}
             className={cn("group relative cursor-zoom-in overflow-hidden bg-bone", i === 0 || i === 3 ? "col-span-2 aspect-[4/5]" : "aspect-[3/4]")}
             aria-label={`Zoom ${alt(i)}`}
           >

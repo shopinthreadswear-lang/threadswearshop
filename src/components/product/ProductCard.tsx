@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { Product } from "@/lib/types";
 import { getProductById, imagesFor } from "@/data/products";
 import { useStore } from "@/components/providers/StoreProvider";
@@ -11,6 +11,7 @@ import { ColorSwatches } from "./ColorSwatches";
 import { Price } from "@/components/ui/Price";
 import { Plus, Check } from "@/components/ui/Icons";
 import { cn } from "@/lib/cn";
+import { flyToBag } from "@/lib/fly";
 
 type CardProps = { priority?: boolean; sizes?: string; className?: string };
 
@@ -25,7 +26,8 @@ function Card({ product: p, priority = false, sizes = "(max-width: 768px) 50vw, 
   const [color, setColor] = useState(p.colors[0].name);
   const [quickOpen, setQuickOpen] = useState(false);
   const [added, setAdded] = useState<string | null>(null);
-  const { addToCart } = useStore();
+  const { addToCart, toast } = useStore();
+  const media = useRef<HTMLDivElement>(null);
   const imgs = imagesFor(p, color);
   const stockFor = (s: string) => p.variants.find((v) => v.color === color && v.size === s)?.stock ?? 0;
   const colorStock = p.sizes.reduce((a, s) => a + stockFor(s), 0);
@@ -35,8 +37,12 @@ function Card({ product: p, priority = false, sizes = "(max-width: 768px) 50vw, 
 
   const quickAdd = (size: string) => {
     if (stockFor(size) <= 0) return;
-    addToCart({ productId: p.id, color, size }, { silent: false });
     setAdded(size);
+    // Throw the photo into the bag, then confirm — the drawer stays shut so browsing isn't interrupted.
+    flyToBag(media.current, imgs[0]).then(() => {
+      addToCart({ productId: p.id, color, size }, { silent: true });
+      toast(`${p.name} · ${size} added to your bag`, { tone: "success", action: { label: "View bag", href: "/bag" } });
+    });
     setTimeout(() => {
       setAdded(null);
       setQuickOpen(false);
@@ -45,7 +51,7 @@ function Card({ product: p, priority = false, sizes = "(max-width: 768px) 50vw, 
 
   return (
     <article className={cn("group/card relative", className)} onMouseLeave={() => setQuickOpen(false)}>
-      <div className="relative aspect-[3/4] overflow-hidden rounded-[18px] bg-bone">
+      <div ref={media} className="relative aspect-[3/4] overflow-hidden rounded-[18px] bg-bone">
         <Link href={href} aria-label={p.name} className="absolute inset-0" data-cursor="View">
           <Image
             src={imgs[0]}

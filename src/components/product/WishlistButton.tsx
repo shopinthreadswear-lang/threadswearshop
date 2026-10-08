@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useStore } from "@/components/providers/StoreProvider";
 import { HeartIcon } from "@/components/ui/Icons";
 import { cn } from "@/lib/cn";
+import { burst } from "@/lib/fly";
 
 export function WishlistButton({ productId, name, className, size = 18, variant = "icon" }: { productId: string; name: string; className?: string; size?: number; variant?: "icon" | "button" }) {
   const { isWishlisted, toggleWishlist, hydrated } = useStore();
@@ -12,7 +13,8 @@ export function WishlistButton({ productId, name, className, size = 18, variant 
   const onClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    toggleWishlist(productId);
+    const added = toggleWishlist(productId);
+    if (added) burst(e.currentTarget);
     setPop((p) => p + 1);
   };
   if (variant === "button")

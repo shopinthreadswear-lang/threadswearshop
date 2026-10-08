@@ -28,8 +28,12 @@ export function CursorLabel() {
     const move = (e: PointerEvent) => {
       pos.tx = e.clientX;
       pos.ty = e.clientY;
-      const el = (e.target as Element | null)?.closest?.("[data-cursor]") as HTMLElement | null;
-      setLabel(el?.dataset.cursor ?? null);
+      const t = e.target as Element | null;
+      const el = t?.closest?.("[data-cursor]") as HTMLElement | null;
+      // A button or link inside a labelled area speaks for itself — don't cover it with the area's label.
+      const control = t?.closest?.("a,button,input,select,textarea,label");
+      const inner = el && control && control !== el && el.contains(control);
+      setLabel(inner ? null : (el?.dataset.cursor ?? null));
       setLight(el?.dataset.cursorTone === "light");
     };
     const out = () => setLabel(null);

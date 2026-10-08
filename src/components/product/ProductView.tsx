@@ -20,6 +20,7 @@ import { ArrowRight, BagIcon, Check, Lock, Pin, ReturnIcon, Ruler, Shield, Gift 
 import { commerce, formatINR } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/cn";
+import { flyToBag } from "@/lib/fly";
 
 function PincodeChecker() {
   const [pin, setPin] = useState("");
@@ -262,10 +263,14 @@ export function ProductView({ product: p, children }: { product: Product; childr
       return;
     }
     setAdding(true);
-    setTimeout(() => {
+    // Fly from the photo if it's on screen, otherwise from the button that was pressed.
+    const media = [...document.querySelectorAll("[data-pdp-media]")].filter((el) => el.getBoundingClientRect().width > 0);
+    const onScreen = media.find((el) => { const r = el.getBoundingClientRect(); return r.bottom > 80 && r.top < innerHeight - 80; });
+    const photo = media[0]?.querySelector("img")?.currentSrc;
+    flyToBag(onScreen ?? document.activeElement, photo).then(() => {
       addToCart({ productId: p.id, color, size });
       setAdding(false);
-    }, 350);
+    });
   };
 
   const ctaLabel = allOut || selectedOut ? "Notify Me" : adding ? "Adding…" : "Add to Bag";

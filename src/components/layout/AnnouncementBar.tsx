@@ -21,7 +21,7 @@ export function AnnouncementBar() {
   }, [paused]);
   return (
     <div
-      className={cn("relative h-9 overflow-hidden bg-burgundy font-mono text-[10.5px] font-medium uppercase tracking-[0.08em] text-cream transition-colors duration-500 sm:text-[11px] sm:tracking-[0.12em]")}
+      className={cn("relative h-9 overflow-hidden bg-burgundy font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-cream transition-colors duration-500 sm:text-[11px] sm:tracking-[0.12em]")}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       role="region"

@@ -46,7 +46,7 @@ export function PromoCode({ defaultOpen = false }: { defaultOpen?: boolean }) {
 
   return (
     <div>
-      <button type="button" aria-expanded={open} onClick={() => setOpen((o) => !o)} className="flex w-full items-center justify-between py-1 text-[12.5px] tracking-wide">
+      <button type="button" aria-expanded={open} onClick={() => setOpen((o) => !o)} className="flex min-h-11 w-full items-center justify-between text-[12.5px] tracking-wide">
         Have a promo code?
         <ChevronDown className={cn("transition-transform duration-300", open && "rotate-180")} />
       </button>

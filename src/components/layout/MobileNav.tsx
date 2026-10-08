@@ -158,7 +158,7 @@ export function MobileNav({ open, onClose }: { open: boolean; onClose: () => voi
                 <Image src={IMG.manSuedeStreet} alt="The Signature Collection" fill sizes="90vw" className="img-grade object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-night/65 to-transparent" />
                 <div className="absolute bottom-4 left-4 text-cream">
-                  <p className="eyebrow text-[10.5px] opacity-80">Now In</p>
+                  <p className="eyebrow text-[11px] opacity-80">Now In</p>
                   <p className="font-serif text-[22px]">The Signature Collection</p>
                 </div>
               </Link>

@@ -147,7 +147,7 @@ function WriteReview({ product, open, onClose, onCreated }: { product: Product; 
                 </div>
               ))}
               {images.length < 3 && (
-                <label className="flex h-24 w-20 cursor-pointer flex-col items-center justify-center gap-1 border border-dashed border-beige text-[10.5px] text-muted hover:border-ink">
+                <label className="flex h-24 w-20 cursor-pointer flex-col items-center justify-center gap-1 border border-dashed border-beige text-[11px] text-muted hover:border-ink">
                   <Upload size={18} />
                   Upload
                   <input type="file" accept="image/jpeg,image/png,image/webp" multiple className="sr-only" onChange={(e) => onFiles(e.target.files)} />
@@ -225,7 +225,7 @@ export function Reviews({ product, seeded }: { product: Product; seeded: Review[
           <dl className="mt-8 grid grid-cols-3 gap-4 border-y border-line py-6 text-center">
             {(["quality", "fit", "value"] as const).map((k) => (
               <div key={k}>
-                <dt className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted">{k}</dt>
+                <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">{k}</dt>
                 <dd className="mt-1 font-serif text-[28px]">{product.ratingBreakdown[k].toFixed(1)}</dd>
               </div>
             ))}
@@ -304,7 +304,7 @@ export function Reviews({ product, seeded }: { product: Product; seeded: Review[
                         ))}
                       </ul>
                     )}
-                    <button type="button" disabled={helpful[r.id]} onClick={() => setHelpful({ ...helpful, [r.id]: true })} className="mt-4 text-[12px] text-muted hover:text-ink disabled:text-success">
+                    <button type="button" disabled={helpful[r.id]} onClick={() => setHelpful({ ...helpful, [r.id]: true })} className="hit mt-4 text-[12px] text-muted hover:text-ink disabled:text-success">
                       {helpful[r.id] ? "Thanks for your feedback" : `Helpful (${r.helpful ?? 0})`}
                     </button>
                   </div>

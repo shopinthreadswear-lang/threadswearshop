@@ -28,7 +28,7 @@ export function Rating({ value, count, className, href }: { value: number; count
     </>
   );
   return href ? (
-    <a href={href} className={cn("inline-flex items-center gap-2 hover:opacity-70 transition-opacity", className)}>
+    <a href={href} className={cn("hit inline-flex items-center gap-2 hover:opacity-70 transition-opacity", className)}>
       {inner}
     </a>
   ) : (

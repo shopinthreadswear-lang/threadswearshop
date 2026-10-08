@@ -22,7 +22,7 @@ export function SizeGuideContent({ initial = "tops" as ChartKey, showAll = false
             <thead>
               <tr>
                 {c.columns.map((h) => (
-                  <th key={h} scope="col" className="border-b border-ink py-3 pr-4 text-left text-[10.5px] font-semibold uppercase tracking-[0.14em]">
+                  <th key={h} scope="col" className="border-b border-ink py-3 pr-4 text-left text-[11px] font-semibold uppercase tracking-[0.14em]">
                     {h}
                   </th>
                 ))}
@@ -55,7 +55,7 @@ export function SizeGuideContent({ initial = "tops" as ChartKey, showAll = false
         )}
         <div className="flex border border-line p-0.5" role="group" aria-label="Units">
           {(["cm", "in"] as const).map((u) => (
-            <button key={u} type="button" aria-pressed={unit === u} onClick={() => setUnit(u)} className={cn("px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors", unit === u ? "bg-ink text-ivory" : "text-muted")}>
+            <button key={u} type="button" aria-pressed={unit === u} onClick={() => setUnit(u)} className={cn("min-h-10 px-4 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors", unit === u ? "bg-ink text-ivory" : "text-muted")}>
               {u === "cm" ? "CM" : "Inch"}
             </button>
           ))}

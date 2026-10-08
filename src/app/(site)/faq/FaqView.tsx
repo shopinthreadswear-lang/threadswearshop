@@ -21,13 +21,13 @@ export function FaqView() {
           <label htmlFor="faq-q" className="sr-only">Search FAQs</label>
           <div className="flex items-center gap-3 border-b border-ink pb-3">
             <SearchIcon size={18} />
-            <input id="faq-q" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search questions" className="w-full bg-transparent text-[15px] focus:outline-none" />
+            <input id="faq-q" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search questions" className="h-11 w-full bg-transparent text-[16px] focus:outline-none" />
           </div>
           <nav aria-label="FAQ categories" className="mt-8">
             <ul className="flex flex-wrap gap-2 lg:block lg:space-y-2">
               {faqs.map((c) => (
                 <li key={c.category}>
-                  <a href={`#${c.category.toLowerCase()}`} className="block border border-line px-3 py-1.5 text-[13px] text-muted hover:text-ink lg:border-0 lg:p-0">
+                  <a href={`#${c.category.toLowerCase()}`} className="flex min-h-11 items-center rounded-full border border-line px-4 text-[13px] text-muted hover:text-ink lg:block lg:min-h-0 lg:rounded-none lg:border-0 lg:p-0 lg:py-1">
                     {c.category}
                   </a>
                 </li>

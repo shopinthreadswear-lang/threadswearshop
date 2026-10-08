@@ -60,7 +60,7 @@ export function AddressBook({ addresses }: { addresses: Address[] }) {
           <li key={a.id} className={cn("flex flex-col border p-6", a.isDefault ? "border-ink" : "border-line")}>
             <div className="flex items-center justify-between">
               <p className="label-sm">{a.label}</p>
-              {a.isDefault && <span className="bg-ink px-2 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-ivory">Default</span>}
+              {a.isDefault && <span className="bg-ink px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-ivory">Default</span>}
             </div>
             <p className="mt-4 flex-1 text-[13.5px] leading-relaxed text-muted">
               {a.fullName}
@@ -241,8 +241,8 @@ export function PaymentMethods({ payments }: { payments: SavedPayment[] }) {
         {payments.map((p) => (
           <li key={p.id} className={cn("relative flex aspect-[1.7] max-h-52 flex-col justify-between p-6", p.isDefault ? "bg-night text-ivory" : "border border-line")}>
             <div className="flex items-start justify-between">
-              <p className="text-[10.5px] font-semibold uppercase tracking-[0.16em] opacity-70">{p.type === "card" ? p.brand : "UPI"}</p>
-              {p.isDefault && <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-champagne-soft">Default</span>}
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] opacity-70">{p.type === "card" ? p.brand : "UPI"}</p>
+              {p.isDefault && <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-champagne-soft">Default</span>}
             </div>
             <p className="font-serif text-[24px] tracking-wide">{p.type === "card" ? `•••• •••• •••• ${p.last4}` : p.vpa}</p>
             <div className="flex items-end justify-between text-[12px]">

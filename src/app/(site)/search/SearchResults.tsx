@@ -39,7 +39,7 @@ export function SearchResults() {
           <label htmlFor="search-page" className="sr-only">
             Search
           </label>
-          <input id="search-page" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Search Threads Ware" className="w-full bg-transparent font-serif text-[clamp(1.8rem,3.4vw,3rem)] leading-none placeholder:text-ink/25 focus:outline-none" />
+          <input id="search-page" data-big value={input} onChange={(e) => setInput(e.target.value)} placeholder="Search Threads Ware" className="w-full bg-transparent font-serif text-[clamp(1.8rem,3.4vw,3rem)] leading-none placeholder:text-ink/25 focus:outline-none" />
         </form>
         {q && (
           <p className="mt-6 text-[14px] text-muted" aria-live="polite">

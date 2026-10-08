@@ -33,7 +33,7 @@ function Count({ n }: { n: number }) {
   if (!n) return null;
   return (
     <span key={bump} className={cn("absolute -right-1.5 -top-1 grid h-[16px] min-w-[16px] place-items-center rounded-full bg-current px-1", bump && "bump")}>
-      <span className="text-[9px] font-semibold leading-none text-[color:var(--count-fg)]">{n}</span>
+      <span className="text-[10px] font-semibold leading-none text-[color:var(--count-fg)]">{n}</span>
     </span>
   );
 }

@@ -59,7 +59,7 @@ function PincodeChecker() {
       </label>
       <div className="mt-3 flex border-b border-line focus-within:border-ink">
         <input id="pincode" inputMode="numeric" maxLength={6} value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))} placeholder="Enter PIN code" className="h-11 flex-1 bg-transparent text-[14px] focus:outline-none" aria-describedby="pin-res" />
-        <button type="submit" disabled={loading} className="label-sm text-[10.5px] hover:opacity-60">
+        <button type="submit" disabled={loading} className="label-sm text-[11px] hover:opacity-60">
           {loading ? "Checking…" : "Check"}
         </button>
       </div>

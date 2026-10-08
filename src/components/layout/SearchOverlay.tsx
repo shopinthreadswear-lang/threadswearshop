@@ -103,6 +103,7 @@ export function SearchOverlay() {
               <input
                 ref={inputRef}
                 id="site-search"
+                data-big
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="What are you looking for?"

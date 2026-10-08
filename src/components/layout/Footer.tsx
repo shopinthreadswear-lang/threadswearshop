@@ -52,17 +52,17 @@ export function Footer() {
           {Object.entries(footerNav).map(([title, links]) => (
             <div key={title}>
               <h3 className="eyebrow mb-4 text-burgundy">{title}</h3>
-              <ul className="space-y-1">
+              <ul className="md:space-y-1">
                 {links.map(([l, h]) => (
                   <li key={h}>
-                    <Link href={h} className="link-u inline-block py-1 font-mono text-[12.5px] text-charcoal transition-colors hover:text-burgundy">
+                    <Link href={h} className="link-u inline-block py-2.5 font-mono text-[12.5px] md:py-1 text-charcoal transition-colors hover:text-burgundy">
                       {l}
                     </Link>
                   </li>
                 ))}
                 {title === "Legal" && (
                   <li>
-                    <CookieSettingsLink className="link-u font-mono text-[12.5px] text-charcoal transition-colors hover:text-burgundy" />
+                    <CookieSettingsLink className="link-u inline-block py-2.5 font-mono md:py-1 text-[12.5px] text-charcoal transition-colors hover:text-burgundy" />
                   </li>
                 )}
               </ul>
@@ -74,11 +74,11 @@ export function Footer() {
       {/* Care, payments, social */}
       <div className="container-site mt-14 flex flex-col gap-8 border-y border-line py-8 font-mono text-[12px] md:flex-row md:items-center md:justify-between">
         <p className="leading-relaxed text-charcoal">
-          <a href={`mailto:${site.email}`} className="link-u hover:text-burgundy">
+          <a href={`mailto:${site.email}`} className="link-u hit hover:text-burgundy">
             {site.email}
           </a>
           <span aria-hidden className="mx-2 text-muted">/</span>
-          <a href={site.whatsappHref} className="link-u hover:text-burgundy" target="_blank" rel="noopener noreferrer">
+          <a href={site.whatsappHref} className="link-u hit hover:text-burgundy" target="_blank" rel="noopener noreferrer">
             WhatsApp {site.whatsapp}
           </a>
           <span className="block text-muted">{site.hours}</span>

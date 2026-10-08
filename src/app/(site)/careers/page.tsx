@@ -38,7 +38,7 @@ export default function CareersPage() {
                 <span className="font-serif text-[23px] md:col-span-6 group-hover:underline">{t}</span>
                 <span className="text-[13px] text-muted md:col-span-2">{team}</span>
                 <span className="text-[13px] text-muted md:col-span-3">{loc}</span>
-                <span className="label-sm text-[10.5px] md:col-span-1 md:text-right">Apply →</span>
+                <span className="label-sm text-[11px] md:col-span-1 md:text-right">Apply →</span>
               </a>
             </li>
           ))}

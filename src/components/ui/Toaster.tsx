@@ -25,7 +25,7 @@ export function Toaster() {
             {t.tone !== "error" && <Check size={15} className="shrink-0 text-champagne-soft" />}
             <span className="flex-1">{t.message}</span>
             {t.action && (
-              <Link href={t.action.href} className="label-sm text-[10.5px] link-static" onClick={() => dismissToast(t.id)}>
+              <Link href={t.action.href} className="label-sm text-[11px] link-static" onClick={() => dismissToast(t.id)}>
                 {t.action.label}
               </Link>
             )}

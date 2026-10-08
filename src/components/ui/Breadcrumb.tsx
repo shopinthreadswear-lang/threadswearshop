@@ -13,7 +13,7 @@ export function Breadcrumb({ items, className, light = false }: { items: { label
             <li key={i} className="flex items-center gap-2">
               {i > 0 && <span aria-hidden className="opacity-50">/</span>}
               {c.href && i < all.length - 1 ? (
-                <Link href={c.href} className="link-u inline-block py-2 hover:text-current">
+                <Link href={c.href} className="link-u hit inline-block py-2 hover:text-current">
                   {c.label}
                 </Link>
               ) : (

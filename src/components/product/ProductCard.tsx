@@ -69,14 +69,14 @@ function Card({ product: p, priority = false, sizes = "(max-width: 768px) 50vw, 
 
         <div className="pointer-events-none absolute left-3 top-3 flex flex-col items-start gap-1.5 md:left-4 md:top-4">
           {p.badge && (
-            <span className={cn("rounded-full px-2.5 py-1 font-mono text-[10.5px] font-medium uppercase tracking-[0.08em]", p.badge === "Sale" ? "bg-error text-cream" : p.badge === "Limited Edition" ? "bg-burgundy text-cream" : p.badge === "New" ? "bg-ochre text-ink" : "bg-ivory text-burgundy")}>
+            <span className={cn("rounded-full px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-[0.08em]", p.badge === "Sale" ? "bg-error text-cream" : p.badge === "Limited Edition" ? "bg-burgundy text-cream" : p.badge === "New" ? "bg-ochre text-ink" : "bg-ivory text-burgundy")}>
               {p.badge}
             </span>
           )}
           {soldOut ? (
-            <span className="rounded-full bg-ivory px-2.5 py-1 font-mono text-[10.5px] font-medium uppercase tracking-[0.08em] text-muted">Sold Out</span>
+            <span className="rounded-full bg-ivory px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-muted">Sold Out</span>
           ) : lowStock ? (
-            <span className="rounded-full bg-ivory px-2.5 py-1 font-mono text-[10.5px] font-medium uppercase tracking-[0.08em] text-warning">Only {colorStock} left</span>
+            <span className="rounded-full bg-ivory px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-warning">Only {colorStock} left</span>
           ) : null}
         </div>
 
@@ -114,7 +114,7 @@ function Card({ product: p, priority = false, sizes = "(max-width: 768px) 50vw, 
                         onClick={() => quickAdd(s)}
                         aria-label={`Add size ${s} to bag${out ? " (out of stock)" : ""}`}
                         className={cn(
-                          "min-w-[2.4rem] flex-1 rounded-full border px-1.5 py-2 font-mono text-[11px] transition-colors duration-300",
+                          "min-w-[2.4rem] flex-1 rounded-full border px-1.5 py-2.5 font-mono text-[11px] transition-colors duration-300",
                           added === s ? "border-ink bg-ink text-ivory" : "border-line hover:border-ink hover:bg-ink hover:text-ivory",
                           out && "border-transparent text-faint line-through hover:bg-transparent hover:text-faint",
                         )}
@@ -132,8 +132,8 @@ function Card({ product: p, priority = false, sizes = "(max-width: 768px) 50vw, 
 
       <div className="mt-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="truncate font-serif text-[18px] leading-snug">
-            <Link href={href} className="link-u">
+          <h3 className="line-clamp-2 font-serif text-[15.5px] leading-snug md:truncate md:text-[18px]">
+            <Link href={href} className="link-u hit">
               {p.name}
             </Link>
           </h3>

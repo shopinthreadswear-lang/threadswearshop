@@ -20,7 +20,7 @@ export default function GiftCardsPage() {
                 <div className="flex h-full flex-col justify-between">
                   <p className="font-serif text-[13px] uppercase tracking-[0.32em]">Threads | Ware</p>
                   <div>
-                    <p className="eyebrow text-[10.5px] text-champagne-soft">Digital Gift Card</p>
+                    <p className="eyebrow text-[11px] text-champagne-soft">Digital Gift Card</p>
                     <p className="mt-1 font-serif text-[34px] leading-none">A gift, considered.</p>
                   </div>
                 </div>

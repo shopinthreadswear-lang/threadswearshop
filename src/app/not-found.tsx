@@ -24,9 +24,9 @@ export default function NotFound() {
               </Link>
               <Link href="/new-arrivals" className="btn btn-outline">Shop New Arrivals</Link>
             </div>
-            <ul className="mt-12 flex flex-wrap gap-x-6 gap-y-2 text-[13px] text-muted">
+            <ul className="mt-12 flex flex-wrap gap-x-6 gap-y-4 text-[13px] text-muted">
               {[["Best Sellers", "/best-sellers"], ["Collections", "/collections"], ["Track Order", "/track-order"], ["Contact", "/contact"]].map(([l, h]) => (
-                <li key={h}><Link href={h} className="link-u hover:text-ink">{l}</Link></li>
+                <li key={h}><Link href={h} className="link-u hit hover:text-ink">{l}</Link></li>
               ))}
             </ul>
           </div>

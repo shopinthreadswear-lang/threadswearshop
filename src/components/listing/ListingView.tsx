@@ -34,7 +34,7 @@ function SortDropdown({ value, onChange }: { value: SortId; onChange: (s: SortId
   const current = SORTS.find((s) => s.id === value)!;
   return (
     <div ref={ref} className="relative">
-      <button type="button" aria-haspopup="listbox" aria-expanded={open} onClick={() => setOpen((o) => !o)} className="flex items-center gap-2 py-2 text-[11px] font-semibold uppercase tracking-[0.16em]">
+      <button type="button" aria-haspopup="listbox" aria-expanded={open} onClick={() => setOpen((o) => !o)} className="flex min-h-11 items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em]">
         <span className="hidden text-muted sm:inline">Sort:</span> {current.label}
         <ChevronDown className={cn("transition-transform duration-300", open && "rotate-180")} />
       </button>
@@ -201,10 +201,10 @@ export function ListingView({ ids, listName, facets = DEFAULT_FACETS, defaultSor
                 ))}
               </ul>
             ) : (
-              <ul className="space-y-2.5">
+              <ul className="md:space-y-2.5">
                 {opts.map((o) => (
                   <li key={o.value}>
-                    <label className={cn("flex cursor-pointer items-center gap-3 text-[13.5px]", !o.count && !sel.includes(o.value) && "opacity-40")}>
+                    <label className={cn("flex min-h-10 cursor-pointer items-center gap-3 text-[13.5px] md:min-h-0", !o.count && !sel.includes(o.value) && "opacity-40")}>
                       <input type="checkbox" className="check" checked={sel.includes(o.value)} disabled={!o.count && !sel.includes(o.value)} onChange={() => toggle(k, o.value)} />
                       <span className="flex-1">{o.label}</span>
                       <span className="text-[12px] text-faint">{o.count}</span>
@@ -225,7 +225,7 @@ export function ListingView({ ids, listName, facets = DEFAULT_FACETS, defaultSor
       <div className="sticky top-[60px] z-20 border-b border-line bg-ivory/[0.96] backdrop-blur-md">
         <div className="container-site flex h-14 items-center justify-between gap-4">
           <div className="flex items-center gap-5">
-            <button type="button" onClick={() => setDrawer(true)} className="flex items-center gap-2.5 py-2 text-[11px] font-semibold uppercase tracking-[0.16em]" aria-haspopup="dialog">
+            <button type="button" onClick={() => setDrawer(true)} className="flex min-h-11 items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.16em]" aria-haspopup="dialog">
               <Filter /> Filters {activeCount > 0 && <span className="grid h-5 min-w-5 place-items-center rounded-full bg-ink px-1 text-[10px] text-ivory">{activeCount}</span>}
             </button>
             <p className="hidden text-[12.5px] text-muted sm:block" aria-live="polite">

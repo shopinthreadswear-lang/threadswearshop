@@ -13,19 +13,19 @@ export function OrderCard({ order }: { order: Order }) {
       <header className="flex flex-wrap items-center justify-between gap-4 border-b border-line bg-paper px-5 py-4 text-[12.5px]">
         <dl className="flex flex-wrap gap-x-8 gap-y-2">
           <div>
-            <dt className="text-[10.5px] uppercase tracking-[0.14em] text-muted">Order</dt>
+            <dt className="text-[11px] uppercase tracking-[0.14em] text-muted">Order</dt>
             <dd>{order.id}</dd>
           </div>
           <div>
-            <dt className="text-[10.5px] uppercase tracking-[0.14em] text-muted">Placed</dt>
+            <dt className="text-[11px] uppercase tracking-[0.14em] text-muted">Placed</dt>
             <dd>{placed}</dd>
           </div>
           <div>
-            <dt className="text-[10.5px] uppercase tracking-[0.14em] text-muted">Total</dt>
+            <dt className="text-[11px] uppercase tracking-[0.14em] text-muted">Total</dt>
             <dd>{formatINR(order.totals.total)}</dd>
           </div>
         </dl>
-        <Link href={`/account/orders/${order.id}`} className="label-sm text-[10.5px] link-u">
+        <Link href={`/account/orders/${order.id}`} className="label-sm text-[11px] link-u">
           View Details
         </Link>
       </header>

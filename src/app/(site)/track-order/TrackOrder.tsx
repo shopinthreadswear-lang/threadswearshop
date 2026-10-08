@@ -82,19 +82,19 @@ export function TrackOrder() {
             </div>
             <dl className="flex flex-wrap gap-x-10 gap-y-3 text-[13px]">
               <div>
-                <dt className="text-[10.5px] uppercase tracking-[0.14em] text-muted">{result.status === "delivered" ? "Delivered" : "Expected Delivery"}</dt>
+                <dt className="text-[11px] uppercase tracking-[0.14em] text-muted">{result.status === "delivered" ? "Delivered" : "Expected Delivery"}</dt>
                 <dd className="mt-1">{new Date(result.expectedDelivery).toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "long" })}</dd>
               </div>
               <div>
-                <dt className="text-[10.5px] uppercase tracking-[0.14em] text-muted">Courier</dt>
+                <dt className="text-[11px] uppercase tracking-[0.14em] text-muted">Courier</dt>
                 <dd className="mt-1">{result.courier?.name ?? "Assigned at dispatch"}</dd>
               </div>
               <div>
-                <dt className="text-[10.5px] uppercase tracking-[0.14em] text-muted">Tracking ID</dt>
+                <dt className="text-[11px] uppercase tracking-[0.14em] text-muted">Tracking ID</dt>
                 <dd className="mt-1">{result.courier?.trackingId ?? "—"}</dd>
               </div>
               <div>
-                <dt className="text-[10.5px] uppercase tracking-[0.14em] text-muted">Delivering to</dt>
+                <dt className="text-[11px] uppercase tracking-[0.14em] text-muted">Delivering to</dt>
                 <dd className="mt-1">{result.city}</dd>
               </div>
             </dl>

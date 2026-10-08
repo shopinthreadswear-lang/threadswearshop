@@ -45,7 +45,7 @@ export function ProductGallery({ images, name }: { images: string[]; name: strin
             <span key={i} className={cn("h-[3px] transition-all duration-500", i === active ? "w-6 bg-ink" : "w-3 bg-ink/25")} />
           ))}
         </div>
-        <span className="absolute right-4 top-4 bg-ivory/85 px-2 py-1 text-[10.5px] tabular-nums">
+        <span className="absolute right-4 top-4 bg-ivory/85 px-2 py-1 text-[11px] tabular-nums">
           {active + 1} / {images.length}
         </span>
       </div>

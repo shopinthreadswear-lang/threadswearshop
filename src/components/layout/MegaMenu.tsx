@@ -22,7 +22,7 @@ function Campaign({ items }: { items: { title: string; href: string; image: stri
           <div className="relative aspect-[3/4] overflow-hidden bg-bone">
             <Image src={c.image} alt={c.title} fill sizes="240px" className="img-grade object-cover transition-transform duration-[1400ms] ease-[var(--ease-lux)] group-hover/c:scale-105" />
           </div>
-          <p className="eyebrow mt-3 text-[10.5px] text-muted">{c.eyebrow}</p>
+          <p className="eyebrow mt-3 text-[11px] text-muted">{c.eyebrow}</p>
           <p className="mt-1 font-serif text-[19px] leading-tight">{c.title}</p>
         </Link>
       ))}
@@ -32,11 +32,11 @@ function Campaign({ items }: { items: { title: string; href: string; image: stri
 
 function ColTitle({ children, href }: { children: React.ReactNode; href?: string }) {
   return href ? (
-    <Link href={href} className="eyebrow mb-4 block text-[10.5px] text-ink hover:opacity-60">
+    <Link href={href} className="eyebrow mb-4 block text-[11px] text-ink hover:opacity-60">
       {children}
     </Link>
   ) : (
-    <p className="eyebrow mb-4 text-[10.5px] text-ink">{children}</p>
+    <p className="eyebrow mb-4 text-[11px] text-ink">{children}</p>
   );
 }
 
@@ -201,7 +201,7 @@ export function MegaMenu({ which }: { which: MenuKey }) {
           <Image src={IMG.manBrownJacket} alt="New Season campaign" fill sizes="360px" className="img-grade object-cover transition-transform duration-[1400ms] ease-[var(--ease-lux)] group-hover/c:scale-105" />
           <div className="absolute inset-0 bg-gradient-to-t from-night/60 via-transparent" />
           <div className="absolute bottom-4 left-4 text-cream">
-            <p className="eyebrow text-[10.5px] opacity-80">Autumn / Winter ’26</p>
+            <p className="eyebrow text-[11px] opacity-80">Autumn / Winter ’26</p>
             <p className="mt-1 font-serif text-[22px]">New Season</p>
           </div>
         </Link>

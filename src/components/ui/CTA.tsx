@@ -16,7 +16,7 @@ export function CTA({ href, children, variant = "primary", className, arrow = tr
 
 export function TextLink({ href, children, className, light }: { href: string; children: ReactNode; className?: string; light?: boolean }) {
   return (
-    <Link href={href} className={cn("group inline-flex items-center gap-3 label-sm", light ? "text-ivory" : "text-ink", className)}>
+    <Link href={href} className={cn("hit group inline-flex items-center gap-3 label-sm", light ? "text-ivory" : "text-ink", className)}>
       <span className="link-u pb-1 [background-size:100%_1px] group-hover:[background-size:0%_1px] group-hover:[background-position:100%_100%]">{children}</span>
       <ArrowRight size={14} className="transition-transform duration-500 ease-[var(--ease-lux)] group-hover:translate-x-1" />
     </Link>

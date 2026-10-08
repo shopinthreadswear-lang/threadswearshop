@@ -263,7 +263,7 @@ export function CheckoutForm() {
       </div>
 
       <div className="lg:col-span-7">
-        <ol className="mb-6 hidden items-center gap-3 text-[10.5px] font-semibold uppercase tracking-[0.16em] sm:flex" aria-label="Checkout progress">
+        <ol className="mb-6 hidden items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.16em] sm:flex" aria-label="Checkout progress">
           {STEPS.map((s, i) => (
             <li key={s} className="flex items-center gap-3">
               <span className={cn(step === i + 1 ? "text-ink" : step > i + 1 ? "text-charcoal" : "text-faint")} aria-current={step === i + 1 ? "step" : undefined}>
@@ -478,7 +478,7 @@ export function CheckoutForm() {
                                           onChange={(e) => setPay({ ...pay, card: e.target.value.replace(/\D/g, "").slice(0, 19).replace(/(\d{4})(?=\d)/g, "$1 ") })}
                                           aria-invalid={!!errors.card}
                                         />
-                                        {pay.card.length > 1 && <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted">{cardBrand(pay.card)}</span>}
+                                        {pay.card.length > 1 && <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">{cardBrand(pay.card)}</span>}
                                       </div>
                                       {inputErr("card")}
                                     </div>

@@ -24,7 +24,7 @@ export function FooterMeta() {
       <span>
         Mumbai studio <span className="tabular-nums text-ink">{time ?? "--:--"}</span> IST
       </span>
-      <button type="button" onClick={top} className="group flex items-center gap-2 uppercase tracking-[0.1em] text-burgundy hover:text-ink">
+      <button type="button" onClick={top} className="hit group flex items-center gap-2 uppercase tracking-[0.1em] text-burgundy hover:text-ink">
         Back to top <ArrowRight size={13} className="-rotate-90 transition-transform duration-300 group-hover:-translate-y-0.5" />
       </button>
     </div>

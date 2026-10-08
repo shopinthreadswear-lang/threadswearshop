@@ -120,6 +120,13 @@
   img { -webkit-user-drag: none; }
   input, select, textarea { font: inherit; }
   [hidden] { display: none !important; }
+
+  /* iOS Safari zooms the page when a field under 16px is focused — keep every text field at 16px on phones. */
+  @media (max-width: 767px) {
+    input:not([type="checkbox"], [type="radio"], [type="range"], [type="hidden"], [data-big]), select, textarea { font-size: 16px !important; }
+  }
+  /* Phones: no grey flash on tap, and no 300ms double-tap delay on controls */
+  a, button, [role="button"], label, summary { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 }
 
 /* ───────────────────────── Utilities ───────────────────────── */
@@ -197,7 +204,14 @@
     background-position: 0% 100%;
   }
 }
+/* Invisible, larger touch area around small text controls — the visual stays small, the finger target doesn't. */
+@utility hit {
+  position: relative;
+  &::after { content: ""; position: absolute; inset: calc(var(--hit, 10px) * -1) calc(var(--hit-x, 6px) * -1); }
+}
 @utility link-static {
+  position: relative;
+  &::after { content: ""; position: absolute; inset: -11px -6px; }
   text-decoration: underline;
   text-underline-offset: 4px;
   text-decoration-thickness: 1px;
@@ -248,7 +262,7 @@
   .btn { transition-property: color, border-color, opacity, transform; }
   .btn:active:not(:disabled) { transform: scale(0.975); transition-duration: 90ms; transition-timing-function: var(--ease-press); }
   .btn:disabled { opacity: 0.45; }
-  .btn-sm { height: 2.5rem; padding-inline: 1.15rem; font-size: 10.5px; }
+  .btn-sm { height: 2.75rem; padding-inline: 1.25rem; font-size: 11px; }
   .btn-block { width: 100%; }
 
   /* Primary: oxblood pill */
@@ -322,6 +336,11 @@
   .prose-tw a { text-decoration: underline; text-underline-offset: 3px; }
   .prose-tw table { width: 100%; border-collapse: collapse; margin: 1.5em 0 2em; font-size: 14px; }
   .prose-tw th, .prose-tw td { text-align: left; padding: 0.85em 1em 0.85em 0; border-bottom: 1px solid var(--color-line); vertical-align: top; }
+  @media (max-width: 639px) {
+    .prose-tw table { font-size: 13px; }
+    .prose-tw th, .prose-tw td { padding: 0.75em 0.75em 0.75em 0; }
+    .prose-tw th:first-child, .prose-tw td:first-child { white-space: nowrap; }
+  }
   .prose-tw th { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; }
 }
 

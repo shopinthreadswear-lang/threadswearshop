@@ -25,7 +25,7 @@ export function FabricViewer({ materials, name, colorHex }: { materials: string;
         <div className="grid gap-8 md:grid-cols-2">
           <div className="relative bg-night" data-cursor="Explore" data-cursor-tone="light">
             <Cloth3D fabric={fabric} variant="swatch" className="relative aspect-square w-full" />
-            <p className="pointer-events-none absolute bottom-3 left-3 text-[10.5px] uppercase tracking-[0.16em] text-ivory/60">Live 3D · move to ripple</p>
+            <p className="pointer-events-none absolute bottom-3 left-3 text-[11px] uppercase tracking-[0.16em] text-ivory/60">Live 3D · move to ripple</p>
           </div>
           <div>
             <p className="eyebrow text-muted">{base.spec}</p>

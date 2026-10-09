@@ -7,9 +7,9 @@ const FILM_BG = "#f0e6da";
 const FEATHER = { maskImage: "radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%)", WebkitMaskImage: "radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%)" };
 
 /**
- * Brand film on the first visit of a session: the needle draws the "T" and THREADS settles in (0.5s), then the
+ * Brand film on every full page load (not on in-app navigation — the root layout stays mounted): the needle draws the "T" and THREADS settles in (1.5s), then the
  * screen lifts away. Never blocks interaction or repeat navigation; skipped entirely under reduced motion.
- * If the film can't autoplay (e.g. iOS Low Power Mode) the finished logo frame is shown for the same half second.
+ * If the film can't autoplay (e.g. iOS Low Power Mode) the finished logo frame is shown for the same 1.5 seconds.
  */
 export function Loader() {
   const [state, setState] = useState<"show" | "hide" | "gone">("gone");
@@ -17,15 +17,10 @@ export function Loader() {
   const video = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    let seen = false;
-    try {
-      seen = !!sessionStorage.getItem("tw.loaded");
-      sessionStorage.setItem("tw.loaded", "1");
-    } catch {}
-    if (seen || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- first-visit only
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- runs once per full page load
     setState("show");
-    const cap = setTimeout(() => setState((s) => (s === "show" ? "hide" : s)), 700); // never longer than this
+    const cap = setTimeout(() => setState((s) => (s === "show" ? "hide" : s)), 1800); // never longer than this
     return () => clearTimeout(cap);
   }, []);
 
@@ -34,7 +29,7 @@ export function Loader() {
       const v = video.current;
       v?.play().catch(() => {
         setStill(true);
-        setTimeout(() => setState("hide"), 500);
+        setTimeout(() => setState("hide"), 1500);
       });
     }
     if (state === "hide") {

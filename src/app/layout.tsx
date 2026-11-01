@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Mono, Fraunces, Manrope } from "next/font/google";
+import { Bricolage_Grotesque, Manrope } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers/Providers";
 import { CartDrawer } from "@/components/cart/CartDrawer";
@@ -17,9 +17,8 @@ import { JsonLd } from "@/components/ui/JsonLd";
 import { absoluteUrl, site } from "@/lib/site";
 import { IMG } from "@/data/images";
 
-const display = Fraunces({ subsets: ["latin"], style: ["normal", "italic"], axes: ["SOFT", "WONK", "opsz"], variable: "--font-display", display: "swap" });
+const display = Bricolage_Grotesque({ subsets: ["latin"], axes: ["opsz", "wdth"], variable: "--font-display", display: "swap" });
 const body = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-body", display: "swap" });
-const label = DM_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-label", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -43,7 +42,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f8efdf",
+  themeColor: "#ebe05c",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -51,7 +50,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IN" className={`${display.variable} ${body.variable} ${label.variable}`}>
+    <html lang="en-IN" className={`${display.variable} ${body.variable}`}>
       <head>
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="" />
       </head>

@@ -2,40 +2,44 @@
 
 /* ───────────────────────── Design tokens ───────────────────────── */
 @theme {
-  /* Colour — a butter-cream canvas with deep, food-for-the-eye colour blocks.
-     Oxblood is the brand; ochre, bottle green and rust are supporting accents; espresso is the dark ground. */
-  --color-ivory: #f8efdf;          /* canvas — butter cream */
-  --color-paper: #fcf6ea;          /* raised panels */
-  --color-bone: #efe3cd;           /* image placeholders, chips */
-  --color-sand: #e9dcc3;
-  --color-beige: #cdb99a;          /* hover borders */
-  --color-ink: #2a1a14;            /* type — espresso black */
-  --color-charcoal: #47342a;
-  --color-muted: #6a5a4f;
-  --color-faint: #6b5c51;          /* ≥4.5:1 on cream and bone */
-  --color-line: #e2d3b8;           /* hairlines */
-  --color-line-dark: #5a3a2c;
-  --color-night: #3e2117;          /* espresso — dark blocks, top bar */
-  --color-burgundy: #7a1c2a;       /* oxblood — the brand colour */
-  --color-burgundy-deep: #5e1320;
-  --color-claret: #94283a;
-  --color-champagne: #e2a93b;      /* ochre */
-  --color-champagne-soft: #f0cf86;
-  --color-ochre: #e2a93b;
-  --color-bottle: #25412f;         /* bottle green */
-  --color-rust: #b2491f;
-  --color-espresso: #3e2117;
-  --color-rose: #d9a3a0;
-  --color-cream: #f8efdf;          /* fixed light */
-  --color-wine: #3e2117;           /* fixed dark */
+  /* Colour — loud, graphic, agency-poster palette: a sage-grey canvas, acid yellow, olive and a dark olive-brown ink,
+     with sky blue and tomato as small accent pills. (Token names are kept from earlier themes so components need no renames.) */
+  --color-ivory: #e2e3d6;          /* canvas — sage grey */
+  --color-paper: #eceee4;          /* raised panels */
+  --color-bone: #d3d5c4;           /* image placeholders, chips */
+  --color-sand: #cfd1bf;
+  --color-beige: #b5b7a0;          /* hover borders */
+  --color-ink: #2f2a1a;            /* type — olive-brown black */
+  --color-charcoal: #423c28;
+  --color-muted: #5b5640;
+  --color-faint: #5f5a44;          /* ≥4.5:1 on canvas and bone */
+  --color-line: #c6c8b4;           /* hairlines */
+  --color-line-dark: #4d4630;
+  --color-night: #2b2718;          /* darkest blocks, top bar */
+  --color-burgundy: #3a3421;       /* primary — deep olive-brown (headings, primary buttons) */
+  --color-burgundy-deep: #26220f;
+  --color-claret: #4d4630;
+  --color-champagne: #ebe05c;      /* acid yellow */
+  --color-champagne-soft: #f3ec9a;
+  --color-ochre: #ebe05c;
+  --color-acid: #ebe05c;
+  --color-olive: #a8a23a;          /* colour-block olive */
+  --color-sky: #9fc6e8;
+  --color-tomato: #b5401a;
+  --color-bottle: #5f5a1c;
+  --color-rust: #b5401a;
+  --color-espresso: #2b2718;
+  --color-rose: #e8a48b;
+  --color-cream: #f4f2e6;          /* fixed light */
+  --color-wine: #2b2718;           /* fixed dark */
   --color-success: #3f6b4f;
   --color-error: #a8261e;
-  --color-warning: #8a5a17;
+  --color-warning: #7a5410;
 
   /* Type */
-  --font-serif: var(--font-display), "Cormorant Garamond", Georgia, serif;
+  --font-serif: var(--font-display), "Bricolage Grotesque", "Arial Narrow", sans-serif; /* display: heavy condensed grotesk */
   --font-sans: var(--font-body), "Manrope", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-label), "DM Mono", ui-monospace, monospace;
+  --font-mono: var(--font-body), "Manrope", ui-sans-serif, system-ui, sans-serif; /* labels: small grotesk caps */
   --tracking-luxe: 0.22em;
   --tracking-wide2: 0.14em;
 
@@ -112,7 +116,10 @@
     line-height: 1.6;
     letter-spacing: 0.005em;
   }
-  ::selection { background: var(--color-burgundy); color: var(--color-cream); }
+  /* The display face is a variable grotesk: anything set in it without its own weight/width gets a firm, slightly
+     condensed cut so names, prices and article titles sit with the poster headlines. */
+  :where(.font-serif) { font-weight: 700; font-variation-settings: 'wdth' 82, 'opsz' 36; letter-spacing: -0.005em; }
+  ::selection { background: var(--color-acid); color: var(--color-ink); }
   :focus-visible { outline: 1.5px solid var(--color-ink); outline-offset: 3px; }
   .on-dark :focus-visible, .bg-night :focus-visible { outline-color: var(--color-ivory); }
   button { cursor: pointer; }
@@ -143,7 +150,7 @@
   font-family: var(--font-mono);
   font-size: 11.5px;
   font-weight: 500;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 @utility label-sm {
@@ -155,32 +162,32 @@
 }
 @utility display-xl {
   font-family: var(--font-serif);
-  font-weight: 500;
-  font-variation-settings: 'SOFT' 100, 'WONK' 0;
+  font-weight: 800;
+  font-variation-settings: 'wdth' 75, 'opsz' 96;
   font-size: clamp(2.9rem, 8.2vw, 8.25rem);
-  line-height: 0.95;
-  letter-spacing: -0.025em;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
 }
 @utility display-lg {
   font-family: var(--font-serif);
-  font-weight: 500;
-  font-variation-settings: 'SOFT' 100, 'WONK' 0;
+  font-weight: 800;
+  font-variation-settings: 'wdth' 75, 'opsz' 96;
   font-size: clamp(2.4rem, 5.4vw, 5.25rem);
-  line-height: 1;
-  letter-spacing: -0.02em;
+  line-height: 0.9;
+  letter-spacing: -0.015em;
 }
 @utility display-md {
   font-family: var(--font-serif);
-  font-weight: 500;
-  font-variation-settings: 'SOFT' 100, 'WONK' 0;
+  font-weight: 800;
+  font-variation-settings: 'wdth' 75, 'opsz' 96;
   font-size: clamp(2rem, 3.6vw, 3.4rem);
-  line-height: 1.06;
-  letter-spacing: -0.015em;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
 }
 @utility display-sm {
   font-family: var(--font-serif);
-  font-weight: 500;
-  font-variation-settings: 'SOFT' 100, 'WONK' 0;
+  font-weight: 800;
+  font-variation-settings: 'wdth' 75, 'opsz' 96;
   font-size: clamp(1.5rem, 2.2vw, 2.1rem);
   line-height: 1.12;
 }
@@ -220,7 +227,7 @@
   &:hover { text-decoration-color: currentColor; }
 }
 @utility skeleton {
-  background: linear-gradient(90deg, #efe3cd 0px, #f6ecda 160px, #efe3cd 320px);
+  background: linear-gradient(90deg, #d3d5c4 0px, #e3e5d8 160px, #d3d5c4 320px);
   background-size: 800px 100%;
   animation: var(--animate-shimmer);
 }
@@ -236,10 +243,10 @@
     height: 3rem;
     padding-inline: 1.75rem;
     border-radius: 999px;
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     white-space: nowrap;
     overflow: hidden;
@@ -277,6 +284,14 @@
   .btn-light { background: var(--color-cream); color: var(--color-burgundy); border-color: var(--color-cream); }
   .btn-light::before { background: var(--color-ochre); }
   .btn-light:hover:not(:disabled) { color: var(--color-wine); border-color: var(--color-ochre); }
+
+  .btn-sky { background: var(--color-sky); color: var(--color-ink); border-color: var(--color-sky); }
+  .btn-sky::before { background: var(--color-acid); }
+  .btn-sky:hover:not(:disabled) { color: var(--color-ink); border-color: var(--color-acid); }
+
+  .btn-olive { background: transparent; color: var(--color-ink); border-color: var(--color-ink); border-width: 1.5px; }
+  .btn-olive::before { background: var(--color-olive); }
+  .btn-olive:hover:not(:disabled) { color: var(--color-ink); border-color: var(--color-ink); }
 
   .btn-green { background: var(--color-bottle); color: var(--color-cream); border-color: var(--color-bottle); }
   .btn-green::before { background: var(--color-burgundy); }
@@ -328,7 +343,7 @@
   .check[type="radio"]:checked::after { width: 0.4rem; height: 0.4rem; border: 0; background: #fff; border-radius: 999px; transform: none; }
 
   .prose-tw p { margin-bottom: 1.35em; color: var(--color-charcoal); font-size: 16.5px; line-height: 1.8; }
-  .prose-tw h2 { font-family: var(--font-serif); font-size: clamp(1.6rem, 2.6vw, 2.15rem); line-height: 1.15; margin: 2.2em 0 0.7em; }
+  .prose-tw h2 { font-family: var(--font-serif); font-weight: 800; font-variation-settings: 'wdth' 75, 'opsz' 48; font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: 1; margin: 2.2em 0 0.7em; }
   .prose-tw h3 { font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; margin: 2.2em 0 0.8em; }
   .prose-tw ul { list-style: none; margin: 0 0 1.4em; padding: 0; }
   .prose-tw li { position: relative; padding-left: 1.4em; margin-bottom: 0.6em; color: var(--color-charcoal); line-height: 1.75; }
@@ -452,15 +467,12 @@
 /* Retro display word with a stacked offset shadow, as on a shop sign */
 .sign-word {
   font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 900;
-  font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
-  letter-spacing: -0.012em;
-  word-spacing: 0.06em;
-  line-height: 0.85;
-  color: var(--color-burgundy);
-  -webkit-text-stroke: 0.008em var(--color-wine);
-  text-shadow: 0.025em 0.03em 0 var(--color-wine), 0.045em 0.055em 0 var(--color-wine);
+  font-weight: 800;
+  font-variation-settings: 'wdth' 75, 'opsz' 96;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.82;
+  color: var(--color-ink);
 }
 
 @media (prefers-reduced-motion: reduce) {

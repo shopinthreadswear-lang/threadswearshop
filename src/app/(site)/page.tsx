@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { HeroBanner } from "@/components/home/HeroBanner";
-import { Ticker } from "@/components/home/Ticker";
+import { Manifesto } from "@/components/home/Manifesto";
+import { RiotBlock } from "@/components/home/RiotBlock";
 import { Spotlight } from "@/components/home/Spotlight";
-import { WelcomeBlock } from "@/components/home/WelcomeBlock";
 import { LookCircles } from "@/components/home/LookCircles";
 import { LookBuilder } from "@/components/home/LookBuilder";
 import { Testimonials } from "@/components/home/Testimonials";
@@ -22,21 +22,21 @@ export const metadata = pageMeta({
   path: "/",
 });
 
-/**
- * Homepage, laid out like a well-loved shop: a cover photo, a ribbon of promises, one shelf, colour blocks
- * for the story and delivery, outfits, customer notes, and snapshots — with pen doodles in the margins.
- */
 /** Lettered-size pieces in the given categories, best-reviewed first — the builder's three rails. */
 const layer = (cats: string[]) => products.filter((p) => cats.includes(p.category) && p.sizes.includes("M")).sort((a, b) => b.reviewCount - a.reviewCount).map((p) => p.id);
 
+/**
+ * Homepage as a loud, poster-like agency site: photo hero with a waving ribbon, a giant manifesto with sticker
+ * pills, the shelf, an olive colour block, the outfit builder, new arrivals, looks, notes, makers, delivery, snapshots.
+ */
 export default function HomePage() {
   return (
     <>
       <HeroBanner />
-      <Ticker />
+      <Manifesto />
 
       {/* The shelf */}
-      <section aria-labelledby="shelf-title" className="relative overflow-x-clip py-20 md:py-28">
+      <section aria-labelledby="shelf-title" className="relative overflow-x-clip border-t border-line py-20 md:py-28">
         <div className="container-site">
           <div className="relative mx-auto mb-10 max-w-2xl text-center md:mb-14">
             <SpringHeading id="shelf-title" className="display-md mx-auto max-w-[22ch] text-burgundy" parts={["Not-so-ordinary shirts, tees and", { em: "everyday tailoring" }]} />
@@ -46,8 +46,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <WelcomeBlock />
-      <LookCircles />
+      <RiotBlock />
       <LookBuilder outer={layer(["jackets", "coats"])} mid={layer(["shirts", "knitwear", "polos", "sweatshirts-hoodies"])} base={layer(["t-shirts"])} />
 
       {/* New this season */}
@@ -63,6 +62,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      <LookCircles />
       <Testimonials />
       <MakersStrip />
       <DeliveryMap />

@@ -13,7 +13,7 @@ import { BagIcon, HeartIcon, SearchIcon, UserIcon } from "@/components/ui/Icons"
 import { useStore } from "@/components/providers/StoreProvider";
 import { cn } from "@/lib/cn";
 
-const OVERLAY_ROUTES = ["/", "/about", "/our-story"];
+const OVERLAY_ROUTES = ["/about", "/our-story"];
 
 const NAV: { label: string; href: string; menu?: MenuKey; wideOnly?: boolean }[] = [
   { label: "Shop", href: "/shop", menu: "shop" },
@@ -85,24 +85,24 @@ export function Header() {
       <div
         className={cn("fixed inset-x-0 top-0 z-50 transition-transform duration-500 ease-[var(--ease-lux)]", scrolled && "-translate-y-9")}
         onMouseLeave={scheduleClose}
-        style={{ "--count-fg": transparent ? "var(--color-wine)" : "var(--color-cream)" } as React.CSSProperties}
+        style={{ "--count-fg": transparent ? "var(--color-wine)" : "var(--color-acid)" } as React.CSSProperties}
       >
         <AnnouncementBar />
         <header
           className={cn(
             "relative transition-[background-color,color,height,border-color,backdrop-filter] duration-500 ease-[var(--ease-lux)]",
-            transparent ? "border-b border-transparent bg-transparent text-cream" : "border-b border-line bg-ivory/[0.96] text-ink backdrop-blur-md",
+            transparent ? "border-b border-transparent bg-transparent text-cream" : "border-b border-ink/10 bg-acid text-ink",
           )}
         >
           {transparent && <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-night/35 to-transparent" />}
-          <div className={cn("container-site relative grid grid-cols-[1fr_auto_1fr] items-center transition-[height] duration-500 ease-[var(--ease-lux)]", scrolled ? "h-[60px]" : "h-[64px] md:h-[78px]")}>
+          <div className={cn("container-site relative grid grid-cols-[1fr_auto_1fr] items-center lg:grid-cols-[auto_1fr_auto] lg:gap-10 transition-[height] duration-500 ease-[var(--ease-lux)]", scrolled ? "h-[60px]" : "h-[64px] md:h-[78px]")}>
             {/* Left */}
             <div className="flex items-center gap-1">
               <MenuToggle open={mobileOpen} onClick={() => setMobileOpen(true)} className="-ml-2 lg:hidden" label="Open menu" />
               <button type="button" className="grid h-11 w-11 place-items-center lg:hidden" aria-label="Search" onClick={() => setSearchOpen(true)}>
                 <SearchIcon />
               </button>
-              <nav aria-label="Primary" className="hidden lg:block">
+              <nav aria-label="Primary" className="hidden lg:ml-auto lg:block">
                 <ul className="flex items-center gap-6 min-[1520px]:gap-7">
                   {NAV.map((n) => {
                     const active = pathname === n.href || (n.href !== "/" && pathname.startsWith(n.href + "/"));
@@ -110,7 +110,7 @@ export function Header() {
                       <li key={n.href} className={cn(n.wideOnly && "hidden min-[1520px]:block")} onMouseEnter={() => (n.menu ? openMenu(n.menu) : scheduleClose())}>
                         {n.menu ? (
                           <span className="flex items-center">
-                            <Link href={n.href} aria-current={active ? "page" : undefined} className={cn("link-u whitespace-nowrap py-1 font-mono text-[11.5px] font-medium uppercase tracking-[0.1em]", menu === n.menu && "[background-size:100%_1px]")}>
+                            <Link href={n.href} aria-current={active ? "page" : undefined} className={cn("link-u whitespace-nowrap py-1 text-[13px] font-semibold tracking-[0.01em]", menu === n.menu && "[background-size:100%_1px]")}>
                               {n.label}
                             </Link>
                             <button
@@ -125,7 +125,7 @@ export function Header() {
                             </button>
                           </span>
                         ) : (
-                          <Link href={n.href} aria-current={active ? "page" : undefined} className="link-u whitespace-nowrap py-1 font-mono text-[11.5px] font-medium uppercase tracking-[0.1em]">
+                          <Link href={n.href} aria-current={active ? "page" : undefined} className="link-u whitespace-nowrap py-1 text-[13px] font-semibold tracking-[0.01em]">
                             {n.label}
                           </Link>
                         )}
@@ -137,15 +137,15 @@ export function Header() {
             </div>
 
             {/* Center */}
-            <Link href="/" aria-label="Threads Ware — home" className="justify-self-center">
-              <Wordmark compact={scrolled} className={transparent ? undefined : "text-burgundy"} />
+            <Link href="/" aria-label="Threads Ware — home" className="justify-self-center lg:order-first lg:justify-self-start">
+              <Wordmark compact={scrolled} />
             </Link>
 
             {/* Right */}
             <div className="flex items-center justify-end gap-0.5 md:gap-2">
               <button type="button" onClick={() => setSearchOpen(true)} className="hidden items-center gap-2 p-2 lg:flex" aria-label="Search">
                 <SearchIcon />
-                <span className="hidden font-mono text-[11.5px] font-medium uppercase tracking-[0.1em] min-[1520px]:inline">Search</span>
+                <span className="hidden text-[13px] font-semibold tracking-[0.01em] min-[1520px]:inline">Search</span>
               </button>
               <Link href={user ? "/account" : "/account/login"} className="hidden p-2 md:block" aria-label={user ? `Account — ${user.firstName}` : "Sign in"}>
                 <UserIcon />

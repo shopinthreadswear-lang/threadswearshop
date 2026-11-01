@@ -1,18 +1,17 @@
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 
-/** Stacked wordmark — "Threads" over an italic "Ware", in the soft display serif, like a shop sign. */
+/** Wordmark — one line of heavy condensed grotesk, like a gig-poster masthead. */
 export function Wordmark({ className, compact = false }: { className?: string; compact?: boolean }) {
   return (
     <span
       className={cn(
-        "inline-flex flex-col items-center font-serif font-semibold leading-[0.8] tracking-[-0.03em] whitespace-nowrap [font-variation-settings:'SOFT'_100,'WONK'_1] transition-[font-size] duration-500 ease-[var(--ease-lux)]",
-        compact ? "text-[19px] md:text-[22px]" : "text-[21px] sm:text-[24px] md:text-[29px]",
+        "inline-block whitespace-nowrap font-serif font-extrabold leading-none tracking-[-0.02em] [font-variation-settings:'wdth'_75,'opsz'_96] transition-[font-size] duration-500 ease-[var(--ease-lux)]",
+        compact ? "text-[24px] md:text-[28px]" : "text-[26px] sm:text-[28px] md:text-[34px]",
         className,
       )}
     >
-      <span>Threads</span>
-      <span className="italic">Ware</span>
+      Threads Ware
     </span>
   );
 }

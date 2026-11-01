@@ -38,7 +38,7 @@ const SOCIAL = [
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t-2 border-burgundy bg-ivory pb-24 text-ink md:pb-0">
+    <footer className="relative overflow-hidden border-t-[1.5px] border-ink bg-acid pb-24 text-ink md:pb-0">
       {/* Letters + links */}
       <div className="container-site grid gap-14 pt-16 md:grid-cols-12 md:pt-24">
         <div className="md:col-span-5">
@@ -72,7 +72,7 @@ export function Footer() {
       </div>
 
       {/* Care, payments, social */}
-      <div className="container-site mt-14 flex flex-col gap-8 border-y border-line py-8 font-mono text-[12px] md:flex-row md:items-center md:justify-between">
+      <div className="container-site mt-14 flex flex-col gap-8 border-y border-ink/20 py-8 font-mono text-[12px] md:flex-row md:items-center md:justify-between">
         <p className="leading-relaxed text-charcoal">
           <a href={`mailto:${site.email}`} className="link-u hit hover:text-burgundy">
             {site.email}
@@ -111,7 +111,7 @@ export function Footer() {
         ))}
       </Reveal>
 
-      <div className="container-site flex flex-col items-start justify-between gap-5 border-t border-line py-7 md:flex-row md:items-center">
+      <div className="container-site flex flex-col items-start justify-between gap-5 border-t border-ink/20 py-7 md:flex-row md:items-center">
         <Wordmark compact className="text-burgundy" />
         <p className="font-mono text-[11px] tracking-wide text-muted">
           © {new Date().getFullYear()} THREADS WARE. GSTIN {site.gstin}.

@@ -4,8 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
-import { SpringHeading } from "@/components/motion/Scroll";
-import { Doodle } from "@/components/doodles/Doodle";
+import { WavyBand } from "./WavyBand";
 import { ArrowRight } from "@/components/ui/Icons";
 import { IMG } from "@/data/images";
 
@@ -45,6 +44,7 @@ export function HeroBanner() {
   const my = useSpring(useMotionValue(0), { stiffness: 60, damping: 20 });
 
   return (
+    <>
     <section
       ref={ref}
       aria-labelledby="hero-title"
@@ -60,7 +60,7 @@ export function HeroBanner() {
         next(((e.clientX - r.left) / r.width) * 100, ((e.clientY - r.top) / r.height) * 100);
       }}
       data-cursor="Next look"
-      className="relative -mt-[var(--hdr)] h-[92svh] min-h-[560px] overflow-hidden bg-night text-cream md:h-[100svh] md:max-h-[1040px] md:min-h-[640px]">
+      className="relative h-[78svh] min-h-[500px] overflow-hidden bg-night text-cream md:h-[86svh] md:max-h-[900px] md:min-h-[600px]">
       <motion.div className="absolute inset-0 will-change-transform" style={reduce ? undefined : { y: imgY, scale: imgScale }}>
         <motion.div className="absolute -inset-4" style={{ x: mx, y: my }}>
           {warm && (
@@ -84,55 +84,34 @@ export function HeroBanner() {
           </AnimatePresence>
         </motion.div>
       </motion.div>
-      <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#1d0f0a]/75 via-[#1d0f0a]/10 to-[#1d0f0a]/35" />
-      <motion.div aria-hidden className="absolute inset-0 bg-[#1d0f0a]" style={{ opacity: reduce ? 0 : shade }} />
+      <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_at_15%_15%,rgb(20_18_10/0.6),transparent_55%),linear-gradient(to_top,rgb(20_18_10/0.55),transparent_45%)]" />
+      <motion.div aria-hidden className="absolute inset-0 bg-[#14120a]" style={{ opacity: reduce ? 0 : shade }} />
 
-      <motion.div className="container-site relative flex h-full flex-col justify-end pb-12 md:pb-20" style={reduce ? undefined : { y: textY, opacity: fade }}>
-        <SpringHeading
-          as="h1"
-          id="hero-title"
-          immediate
-          delay={250}
-          parts={["The shirt you’ll", { em: "reach for first." }]}
-          className="max-w-[12ch] font-serif text-[clamp(2.9rem,7.4vw,7.4rem)] font-medium leading-[0.92] tracking-[-0.03em] [font-variation-settings:'SOFT'_100,'WONK'_1]"
-        />
-        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4" style={{ animation: "fade-up 900ms var(--ease-lux) 900ms both" }}>
-          <Link href="/new-arrivals" className="btn btn-light">
-            Shop new arrivals <ArrowRight size={14} className="btn-arrow" />
+      <motion.div className="container-site relative flex h-full flex-col justify-between pb-24 pt-8 md:pb-32 md:pt-12" style={reduce ? undefined : { y: textY, opacity: fade }}>
+        <div className="max-w-[19rem] md:max-w-[22rem]" style={{ animation: "fade-up 900ms var(--ease-lux) 250ms both" }}>
+          <h1 id="hero-title" className="text-[16px] font-semibold leading-snug md:text-[18px]">
+            We make shirts, tees &amp; tailoring that stand out, get noticed &amp; leave an impression that sticks.
+          </h1>
+          <Link href="/new-arrivals" className="btn btn-sky btn-sm mt-5">
+            Shop new in <ArrowRight size={14} className="btn-arrow" />
           </Link>
-          <button type="button" onClick={() => next()} className="group inline-flex min-h-11 items-center gap-3 font-mono text-[11.5px] uppercase tracking-[0.12em] text-cream/90" aria-label={`Show the next look (now: ${cur.name})`}>
-            <span className="flex gap-1.5" aria-hidden>
-              {LOOKS.map((_, k) => (
-                <span key={k} className={`h-1.5 rounded-full bg-cream transition-all duration-500 ${k === look.i ? "w-6" : "w-1.5 opacity-40"}`} />
-              ))}
-            </span>
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.span key={look.i} initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -8, opacity: 0 }} transition={{ duration: 0.25 }}>
-                Look {String(look.i + 1).padStart(2, "0")} · {cur.name}
-              </motion.span>
-            </AnimatePresence>
-            <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-1" />
-          </button>
         </div>
+        <button type="button" onClick={() => next()} className="group inline-flex min-h-11 items-center gap-3 self-start rounded-full bg-[#14120a]/45 px-4 text-[12px] font-semibold tracking-[0.04em] text-cream backdrop-blur-sm" aria-label={`Show the next look (now: ${cur.name})`} style={{ animation: "fade-up 900ms var(--ease-lux) 700ms both" }}>
+          <span className="flex gap-1.5" aria-hidden>
+            {LOOKS.map((_, k) => (
+              <span key={k} className={`h-1.5 rounded-full bg-acid transition-all duration-500 ${k === look.i ? "w-6" : "w-1.5 opacity-50"}`} />
+            ))}
+          </span>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.span key={look.i} initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -8, opacity: 0 }} transition={{ duration: 0.25 }}>
+              Look {String(look.i + 1).padStart(2, "0")} · {cur.name}<span className="hidden sm:inline"> — tap for the next</span>
+            </motion.span>
+          </AnimatePresence>
+        </button>
       </motion.div>
-
-      {/* Stamp that spins in the corner and invites a scroll */}
-      <a href="#shelf-title" aria-label="Scroll to the collection" className="group absolute bottom-8 right-[var(--spacing-gutter)] hidden h-28 w-28 md:block lg:h-32 lg:w-32" style={{ animation: "fade-in 900ms var(--ease-lux) 1200ms both" }}>
-        <svg viewBox="0 0 200 200" className="spin-slow absolute inset-0 h-full w-full text-cream group-hover:[animation-duration:6s]" aria-hidden>
-          <defs>
-            <path id="hero-rim" d="M100 100 m-80 0 a80 80 0 1 1 160 0 a80 80 0 1 1 -160 0" />
-          </defs>
-          <text className="fill-current font-mono text-[15px] uppercase" textLength={500} lengthAdjust="spacing">
-            <textPath href="#hero-rim" textLength={500} lengthAdjust="spacing">
-              Scroll down ✦ Made in Mumbai ✦ Since 2021 ✦
-            </textPath>
-          </text>
-        </svg>
-        <span className="absolute inset-[30%] grid place-items-center rounded-full bg-ochre text-burgundy transition-transform duration-500 ease-[var(--ease-lux)] group-hover:scale-110">
-          <ArrowRight size={18} className="rotate-90 transition-transform duration-500 group-hover:translate-y-1" />
-        </span>
-        <Doodle name="sparkle" className="absolute -left-3 -top-2 h-6 w-6 text-ochre" strokeWidth={2.4} />
-      </a>
     </section>
+    {/* The ribbon rides over the seam between the photo and the next section */}
+    <WavyBand className="relative z-10 -mb-10 -mt-14 sm:-mt-20 md:-mb-14 md:-mt-24" />
+    </>
   );
 }

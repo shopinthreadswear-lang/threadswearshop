@@ -100,7 +100,7 @@ export function SpringHeading({ parts, as: Tag = "h2", id, className, delay = 0,
     >
       {words.map((x, i) => (
         <Fragment key={i}>
-          <span aria-hidden className="inline-block overflow-hidden pb-[0.12em] -mb-[0.12em] align-top">
+          <span aria-hidden className="-mb-[0.12em] -mr-[0.14em] inline-block overflow-hidden pb-[0.12em] pr-[0.14em] align-top">
             <motion.span
               className={cn("inline-block origin-bottom-left", x.em !== undefined && "italic", x.em)}
               variants={{ hidden: { y: "110%", rotate: 8 }, show: { y: "0%", rotate: 0, transition: { type: "spring", stiffness: 140, damping: 16, mass: 0.8 } } }}

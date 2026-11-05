@@ -32,7 +32,7 @@ export default async function OrderDetail({ params }: { params: Promise<{ id: st
               Return / Exchange
             </Link>
           )}
-          <a href={`mailto:care@threadsware.in?subject=Invoice%20${order.id}`} className="btn btn-outline btn-sm">
+          <a href={`mailto:care@threadswear.in?subject=Invoice%20${order.id}`} className="btn btn-outline btn-sm">
             Request Invoice
           </a>
         </div>

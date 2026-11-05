@@ -62,8 +62,8 @@ export function NewsletterPopup() {
           <Image src={IMG.manPortraitKnit} alt="" fill sizes="400px" className="img-grade object-cover" />
         </div>
         <div className="flex flex-col justify-center p-8 sm:p-10">
-          <p className="eyebrow text-muted">The Threads Ware Letter</p>
-          <h3 className="display-md mt-4">Join the world of Threads Ware.</h3>
+          <p className="eyebrow text-muted">The Threads Wear Letter</p>
+          <h3 className="display-md mt-4">Join the world of Threads Wear.</h3>
           <p className="mt-4 text-[14px] leading-relaxed text-muted">Private access to new collections, early releases and editorial stories — plus 10% off your first order.</p>
           <NewsletterForm source="popup" className="mt-8" onDone={() => setTimeout(close, 2600)} />
           <button type="button" onClick={close} className="mt-6 self-start text-[12px] text-muted underline underline-offset-4 hover:text-ink">

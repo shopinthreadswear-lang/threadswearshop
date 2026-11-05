@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props) {
   const { category } = await params;
   const r = resolve(category);
   if (!r) return {};
-  return pageMeta({ title: r.title, description: `${r.description} Shop ${r.title.toLowerCase()} at Threads Ware — complimentary shipping above ₹2,999 and easy 15-day returns.`, path: `/men/${category}`, image: r.image });
+  return pageMeta({ title: r.title, description: `${r.description} Shop ${r.title.toLowerCase()} at Threads Wear — complimentary shipping above ₹2,999 and easy 15-day returns.`, path: `/men/${category}`, image: r.image });
 }
 
 export default async function CategoryPage({ params }: Props) {

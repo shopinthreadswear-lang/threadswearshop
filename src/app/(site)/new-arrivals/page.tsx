@@ -3,7 +3,7 @@ import { newArrivals } from "@/data/products";
 import { IMG } from "@/data/images";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "New Arrivals", description: "The latest Threads Ware menswear — new-season suede, linen, knitwear and tailoring. Shop new arrivals with complimentary shipping above ₹2,999.", path: "/new-arrivals" });
+export const metadata = pageMeta({ title: "New Arrivals", description: "The latest Threads Wear menswear — new-season suede, linen, knitwear and tailoring. Shop new arrivals with complimentary shipping above ₹2,999.", path: "/new-arrivals" });
 
 export default function NewArrivalsPage() {
   return (

@@ -73,7 +73,7 @@ export function LoginForm() {
       <p className="eyebrow text-muted">Welcome Back</p>
       <h1 className="display-md mt-4">Sign in</h1>
       <p className="mt-3 text-[14px] text-muted">
-        New to Threads Ware?{" "}
+        New to Threads Wear?{" "}
         <Link href="/account/register" onClick={(e) => { const n = query().get("next"); if (n) { e.preventDefault(); router.push(`/account/register?next=${encodeURIComponent(n)}`); } }} className="link-static text-ink">
           Create an account
         </Link>
@@ -94,7 +94,7 @@ export function LoginForm() {
         <button type="submit" disabled={loading} className="btn btn-primary btn-block">
           {loading ? "Signing in…" : "Sign In"}
         </button>
-        <p className="text-center text-[12px] text-faint">Demo account: arjun@threadsware.in · Threads@2026</p>
+        <p className="text-center text-[12px] text-faint">Demo account: arjun@threadswear.in · Threads@2026</p>
       </form>
       <div className="mt-10 border-t border-line pt-8 text-center">
         <p className="text-[13px] text-muted">Checking out without an account?</p>
@@ -150,7 +150,7 @@ export function RegisterForm() {
 
   return (
     <>
-      <p className="eyebrow text-muted">Join Threads Ware</p>
+      <p className="eyebrow text-muted">Join Threads Wear</p>
       <h1 className="display-md mt-4">Create an account</h1>
       <p className="mt-3 text-[14px] text-muted">
         Already a member?{" "}

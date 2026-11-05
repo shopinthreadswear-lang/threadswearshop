@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- THREADS WARE — production schema (Supabase / PostgreSQL 15+)
+-- THREADS WEAR — production schema (Supabase / PostgreSQL 15+)
 -- Mirrors the JSON store in src/lib/server/store.ts. Run in the Supabase SQL editor
 -- or via `supabase db push`. Row Level Security is enabled on every customer table;
 -- the storefront server uses the service role for order creation & price verification.

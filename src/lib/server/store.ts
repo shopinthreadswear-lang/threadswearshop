@@ -26,7 +26,7 @@ export type DB = {
   inventoryAdjustments: Record<string, number>;
 };
 
-const DATA_DIR = process.env.VERCEL ? "/tmp/threads-ware" : path.join(process.cwd(), ".data");
+const DATA_DIR = process.env.VERCEL ? "/tmp/threads-wear" : path.join(process.cwd(), ".data");
 const FILE = path.join(DATA_DIR, "store.json");
 
 let cache: DB | null = null;
@@ -62,7 +62,7 @@ function seed(): DB {
     id: "usr_demo_arjun",
     firstName: "Arjun",
     lastName: "Kapoor",
-    email: "arjun@threadsware.in",
+    email: "arjun@threadswear.in",
     phone: "9820012345",
     dob: "1994-03-18",
     passwordHash: hashPassword("Threads@2026"),

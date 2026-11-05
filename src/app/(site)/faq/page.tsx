@@ -4,7 +4,7 @@ import { JsonLd } from "@/components/ui/JsonLd";
 import { faqs } from "@/data/faq";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "Frequently Asked Questions", description: "Answers on orders, delivery, returns, payments, sizing, products and your Threads Ware account.", path: "/faq" });
+export const metadata = pageMeta({ title: "Frequently Asked Questions", description: "Answers on orders, delivery, returns, payments, sizing, products and your Threads Wear account.", path: "/faq" });
 
 export default function FaqPage() {
   return (

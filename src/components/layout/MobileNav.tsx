@@ -78,7 +78,7 @@ export function MobileNav({ open, onClose }: { open: boolean; onClose: () => voi
         >
           <div className="container-site flex h-[64px] shrink-0 items-center justify-between border-b border-line">
             <MenuToggle open onClick={onClose} className="-ml-2" label="Close menu" />
-            <Link href="/" onClick={onClose} aria-label="Threads Ware — home">
+            <Link href="/" onClick={onClose} aria-label="Threads Wear — home">
               <Wordmark compact />
             </Link>
             <span className="w-10" />

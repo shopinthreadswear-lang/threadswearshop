@@ -25,8 +25,8 @@ export function flyToBag(from: Element | null | undefined, src?: string): Promis
     top: `${a.top + a.height / 2 - size * 0.625}px`,
     width: `${size}px`,
     height: `${size * 1.25}px`,
-    borderRadius: "16px",
-    border: "4px solid var(--color-paper)",
+    borderRadius: "0",
+    border: "3px solid #fff",
     background: img ? `center / cover no-repeat url("${img}")` : "var(--color-burgundy)",
     boxShadow: "0 18px 40px -16px rgb(62 33 23 / 0.6)",
     zIndex: "400",
@@ -58,7 +58,7 @@ export function flyToBag(from: Element | null | undefined, src?: string): Promis
 }
 
 /** A small burst of hearts/sparks from an element — used when something is saved. */
-export function burst(from: Element | null | undefined, color = "var(--color-burgundy)") {
+export function burst(from: Element | null | undefined, color = "var(--color-denim)") {
   if (typeof window === "undefined" || !from || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const r = from.getBoundingClientRect();
   const cx = r.left + r.width / 2;

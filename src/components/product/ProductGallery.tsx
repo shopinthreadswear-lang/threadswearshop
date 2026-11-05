@@ -57,7 +57,7 @@ export function ProductGallery({ images, name }: { images: string[]; name: strin
             key={src + i}
             type="button"
             onClick={() => setLightbox(i)}
-            data-cursor="Zoom"
+           
             data-pdp-media={i === 0 ? "" : undefined}
             className={cn("group relative cursor-zoom-in overflow-hidden bg-bone", i === 0 || i === 3 ? "col-span-2 aspect-[4/5]" : "aspect-[3/4]")}
             aria-label={`Zoom ${alt(i)}`}

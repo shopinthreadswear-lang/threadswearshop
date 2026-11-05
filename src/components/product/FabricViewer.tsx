@@ -23,7 +23,7 @@ export function FabricViewer({ materials, name, colorHex }: { materials: string;
       </button>
       <Modal open={open} onClose={() => setOpen(false)} title={`The cloth — ${name}`} wide>
         <div className="grid gap-8 md:grid-cols-2">
-          <div className="relative bg-night" data-cursor="Explore" data-cursor-tone="light">
+          <div className="relative bg-night">
             <Cloth3D fabric={fabric} variant="swatch" className="relative aspect-square w-full" />
             <p className="pointer-events-none absolute bottom-3 left-3 text-[11px] uppercase tracking-[0.16em] text-ivory/60">Live 3D · move to ripple</p>
           </div>

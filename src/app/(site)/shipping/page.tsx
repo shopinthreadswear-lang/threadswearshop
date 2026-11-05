@@ -3,7 +3,7 @@ import { PolicyPage } from "@/components/content/PolicyPage";
 import { pageMeta } from "@/lib/seo";
 import { commerce, formatINR } from "@/lib/site";
 
-export const metadata = pageMeta({ title: "Shipping Information", description: "Complimentary shipping on Threads Ware orders above ₹2,999. Delivery timelines, express options, Cash on Delivery and order tracking across India.", path: "/shipping" });
+export const metadata = pageMeta({ title: "Shipping Information", description: "Complimentary shipping on Threads Wear orders above ₹2,999. Delivery timelines, express options, Cash on Delivery and order tracking across India.", path: "/shipping" });
 
 export default function ShippingPage() {
   return (
@@ -34,7 +34,7 @@ export default function ShippingPage() {
         { id: "coverage", title: "Where we deliver", body: <><p>We deliver to over 19,000 PIN codes across India through Blue Dart, Delhivery and Shiprocket partners. Check your PIN code on any product page for an exact delivery estimate.</p><p>We don’t yet ship internationally — international delivery to the UAE, UK, USA and Singapore launches in early 2027.</p></> },
         { id: "tracking", title: "Tracking your order", body: <p>You’ll receive an SMS and email with your courier and tracking number as soon as your order ships. Follow it any time on our <Link href="/track-order">Track Order</Link> page, or in <Link href="/account/orders">My Account</Link>.</p> },
         { id: "packaging", title: "Packaging", body: <p>Every order arrives in our matte black rigid box, tissue-wrapped and sealed, with a handwritten note. Our packaging is plastic-free and fully recyclable. If you’d prefer minimal packaging, add a note at checkout.</p> },
-        { id: "issues", title: "Delays & damaged parcels", body: <p>If your parcel is delayed beyond the estimated date or arrives damaged, please contact us within 48 hours at <a href="mailto:care@threadsware.in">care@threadsware.in</a> with your order number and a photo. We’ll make it right — usually with a replacement dispatched the same day.</p> },
+        { id: "issues", title: "Delays & damaged parcels", body: <p>If your parcel is delayed beyond the estimated date or arrives damaged, please contact us within 48 hours at <a href="mailto:care@threadswear.in">care@threadswear.in</a> with your order number and a photo. We’ll make it right — usually with a replacement dispatched the same day.</p> },
       ]}
     />
   );

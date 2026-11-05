@@ -6,8 +6,6 @@ import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { getProductById, imagesFor, variantStock } from "@/data/products";
 import { useStore } from "@/components/providers/StoreProvider";
-import { SpringHeading } from "@/components/motion/Scroll";
-import { Doodle } from "@/components/doodles/Doodle";
 import { ArrowLeft, ArrowRight } from "@/components/ui/Icons";
 import { formatINR } from "@/lib/site";
 import { flyToBag } from "@/lib/fly";
@@ -16,9 +14,9 @@ import type { Product } from "@/lib/types";
 
 const SIZES = ["S", "M", "L", "XL"];
 const LAYERS = [
-  { key: "outer", label: "Outer layer", tilt: -7, pos: "left-[2%] top-[4%] w-[52%]", z: 1 },
-  { key: "mid", label: "Shirt or knit", tilt: 5, pos: "right-[2%] top-[14%] w-[50%]", z: 2 },
-  { key: "base", label: "The tee", tilt: -2, pos: "left-[22%] bottom-[2%] w-[46%]", z: 3 },
+  { key: "outer", label: "Outer layer", tilt: -3, pos: "left-[2%] top-[4%] w-[52%]", z: 1 },
+  { key: "mid", label: "Shirt or knit", tilt: 2, pos: "right-[2%] top-[14%] w-[50%]", z: 2 },
+  { key: "base", label: "The tee", tilt: -1, pos: "left-[22%] bottom-[2%] w-[46%]", z: 3 },
 ] as const;
 
 /** First colour that has the size in stock, so "add the look" never adds a sold-out variant. */
@@ -77,18 +75,16 @@ export function LookBuilder({ outer, mid, base }: { outer: string[]; mid: string
   };
 
   return (
-    <section aria-labelledby="builder-title" className="relative overflow-x-clip border-t border-line bg-paper py-20 md:py-28">
+    <section aria-labelledby="builder-title" className="relative overflow-x-clip border-t border-line bg-paper py-14 md:py-20">
       <div className="container-site">
-        <div className="mb-12 text-center md:mb-16">
-          <SpringHeading id="builder-title" className="display-md text-burgundy" parts={["Build", { em: "the look" }]} />
-          <p className="mx-auto mt-4 max-w-md font-mono text-[12.5px] leading-[1.8] text-muted">Pick an outer layer, a shirt and a tee — or shuffle for an idea. One size, one tap, the whole outfit in your bag.</p>
+        <div className="mb-10 text-center md:mb-12">
+          <h2 id="builder-title" className="display-md">Build the Look</h2>
+          <p className="mx-auto mt-2 max-w-md text-[14px] leading-relaxed text-muted">Pick an outer layer, a shirt and a tee — or shuffle for an idea. One size, one tap, the whole outfit in your bag.</p>
         </div>
 
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-20">
           {/* The board */}
           <div ref={board} className="relative mx-auto aspect-[1/1.05] w-full max-w-[560px]" aria-hidden>
-            <Doodle name="sparkle" className="spin-slow absolute -left-2 top-0 h-9 w-9 text-ochre [animation-duration:10s]" strokeWidth={2.2} />
-            <Doodle name="arrow" className="absolute -right-4 bottom-[18%] hidden w-20 rotate-[160deg] text-burgundy sm:block" strokeWidth={1.8} />
             {LAYERS.map((l) => {
               const p = pick[l.key];
               return (
@@ -106,10 +102,10 @@ export function LookBuilder({ outer, mid, base }: { outer: string[]; mid: string
                       animate="center"
                       exit="exit"
                       whileHover={{ scale: 1.04, rotate: 0, transition: { type: "spring", stiffness: 300, damping: 18 } }}
-                      className="relative aspect-[4/5] overflow-hidden rounded-[20px] border-[6px] border-ivory bg-bone shadow-[0_26px_44px_-26px_rgb(62_33_23/0.6)]"
+                      className="relative aspect-[4/5] overflow-hidden border-[5px] border-cream bg-bone shadow-[0_18px_36px_-22px_rgb(0_0_0/0.4)]"
                     >
                       <Image src={imagesFor(p)[0]} alt="" fill sizes="(max-width:1024px) 50vw, 280px" className="object-cover" />
-                      <span className="absolute bottom-2.5 left-2.5 rounded-full bg-ivory/95 px-2.5 py-1 font-mono text-[11px] text-burgundy">{formatINR(p.price)}</span>
+                      <span className="absolute bottom-2.5 left-2.5 bg-cream px-2 py-0.5 text-[11.5px] text-ink">{formatINR(p.price)}</span>
                     </motion.div>
                   </AnimatePresence>
                 </div>
@@ -125,11 +121,11 @@ export function LookBuilder({ outer, mid, base }: { outer: string[]; mid: string
                 const n = lists[l.key].length;
                 return (
                   <li key={l.key} className="flex items-center gap-3 py-4 sm:gap-4">
-                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border-2 border-burgundy font-mono text-[12px] text-burgundy">{i + 1}</span>
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-line text-[12px] text-burgundy">{i + 1}</span>
                     <div className="min-w-0 flex-1">
-                      <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-muted">{l.label}</p>
+                      <p className="text-[12px] text-muted">{l.label}</p>
                       <AnimatePresence mode="wait" initial={false}>
-                        <motion.p key={p.id} initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -10, opacity: 0 }} transition={{ duration: 0.22 }} className="line-clamp-2 font-serif text-[17px] leading-snug sm:truncate md:text-[21px]">
+                        <motion.p key={p.id} initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -10, opacity: 0 }} transition={{ duration: 0.22 }} className="line-clamp-2 text-[15px] font-medium leading-snug sm:truncate md:text-[16px]">
                           <Link href={`/products/${p.slug}`} className="link-u hit">
                             {p.name}
                           </Link>
@@ -140,7 +136,7 @@ export function LookBuilder({ outer, mid, base }: { outer: string[]; mid: string
                       <button type="button" onClick={() => step(l.key, -1)} aria-label={`Previous ${l.label.toLowerCase()}`} className="grid h-11 w-11 place-items-center rounded-full border border-line transition-colors hover:border-burgundy hover:text-burgundy active:scale-95">
                         <ArrowLeft size={14} />
                       </button>
-                      <span className="hidden w-10 text-center font-mono text-[11px] tabular-nums text-muted sm:inline" aria-hidden>
+                      <span className="hidden w-10 text-center text-[11px] tabular-nums text-muted sm:inline" aria-hidden>
                         {idx[l.key] + 1}/{n}
                       </span>
                       <button type="button" onClick={() => step(l.key, 1)} aria-label={`Next ${l.label.toLowerCase()}`} className="grid h-11 w-11 place-items-center rounded-full border border-line transition-colors hover:border-burgundy hover:text-burgundy active:scale-95">
@@ -154,30 +150,30 @@ export function LookBuilder({ outer, mid, base }: { outer: string[]; mid: string
 
             <div className="mt-7 flex flex-wrap items-center justify-between gap-5">
               <div role="radiogroup" aria-label="Your size" className="flex items-center gap-2">
-                <span className="mr-1 font-mono text-[11px] uppercase tracking-[0.1em] text-muted">Size</span>
+                <span className="mr-1 text-[12px] text-muted">Size</span>
                 {SIZES.map((s) => (
-                  <button key={s} type="button" role="radio" aria-checked={size === s} onClick={() => setSize(s)} className={cn("grid h-11 min-w-11 place-items-center rounded-full border px-3 font-mono text-[12px] transition-colors", size === s ? "border-burgundy bg-burgundy text-cream" : "border-line hover:border-burgundy")}>
+                  <button key={s} type="button" role="radio" aria-checked={size === s} onClick={() => setSize(s)} className={cn("grid h-11 min-w-11 place-items-center rounded-full border px-3 text-[12px] transition-colors", size === s ? "border-burgundy bg-burgundy text-cream" : "border-line hover:border-burgundy")}>
                     {s}
                   </button>
                 ))}
               </div>
-              <motion.button type="button" onClick={shuffle} whileTap={{ rotate: -20, scale: 0.92 }} className="hit group inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.1em] text-burgundy">
-                <motion.span key={shuffles} initial={{ rotate: 0 }} animate={{ rotate: 360 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="grid h-9 w-9 place-items-center rounded-full bg-ochre text-[16px] text-burgundy">
+              <motion.button type="button" onClick={shuffle} whileTap={{ rotate: -20, scale: 0.92 }} className="hit group inline-flex items-center gap-2 text-[13px] font-medium text-burgundy">
+                <motion.span key={shuffles} initial={{ rotate: 0 }} animate={{ rotate: 360 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="grid h-9 w-9 place-items-center rounded-full bg-mist text-[16px] text-ink">
                   ⟳
                 </motion.span>
                 Shuffle
               </motion.button>
             </div>
 
-            <div className="mt-8 flex flex-wrap items-center justify-between gap-5 rounded-[22px] bg-burgundy p-6 text-cream md:p-7">
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-5 bg-night p-6 text-cream md:p-7">
               <div aria-live="polite">
-                <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-cream/75">The look, together</p>
+                <p className="text-[12px] text-cream/75">The look, together</p>
                 <AnimatePresence mode="wait" initial={false}>
-                  <motion.p key={total} initial={{ y: 14, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -10, opacity: 0 }} transition={{ duration: 0.22 }} className="font-serif text-[30px] leading-tight">
+                  <motion.p key={total} initial={{ y: 14, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -10, opacity: 0 }} transition={{ duration: 0.22 }} className="font-serif text-[30px] font-medium leading-tight">
                     {formatINR(total)}
                   </motion.p>
                 </AnimatePresence>
-                {missing.length > 0 && <p className="mt-1 font-mono text-[11.5px] text-champagne-soft">{missing.map((p) => p.name).join(", ")} is sold out in {size}</p>}
+                {missing.length > 0 && <p className="mt-1 text-[11.5px] text-champagne-soft">{missing.map((p) => p.name).join(", ")} is sold out in {size}</p>}
               </div>
               <button type="button" onClick={addLook} disabled={busy || missing.length === pieces.length} className="btn btn-light">
                 {busy ? "Adding…" : "Add the look"} <ArrowRight size={14} className="btn-arrow" />

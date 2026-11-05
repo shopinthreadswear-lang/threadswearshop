@@ -3,7 +3,7 @@ import { TrackOrder } from "./TrackOrder";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "Track Your Order", description: "Track your Threads Ware order with your order number and email or mobile number. Live courier updates from dispatch to doorstep.", path: "/track-order" });
+export const metadata = pageMeta({ title: "Track Your Order", description: "Track your Threads Wear order with your order number and email or mobile number. Live courier updates from dispatch to doorstep.", path: "/track-order" });
 
 export default function Page() {
   return (

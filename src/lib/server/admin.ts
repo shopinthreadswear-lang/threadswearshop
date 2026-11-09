@@ -46,9 +46,12 @@ export const can = (user: Pick<AdminUser, "role"> | null | undefined, area: Area
 const sha = (s: string) => crypto.createHash("sha256").update(s).digest();
 const stamp = (secretish: string) => sha(`tw-admin:${secretish}`).toString("base64url").slice(0, 16);
 
+/** Env values as typed in a dashboard: forgive surrounding spaces, line breaks and quote marks. */
+const envValue = (v: string | undefined) => (v ?? "").trim().replace(/^(["'])(.*)\1$/s, "$2").trim();
+
 function owner() {
-  const email = (process.env.ADMIN_EMAIL ?? "").trim().toLowerCase();
-  const password = process.env.ADMIN_PASSWORD ?? "";
+  const email = envValue(process.env.ADMIN_EMAIL).toLowerCase();
+  const password = envValue(process.env.ADMIN_PASSWORD);
   return email && password ? { email, password } : null;
 }
 

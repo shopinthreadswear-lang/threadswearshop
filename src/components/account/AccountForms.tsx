@@ -269,7 +269,7 @@ export function PaymentMethods({ payments }: { payments: SavedPayment[] }) {
           <Plus size={12} /> Add UPI ID
         </button>
       </div>
-      <p className="mt-6 max-w-xl text-[12.5px] text-muted">Cards are tokenised by our PCI-DSS certified payment partner in line with RBI guidelines. Threads Wear stores only the card brand, last four digits and expiry — never your full card number or CVV.</p>
+      <p className="mt-6 max-w-xl text-[12.5px] text-muted">Cards are tokenised by our PCI-DSS certified payment partner in line with RBI guidelines. Threads Ware stores only the card brand, last four digits and expiry — never your full card number or CVV.</p>
       <Modal open={!!adding} onClose={() => setAdding(null)} title={adding === "card" ? "Add a Card" : "Add a UPI ID"}>
         <form onSubmit={save} noValidate className="space-y-5">
           {errors.form && <p className="field-error" role="alert">{errors.form}</p>}

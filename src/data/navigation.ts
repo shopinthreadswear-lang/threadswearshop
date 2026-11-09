@@ -53,7 +53,7 @@ export const footerNav = {
   ],
   About: [
     ["Our Story", "/our-story"],
-    ["About Threads Wear", "/about"],
+    ["About Threads Ware", "/about"],
     ["Journal", "/journal"],
     ["Careers", "/careers"],
     ["Stores", "/stores"],

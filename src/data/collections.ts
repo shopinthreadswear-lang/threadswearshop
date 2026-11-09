@@ -6,7 +6,7 @@ export const collections: Collection[] = [
     slug: "signature",
     name: "The Signature Collection",
     tagline: "Modern tailoring meets effortless everyday luxury.",
-    description: "The pieces that define Threads Wear — a suede jacket cut close to the body, a half-canvassed blazer with a soft shoulder, an oxford shirt with a collar that holds its line. Made in limited runs from the finest materials we source.",
+    description: "The pieces that define Threads Ware — a suede jacket cut close to the body, a half-canvassed blazer with a soft shoulder, an oxford shirt with a collar that holds its line. Made in limited runs from the finest materials we source.",
     image: IMG.manSuedeStreet,
     secondaryImage: IMG.suedeJacket,
   },

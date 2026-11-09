@@ -4,7 +4,7 @@ import { CTA } from "@/components/ui/CTA";
 import { IMG } from "@/data/images";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "Our Story", description: "From a single heavyweight T-shirt in a Mumbai apartment to a considered menswear wardrobe — the story of Threads Wear.", path: "/our-story", image: IMG.tailoring });
+export const metadata = pageMeta({ title: "Our Story", description: "From a single heavyweight T-shirt in a Mumbai apartment to a considered menswear wardrobe — the story of Threads Ware.", path: "/our-story", image: IMG.tailoring });
 
 const TIMELINE = [
   ["2021", "The first tee", "Frustrated by T-shirts that lost their shape after three washes, our founder spent eleven months developing a single 240 GSM heavyweight tee with a family workshop in Tiruppur. The Mercer was born."],
@@ -34,7 +34,7 @@ export default function OurStoryPage() {
           <p className="font-serif text-[clamp(1.6rem,2.6vw,2.2rem)] leading-snug text-ink">We didn’t set out to build a fashion brand. We set out to make one T-shirt properly.</p>
           <p>In 2021, our founder Aarav Mehta was tired of buying menswear that looked good on the hanger and tired after a month. Collars curled. Seams twisted. Prices climbed while quality quietly fell.</p>
           <p>So he went to Tiruppur, sat with a family that had been knitting cotton for three generations, and spent eleven months on a single heavyweight tee. Forty samples. Six fabric weights. One shoulder seam moved by eight millimetres.</p>
-          <p>That obsession is still how we work. Every Threads Wear piece is designed in Mumbai, made by partners we know by name, and released only when it’s right.</p>
+          <p>That obsession is still how we work. Every Threads Ware piece is designed in Mumbai, made by partners we know by name, and released only when it’s right.</p>
         </Reveal>
       </section>
 

@@ -23,7 +23,7 @@ export function NewsletterForm({ source = "footer", light = false, className, on
       const json = await res.json();
       if (!json.ok) throw new Error(json.error);
       setState("done");
-      setMsg(json.already ? "You’re already on the list — welcome back." : "Welcome to Threads Wear. Your 10% code WELCOME10 is on its way.");
+      setMsg(json.already ? "You’re already on the list — welcome back." : "Welcome to Threads Ware. Your 10% code WELCOME10 is on its way.");
       track({ name: "newsletter_signup", source });
       try {
         localStorage.setItem("tw.subscribed", "1");

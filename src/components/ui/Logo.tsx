@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 
-/** Wordmark — one line of heavy display serif; the only serif on the site, so the name always reads as a logo. */
+/** Wordmark — heavy italic uppercase, set tight, like a racing-team logotype. */
 export function Wordmark({ className, compact = false }: { className?: string; compact?: boolean }) {
   return (
-    <span className={cn("inline-block whitespace-nowrap font-[family-name:var(--font-logo)] font-extrabold leading-none tracking-[-0.01em] transition-[font-size] duration-500 ease-[var(--ease-lux)]", compact ? "text-[21px] md:text-[23px]" : "text-[22px] md:text-[27px]", className)}>
-      Threads Wear
+    <span className={cn("inline-block whitespace-nowrap font-serif text-[length:var(--wm)] font-black uppercase italic leading-none tracking-[-0.04em] transition-[font-size] duration-500 ease-[var(--ease-lux)]", compact ? "[--wm:18px] md:[--wm:21px]" : "[--wm:19px] sm:[--wm:21px] md:[--wm:25px]", className)}>
+      Threads Ware
     </span>
   );
 }
@@ -33,7 +33,7 @@ export function Monogram({ size = 44, className, animated = false }: { size?: nu
 
 export function LogoLink({ className, compact }: { className?: string; compact?: boolean }) {
   return (
-    <Link href="/" aria-label="Threads Wear — home" className={cn("inline-flex", className)}>
+    <Link href="/" aria-label="Threads Ware — home" className={cn("inline-flex", className)}>
       <Wordmark compact={compact} />
     </Link>
   );

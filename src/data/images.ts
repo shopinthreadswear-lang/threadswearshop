@@ -1,7 +1,7 @@
 /**
  * Editorial photography library.
  * Placeholder photography is served from Unsplash's CDN; replace each entry with
- * Threads Wear campaign photography (or a DAM / Supabase Storage URL) before launch.
+ * Threads Ware campaign photography (or a DAM / Supabase Storage URL) before launch.
  */
 const u = (id: string) => `https://images.unsplash.com/photo-${id}`;
 

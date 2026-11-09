@@ -4,11 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { AnnouncementBar } from "./AnnouncementBar";
 import { MegaMenu, type MenuKey } from "./MegaMenu";
 import { MobileNav } from "./MobileNav";
 import { MenuToggle } from "./MenuToggle";
 import { Wordmark } from "@/components/ui/Logo";
-import { BagIcon, ChevronDown, HeartIcon, SearchIcon, UserIcon } from "@/components/ui/Icons";
+import { BagIcon, HeartIcon, SearchIcon, UserIcon } from "@/components/ui/Icons";
 import { useStore } from "@/components/providers/StoreProvider";
 import { cn } from "@/lib/cn";
 
@@ -82,18 +83,19 @@ export function Header() {
   return (
     <>
       <div
-        className="fixed inset-x-0 top-0 z-50"
+        className={cn("fixed inset-x-0 top-0 z-50 transition-transform duration-500 ease-[var(--ease-lux)]", scrolled && "-translate-y-9")}
         onMouseLeave={scheduleClose}
         style={{ "--count-fg": transparent ? "var(--color-wine)" : "var(--color-cream)" } as React.CSSProperties}
       >
+        <AnnouncementBar />
         <header
           className={cn(
             "relative transition-[background-color,color,height,border-color,backdrop-filter] duration-500 ease-[var(--ease-lux)]",
-            transparent ? "border-b border-transparent bg-transparent text-cream" : "border-b border-line bg-ivory text-ink",
+            transparent ? "border-b border-transparent bg-transparent text-cream" : "border-b border-line bg-ivory/[0.96] text-ink backdrop-blur-md",
           )}
         >
           {transparent && <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-night/35 to-transparent" />}
-          <div className={cn("container-site relative grid grid-cols-[1fr_auto_1fr] items-center transition-[height] duration-500 ease-[var(--ease-lux)]", scrolled ? "h-[60px]" : "h-[64px] md:h-[76px]")}>
+          <div className={cn("container-site relative grid grid-cols-[1fr_auto_1fr] items-center transition-[height] duration-500 ease-[var(--ease-lux)]", scrolled ? "h-[60px]" : "h-[64px] md:h-[78px]")}>
             {/* Left */}
             <div className="flex items-center gap-1">
               <MenuToggle open={mobileOpen} onClick={() => setMobileOpen(true)} className="-ml-2 lg:hidden" label="Open menu" />
@@ -101,16 +103,15 @@ export function Header() {
                 <SearchIcon />
               </button>
               <nav aria-label="Primary" className="hidden lg:block">
-                <ul className="flex items-center gap-6 xl:gap-7">
+                <ul className="flex items-center gap-6 min-[1520px]:gap-7">
                   {NAV.map((n) => {
                     const active = pathname === n.href || (n.href !== "/" && pathname.startsWith(n.href + "/"));
                     return (
-                      <li key={n.href} className={cn(n.wideOnly && "hidden xl:block")} onMouseEnter={() => (n.menu ? openMenu(n.menu) : scheduleClose())}>
+                      <li key={n.href} className={cn(n.wideOnly && "hidden min-[1520px]:block")} onMouseEnter={() => (n.menu ? openMenu(n.menu) : scheduleClose())}>
                         {n.menu ? (
                           <span className="flex items-center">
-                            <Link href={n.href} aria-current={active ? "page" : undefined} className={cn("link-u inline-flex items-center gap-1 whitespace-nowrap py-1 text-[13.5px] font-medium", menu === n.menu && "[background-size:100%_1px]")}>
+                            <Link href={n.href} aria-current={active ? "page" : undefined} className={cn("link-u whitespace-nowrap py-1 text-[13px] font-semibold [background-size:0%_2px] hover:[background-size:100%_2px] aria-[current=page]:[background-size:100%_2px]", menu === n.menu && "[background-size:100%_2px]")}>
                               {n.label}
-                              <ChevronDown size={11} className={cn("transition-transform duration-300", menu === n.menu && "rotate-180")} />
                             </Link>
                             <button
                               type="button"
@@ -124,7 +125,7 @@ export function Header() {
                             </button>
                           </span>
                         ) : (
-                          <Link href={n.href} aria-current={active ? "page" : undefined} className="link-u whitespace-nowrap py-1 text-[13.5px] font-medium">
+                          <Link href={n.href} aria-current={active ? "page" : undefined} className="link-u whitespace-nowrap py-1 text-[13px] font-semibold">
                             {n.label}
                           </Link>
                         )}
@@ -136,15 +137,15 @@ export function Header() {
             </div>
 
             {/* Center */}
-            <Link href="/" aria-label="Threads Wear — home" className="justify-self-center">
-              <Wordmark compact={scrolled} />
+            <Link href="/" aria-label="Threads Ware — home" className="justify-self-center">
+              <Wordmark compact={scrolled} className={transparent ? undefined : "text-burgundy"} />
             </Link>
 
             {/* Right */}
             <div className="flex items-center justify-end gap-0.5 md:gap-2">
               <button type="button" onClick={() => setSearchOpen(true)} className="hidden items-center gap-2 p-2 lg:flex" aria-label="Search">
                 <SearchIcon />
-                <span className="hidden font-mono text-[11.5px] font-medium uppercase tracking-[0.1em] hidden">Search</span>
+                <span className="hidden text-[13px] font-semibold xl:inline">Search</span>
               </button>
               <Link href={user ? "/account" : "/account/login"} className="hidden p-2 md:block" aria-label={user ? `Account — ${user.firstName}` : "Sign in"}>
                 <UserIcon />
@@ -191,7 +192,7 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-40 hidden bg-ink/25 lg:block"
+            className="fixed inset-0 z-40 hidden bg-night/25 lg:block"
             onMouseEnter={scheduleClose}
             onClick={() => setMenu(null)}
           />

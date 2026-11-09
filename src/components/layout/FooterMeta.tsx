@@ -20,11 +20,11 @@ export function FooterMeta() {
     else window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   };
   return (
-    <div className="flex items-center gap-6 font-mono text-[11.5px] text-muted">
+    <div className="flex items-center gap-6 text-[11.5px] font-medium text-cream/60">
       <span>
-        Mumbai studio <span className="tabular-nums text-ink">{time ?? "--:--"}</span> IST
+        Mumbai studio <span className="tabular-nums text-cream">{time ?? "--:--"}</span> IST
       </span>
-      <button type="button" onClick={top} className="hit group flex items-center gap-2 font-medium text-ink hover:text-denim">
+      <button type="button" onClick={top} className="hit group flex items-center gap-2 font-bold uppercase tracking-[0.1em] text-ochre hover:text-cream">
         Back to top <ArrowRight size={13} className="-rotate-90 transition-transform duration-300 group-hover:-translate-y-0.5" />
       </button>
     </div>

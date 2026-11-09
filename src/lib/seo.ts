@@ -9,8 +9,8 @@ export function pageMeta({ title, description, path, image, noindex, type = "web
     title,
     description,
     alternates: { canonical: url },
-    openGraph: { title: `${title} | Threads Wear`, description, url, siteName: site.shortName, type, locale: "en_IN", images: [{ url: img, width: 1200, height: 630, alt: title }] },
-    twitter: { card: "summary_large_image", title: `${title} | Threads Wear`, description, images: [img], site: "@threadswear" },
+    openGraph: { title: `${title} | Threads Ware`, description, url, siteName: site.shortName, type, locale: "en_IN", images: [{ url: img, width: 1200, height: 630, alt: title }] },
+    twitter: { card: "summary_large_image", title: `${title} | Threads Ware`, description, images: [img], site: "@threadsware" },
     robots: noindex ? { index: false, follow: false } : undefined,
   };
 }

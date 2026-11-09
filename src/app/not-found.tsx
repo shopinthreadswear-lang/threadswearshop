@@ -12,7 +12,7 @@ export default function NotFound() {
   return (
     <>
       <Header />
-      <main id="main" className="pt-[var(--hdr)] [--hdr:64px] md:[--hdr:76px]">
+      <main id="main" className="pt-[var(--hdr)] [--hdr:100px] md:[--hdr:114px]">
         <section className="container-site grid min-h-[72vh] items-center gap-12 py-16 md:grid-cols-2">
           <div>
             <p className="eyebrow text-muted">Error 404</p>

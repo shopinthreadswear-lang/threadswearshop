@@ -437,7 +437,7 @@ export function CheckoutForm() {
                       ["card", "Credit / Debit Card", "Visa, Mastercard, RuPay, Amex"],
                       ["netbanking", "Net Banking", "All major Indian banks"],
                       ["wallet", "Wallets", "Paytm, PhonePe, Amazon Pay"],
-                      ["giftcard", "Threads Wear Gift Card", "Redeem your gift card balance"],
+                      ["giftcard", "Threads Ware Gift Card", "Redeem your gift card balance"],
                       ["cod", "Cash on Delivery", codAllowed ? `₹${commerce.codFee} handling fee` : `Available on orders up to ₹${commerce.codLimit.toLocaleString("en-IN")}`],
                     ] as [PayMethod, string, string][]
                   ).map(([m, label, hint]) => {
@@ -509,7 +509,7 @@ export function CheckoutForm() {
                                       <input id="holder" autoComplete="cc-name" className="field bg-ivory" value={pay.holder} onChange={(e) => setPay({ ...pay, holder: e.target.value })} aria-invalid={!!errors.holder} />
                                       {inputErr("holder")}
                                     </div>
-                                    <p className="text-[11.5px] text-faint sm:col-span-2">Your card details are encrypted and tokenised by our payment partner — they are never stored on Threads Wear servers.</p>
+                                    <p className="text-[11.5px] text-faint sm:col-span-2">Your card details are encrypted and tokenised by our payment partner — they are never stored on Threads Ware servers.</p>
                                   </>
                                 )}
                                 {m === "netbanking" && (

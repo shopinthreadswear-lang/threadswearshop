@@ -1,4 +1,4 @@
-# THREADS WEAR — Premium Menswear E-commerce
+# THREADS WARE — Premium Menswear E-commerce
 
 A complete, multi-page luxury **topwear and designer wear** storefront (T-shirts, shirts, polos, knitwear, outerwear and tailoring) built with **Next.js 16 (App Router)**, **React 19**, **TypeScript**, **Tailwind CSS 4** and **Framer Motion**. It covers the whole customer journey: discovery → product → bag → checkout → confirmation → account → tracking → returns → support.
 
@@ -22,8 +22,8 @@ npm run build && npm start
 
 | What | Value |
 | --- | --- |
-| Customer account | `arjun@threadswear.in` / `Threads@2026` (2 orders, addresses, saved cards, wishlist) |
-| Track an order (guest) | `TW-517406` + `arjun@threadswear.in` |
+| Customer account | `arjun@threadsware.in` / `Threads@2026` (2 orders, addresses, saved cards, wishlist) |
+| Track an order (guest) | `TW-517406` + `arjun@threadsware.in` |
 | Promo codes | `WELCOME10` (10%), `TW500` (₹500 off ≥ ₹4,999), `SIGNATURE15` (15% off ≥ ₹9,999) |
 | Gift card | `TWGC-DEMO-2026` (₹5,000 balance) |
 | Simulate a declined payment | Card ending `0002` (e.g. `4000 0000 0000 0002`) or UPI `fail@upi` |
@@ -75,7 +75,7 @@ supabase/schema.sql    Production PostgreSQL schema with RLS
 
 ### Experience layer (3D, motion, interaction)
 
-**Homepage:** a clean storefront — full-bleed campaign slider under a transparent header, New Arrivals with category tabs, four promo tiles, Best Sellers, the Build the Look outfit builder and a service strip.
+**Homepage:** oxblood hero slider (duotone looks, centred uppercase title, price bubble, round arrows, motion-blur transitions), trust bar, the shelf as a rounded-card carousel with a progress bar, the oxblood story block, look cards, the Build-the-look outfit builder, new arrivals, customer notes, makers strip, delivery map, "in the wild" tiles, and a dark espresso footer with a "Made to be worn" sign.
 
 **3D (`src/components/three/`)**
 - `ClothScene` is one R3F scene used in two places: the fabric swatch (The Cloth section and the PDP viewer) and the closing CTA (suede). Folds, a pointer "press" ripple and analytic normals are computed in the **vertex shader** (injected into `MeshPhysicalMaterial` with its cloth `sheen` model), so the CPU does no per-frame geometry work.
@@ -83,11 +83,11 @@ supabase/schema.sql    Production PostgreSQL schema with RLS
 - `fabrics.ts` holds the physical values and the plain-language copy (what it is / why it matters / what you get) for each fabric. `fabricForMaterial()` maps a product's material to the matching fabric for the PDP "See the cloth in 3D" dialog.
 - `Cloth3D` handles performance and safety. three.js lives in its own chunk, loaded only on the homepage or on demand. Scenes mount after `load` plus an idle slot (so they never compete with first paint), only near the viewport, and pause their render loop off-screen or in background tabs. Lower-power devices (coarse pointer, small screen, ≤4 cores or Save-Data) get fewer segments and lower DPR, and adaptive DPR steps down further if frame rate drops. Reduced motion renders a single still frame. Without WebGL, the CSS poster remains. Materials and the PMREM environment are disposed on unmount.
 
-**Motion:** restrained — slider crossfades, scroll reveals on products, photos that fly to the bag on add, and a burst on wishlist saves. Under `prefers-reduced-motion` these are off. `SmoothScroll` (Lenis) handles desktop wheel scrolling.
+**Motion system:** three tiers in tokens: micro 220ms, component 450ms, cinematic 900ms, with expo-out easing. Primitives live in `src/components/motion/`: `WordReveal` (masked word stagger, headings only), `Magnetic` (primary CTAs, fine pointers only), `CursorLabel` (contextual "View / Explore / Zoom" disc via `data-cursor`; the native cursor is never hidden), `StatCounter`, `SmoothScroll` (Lenis on desktop wheel only; scroll panels opt out with `data-lenis-prevent`; it pauses while modals lock the body), `FloatingField` (animated labels, inline validation, success tick). Under `prefers-reduced-motion`, Lenis, the cursor, parallax, auto-advance and 3D animation are all off and headings render statically.
 
 ### Design system
 
-Tokens live in `src/app/globals.css` (`@theme`): colour (white canvas, grey product tiles `#F1F1F1`, ink `#1B1B1B`, denim accent `#4A6F96`), typography (Outfit headings, Inter body, Playfair Display for the wordmark only, via `next/font`), spacing (`--spacing-gutter`, `--spacing-section`), container widths, motion (`--ease-lux`, 200–700ms), and component classes (`.btn-*`, `.field`, `.check`, `.prose-tw`). Mixed photography is unified with a single `img-grade` filter. `prefers-reduced-motion` disables all animation, and Framer Motion respects it via `MotionConfig`.
+Tokens live in `src/app/globals.css` (`@theme`): colour (butter-cream canvas `#F8EFDF`, oxblood `#7A1C2A`, ochre `#E2A93B`, bottle green `#25412F`, espresso `#3E2117`, ink `#2A1A14`), typography (Montserrat heavy uppercase display, labels and buttons; Manrope body, via `next/font`), spacing (`--spacing-gutter`, `--spacing-section`), container widths, motion (`--ease-lux`, 200–700ms), and component classes (`.btn-*`, `.field`, `.check`, `.prose-tw`). Mixed photography is unified with a single `img-grade` filter. `prefers-reduced-motion` disables all animation, and Framer Motion respects it via `MotionConfig`.
 
 ### Security
 
@@ -113,6 +113,6 @@ Every page has a unique title, description, canonical URL, Open Graph and Twitte
 2. **Auth:** keep the current scrypt + signed-cookie sessions, or switch `lib/server/auth.ts` to Supabase Auth (the `profiles` table already references `auth.users`). Wire password-reset emails in `api/auth/forgot` (in development the reset link is logged to the console instead).
 3. **Payments:** set `PAYMENT_PROVIDER=razorpay` or `stripe` and implement the adapter in `lib/server/payments.ts` (create the order/intent server-side, confirm on the client, fulfil on the webhook).
 4. **Email/SMS:** forward newsletter sign-ups, order confirmations, stock alerts and contact messages from their route handlers to your provider.
-5. **Photography:** `src/data/images.ts` currently uses Unsplash placeholder photography as stand-ins. Replace every entry with Threads Wear campaign and product photography (and your own CDN loader in `src/lib/image-loader.ts`) **before launch**.
+5. **Photography:** `src/data/images.ts` currently uses Unsplash placeholder photography as stand-ins. Replace every entry with Threads Ware campaign and product photography (and your own CDN loader in `src/lib/image-loader.ts`) **before launch**.
 6. **Admin:** the schema already covers products, variants, inventory, collections, orders, returns, coupons, reviews (with moderation status), banners, journal, campaigns and subscribers, so an admin dashboard can be added as an `(admin)` route group behind `role = 'admin'`.
 7. **Legal copy:** the company details (GSTIN, address, phone numbers, emails) are realistic placeholders. Replace them in `src/lib/site.ts`, and have the policy pages reviewed by counsel.

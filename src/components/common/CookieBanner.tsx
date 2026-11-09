@@ -44,7 +44,7 @@ const CATS = [
   { key: "necessary", title: "Strictly necessary", text: "Required for the bag, checkout, sign-in and security. These cannot be switched off." },
   { key: "analytics", title: "Analytics", text: "Help us understand how the site is used so we can improve it (Google Analytics)." },
   { key: "personalisation", title: "Personalisation", text: "Remember your preferences and tailor recommendations to you." },
-  { key: "marketing", title: "Marketing", text: "Measure our campaigns and show you relevant Threads Wear advertising elsewhere (Meta)." },
+  { key: "marketing", title: "Marketing", text: "Measure our campaigns and show you relevant Threads Ware advertising elsewhere (Meta)." },
 ] as const;
 
 export function CookieBanner() {
@@ -112,7 +112,7 @@ export function CookieBanner() {
       </AnimatePresence>
 
       <Modal open={manage} onClose={() => setManage(false)} title="Cookie Preferences">
-        <p className="text-[13.5px] text-muted">Choose which cookies Threads Wear may use. You can change this at any time from the footer.</p>
+        <p className="text-[13.5px] text-muted">Choose which cookies Threads Ware may use. You can change this at any time from the footer.</p>
         <ul className="mt-6 divide-y divide-line border-y border-line">
           {CATS.map((c) => {
             const locked = c.key === "necessary";

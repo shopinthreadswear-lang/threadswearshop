@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getAdmin } from "@/lib/server/admin";
 import { notFound } from "next/navigation";
 import { deriveProducts, emptyCatalog } from "@/lib/catalog";
 import { availableStock, read } from "@/lib/server/store";
@@ -9,6 +10,7 @@ import { deleteCustomProduct, resetProduct, resetProductImages } from "@/app/adm
 import { PhotosForm, ProductForm, StockRow } from "./ProductForms";
 
 export default async function EditProduct({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ created?: string; reset?: string }> }) {
+  await getAdmin("products");
   const { id } = await params;
   const { created, reset } = await searchParams;
   const data = await read((db) => {
@@ -46,10 +48,10 @@ export default async function EditProduct({ params, searchParams }: { params: Pr
       />
       {(created || reset) && <p role="status" className="mb-4 rounded-chip bg-success/10 px-4 py-3 text-[13px] font-medium text-success">{created ? "Product added. It’s live in the shop — check the details and stock below." : "Back to the original details."}</p>}
 
-      <div className="grid gap-4 xl:grid-cols-[1.4fr_1fr]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-4 xl:grid-cols-[1.4fr_1fr]">
         <Card title="Details">
           <ProductForm
-            product={{ id: p.id, name: own.name, shortDescription: own.shortDescription, description: own.description, price: own.price, compareAtPrice: own.compareAtPrice, isNew: own.isNew, isBestSeller: own.isBestSeller, hidden: !!patch.hidden, badge: patch.badge ?? "auto" }}
+            product={{ id: p.id, seoTitle: patch.seoTitle, seoDescription: patch.seoDescription, name: own.name, shortDescription: own.shortDescription, description: own.description, price: own.price, compareAtPrice: own.compareAtPrice, isNew: own.isNew, isBestSeller: own.isBestSeller, hidden: !!patch.hidden, badge: patch.badge ?? "auto" }}
             offerNote={onOffer ? `An offer is running on this piece, so customers pay ${formatINR(p.price)} instead of ${formatINR(own.price)}. Set your normal price below.` : undefined}
           />
         </Card>

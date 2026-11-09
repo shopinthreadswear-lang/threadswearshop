@@ -1,20 +1,24 @@
 import Link from "next/link";
+import { getAdmin } from "@/lib/server/admin";
 import Image from "next/image";
-import { dashboard, fmtDate, STATUS_LABEL } from "@/lib/server/admin";
+import { dashboard, fmtDate, ROLE_LABEL, STATUS_LABEL } from "@/lib/server/admin";
 import { read } from "@/lib/server/store";
 import { formatINR } from "@/lib/site";
 import { Card, Empty, OrderPill, PageHeader, Pill, Stat, td, th } from "@/components/admin/bits";
 
 export const metadata = { title: "Overview" };
 
-export default async function AdminHome() {
+export default async function AdminHome({ searchParams }: { searchParams: Promise<{ denied?: string }> }) {
+  const me = await getAdmin("dashboard");
+  const { denied } = await searchParams;
   const d = await read(dashboard);
   const max = Math.max(1, ...d.days.map((x) => x.total));
   const greeting = new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 17 ? "Good afternoon" : "Good evening";
 
   return (
     <>
-      <PageHeader title={greeting} sub={d.toFulfil ? `${d.toFulfil} ${d.toFulfil === 1 ? "order is" : "orders are"} waiting to be packed and shipped.` : "Every order is on its way. Nothing waiting on you."} action={d.toFulfil ? <Link href="/admin/orders?status=open" className="btn btn-primary btn-sm">Fulfil orders</Link> : undefined} />
+      {denied && <p role="alert" className="mb-4 rounded-chip bg-error/10 px-4 py-3 text-[13px] font-medium text-error">Your role ({ROLE_LABEL[me.role]}) doesn’t include that page. Ask the owner if you need access.</p>}
+      <PageHeader title={me.role === "owner" ? greeting : `${greeting}, ${me.name.split(" ")[0]}`} sub={d.toFulfil ? `${d.toFulfil} ${d.toFulfil === 1 ? "order is" : "orders are"} waiting to be packed and shipped.` : "Every order is on its way. Nothing waiting on you."} action={d.toFulfil ? <Link href="/admin/orders?status=open" className="btn btn-primary btn-sm">Fulfil orders</Link> : undefined} />
 
       <div className="grid grid-cols-2 gap-3 md:gap-4 xl:grid-cols-4">
         <Stat label="Sales, last 30 days" value={formatINR(d.revenue30)} note={`${formatINR(d.revenue)} all time`} />
@@ -23,7 +27,7 @@ export default async function AdminHome() {
         <Stat label="Low or sold out" value={String(d.lowVariants.length)} note="sizes to restock" href="/admin/products?stock=low" />
       </div>
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-[1.6fr_1fr]">
+      <div className="mt-4 grid grid-cols-[minmax(0,1fr)] gap-4 xl:grid-cols-[1.6fr_1fr]">
         <Card title="Sales, last 14 days">
           <div className="flex h-40 items-end gap-1.5" role="img" aria-label={`Daily sales for the last 14 days, highest ${formatINR(max)}`}>
             {d.days.map((x) => (
@@ -62,7 +66,7 @@ export default async function AdminHome() {
         </Card>
       </div>
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-[1.6fr_1fr]">
+      <div className="mt-4 grid grid-cols-[minmax(0,1fr)] gap-4 xl:grid-cols-[1.6fr_1fr]">
         <Card title="Latest orders" action={<Link href="/admin/orders" className="text-[13px] font-semibold text-burgundy hover:underline">All orders</Link>} pad={false}>
           {d.recentOrders.length ? (
             <div className="overflow-x-auto">

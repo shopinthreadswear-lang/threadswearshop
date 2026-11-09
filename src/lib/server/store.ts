@@ -6,6 +6,7 @@ import type { Order, ReturnRequest, Review, User } from "@/lib/types";
 import { getProduct } from "@/data/products";
 import { applyCatalog, type CatalogState } from "@/lib/catalog";
 import type { Coupon } from "./promos";
+import type { AuditEntry, StaffMember } from "./admin";
 import { supabaseEnabled, supabaseLoad, supabaseWrite } from "./supabase-store";
 
 /**
@@ -31,6 +32,10 @@ export type DB = {
   catalog?: CatalogState;
   /** Discount codes. Seeded from the defaults in promos.ts on first use. */
   coupons?: Coupon[];
+  /** Admin team members (the owner signs in from environment variables). */
+  staff?: StaffMember[];
+  /** Who changed what in the admin, newest first. */
+  audit?: AuditEntry[];
 };
 
 const DATA_DIR = process.env.VERCEL ? "/tmp/threads-ware" : path.join(process.cwd(), ".data");

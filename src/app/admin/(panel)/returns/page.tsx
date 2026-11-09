@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getAdmin } from "@/lib/server/admin";
 import { fmtDate } from "@/lib/server/admin";
 import { read } from "@/lib/server/store";
 import { Card, Empty, PageHeader, Pill } from "@/components/admin/bits";
@@ -10,6 +11,7 @@ const LABEL = { requested: "Requested", approved: "Approved", picked_up: "Picked
 const NEXT = { requested: ["approved"], approved: ["picked_up"], picked_up: ["refunded", "exchanged"], refunded: [], exchanged: [] } as const;
 
 export default async function ReturnsPage() {
+  await getAdmin("returns");
   const list = await read((db) => [...db.returns].sort((a, b) => b.createdAt.localeCompare(a.createdAt)));
   return (
     <>

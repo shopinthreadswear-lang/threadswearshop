@@ -113,6 +113,23 @@ Every page has a unique title, description, canonical URL, Open Graph and Twitte
 that works is `ADMIN_EMAIL` + `ADMIN_PASSWORD` from the environment. Sessions last 12 hours; changing the password
 signs everyone out. Five wrong attempts lock an address out for 15 minutes.
 
+The owner can add staff under **Team** with their own email and password:
+
+| Role | Can use |
+| --- | --- |
+| Owner | Everything, including Team (login from `ADMIN_EMAIL` / `ADMIN_PASSWORD`) |
+| Manager | Everything except Team |
+| Support | Overview, orders, returns, customers, inbox and reviews |
+
+Every change made in the admin is recorded in the **Activity log** (who, what, when; the latest 1,000 are kept).
+
+- **Orders**: filter by status, payment and date; record refunds (store credit creates a gift card automatically;
+  other refunds are recorded here and paid out from the payment provider or bank); print or save a GST tax invoice.
+- **Products**: bulk hide/show, sale %, price change %, new/best-seller flags; CSV export and import of products
+  and stock (matched by `id` / `sku`; empty cells are left unchanged); SEO title and description per product.
+- **Reviews**: new customer reviews wait for approval before they appear on product pages.
+- **Customers**: detail page with order history and spend; block a customer (signs them out, stops sign-in and orders).
+
 | Section | What you can do |
 |---|---|
 | Overview | Sales, orders, customers, sizes running low, what needs attention |

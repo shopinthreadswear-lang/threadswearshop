@@ -8,9 +8,11 @@ import type { Badge, OrderStatus, ReturnRequest, Size } from "@/lib/types";
 import { baseProduct, buildCustomProduct, currentHome, deriveProducts, emptyCatalog, type CustomProductInput, type StoreSettings } from "@/lib/catalog";
 import { mediaEnabled, MEDIA_MAX_BYTES, MEDIA_TYPES, signUpload } from "@/lib/server/media";
 import { categories } from "@/data/categories";
-import { assertAdmin, nextStatuses, STATUS_LABEL } from "@/lib/server/admin";
+import { getProductById } from "@/data/products";
+import { csvObjects } from "@/lib/csv";
+import { assertAdmin, log, nextStatuses, ownerEmail, ROLE_LABEL, STATUS_LABEL } from "@/lib/server/admin";
 import { coupons } from "@/lib/server/promos";
-import { write, type DB } from "@/lib/server/store";
+import { hashPassword, write, type DB } from "@/lib/server/store";
 
 export type ActionState = { ok: boolean; message: string; fields?: Record<string, string> } | null;
 
@@ -36,7 +38,7 @@ const price = z.coerce.number({ error: "Enter a price" }).int("Use whole rupees"
 /* ─── Orders ─────────────────────────────────────────────── */
 
 export async function updateOrderStatus(_: ActionState, form: FormData): Promise<ActionState> {
-  await assertAdmin();
+  const me = await assertAdmin("orders");
   const parsed = z
     .object({
       orderId: z.string().min(1),
@@ -61,6 +63,7 @@ export async function updateOrderStatus(_: ActionState, form: FormData): Promise
     if (status === "delivered") order.expectedDelivery = new Date().toISOString();
     if (status === "cancelled")
       for (const i of order.items) if (i.productId !== GIFT_CARD && db.inventoryAdjustments[i.sku]) db.inventoryAdjustments[i.sku] -= i.quantity;
+    log(db, me, "orders", `Order ${order.id} marked ${STATUS_LABEL[status as OrderStatus].toLowerCase()}${trackingId ? ` · ${courierName} ${trackingId}` : ""}`, `/admin/orders/${order.id}`);
     return done(status === "cancelled" ? "Order cancelled and the stock put back." : `Order marked ${STATUS_LABEL[status as OrderStatus].toLowerCase()}.`);
   });
   revalidatePath("/admin", "layout");
@@ -72,7 +75,7 @@ export async function updateOrderStatus(_: ActionState, form: FormData): Promise
 const BADGES = ["auto", "none", "New", "Bestseller", "Limited Edition", "Sale"] as const;
 
 export async function saveProduct(_: ActionState, form: FormData): Promise<ActionState> {
-  await assertAdmin();
+  const me = await assertAdmin("products");
   const parsed = z
     .object({
       productId: z.string().min(1),
@@ -85,6 +88,8 @@ export async function saveProduct(_: ActionState, form: FormData): Promise<Actio
       isNew: checkbox,
       isBestSeller: checkbox,
       hidden: checkbox,
+      seoTitle: z.string().trim().max(70, "Search engines show about 60 characters").optional(),
+      seoDescription: z.string().trim().max(170, "Search engines show about 155 characters").optional(),
     })
     .safeParse(Object.fromEntries(form));
   if (!parsed.success) return oops("Please fix the highlighted fields.", fieldErrors(parsed.error));
@@ -106,7 +111,10 @@ export async function saveProduct(_: ActionState, form: FormData): Promise<Actio
       isBestSeller: d.isBestSeller,
       badge: d.badge as Badge | "auto" | "none",
       hidden: d.hidden,
+      seoTitle: d.seoTitle || undefined,
+      seoDescription: d.seoDescription || undefined,
     };
+    log(db, me, "products", `Edited ${d.name} (₹${d.price}${d.hidden ? ", hidden" : ""})`, `/admin/products/${d.productId}`);
     return done(d.hidden ? "Saved. This product is hidden from the shop." : "Saved. The shop is showing the new details.");
   });
   refreshStore();
@@ -115,7 +123,7 @@ export async function saveProduct(_: ActionState, form: FormData): Promise<Actio
 
 /** Set the units on hand for one colour and size. Sales after this count down from the new number. */
 export async function setStock(_: ActionState, form: FormData): Promise<ActionState> {
-  await assertAdmin();
+  const me = await assertAdmin("products");
   const parsed = z.object({ productId: z.string().min(1), sku: z.string().min(1), qty: z.coerce.number().int().min(0, "Can’t be below 0").max(9999) }).safeParse(Object.fromEntries(form));
   if (!parsed.success) return oops("Enter a whole number of units, 0 or more.");
   const { productId, sku, qty } = parsed.data;
@@ -127,6 +135,7 @@ export async function setStock(_: ActionState, form: FormData): Promise<ActionSt
     const patch = (c.products[productId] ??= {});
     patch.stock = { ...patch.stock, [sku]: qty };
     db.inventoryAdjustments[sku] = 0;
+    log(db, me, "products", `Stock for ${sku} set to ${qty}`, `/admin/products/${productId}`);
     return done(`${variant.color} · ${variant.size}: ${qty} in stock.`);
   });
   refreshStore();
@@ -136,7 +145,7 @@ export async function setStock(_: ActionState, form: FormData): Promise<ActionSt
 const SIZES = ["XS", "S", "M", "L", "XL", "XXL", "36", "38", "40", "42", "44", "46"] as const;
 
 export async function createProduct(_: ActionState, form: FormData): Promise<ActionState> {
-  await assertAdmin();
+  const me = await assertAdmin("products");
   const raw = Object.fromEntries(form);
   const parsed = z
     .object({
@@ -197,6 +206,7 @@ export async function createProduct(_: ActionState, form: FormData): Promise<Act
       isNew: d.isNew,
       createdAt: new Date().toISOString(),
     };
+    log(db, me, "products", `Added product ${d.name}`, `/admin/products/${input.id}`);
     c.custom.push(input);
     return input.id;
   });
@@ -205,10 +215,11 @@ export async function createProduct(_: ActionState, form: FormData): Promise<Act
 }
 
 export async function deleteCustomProduct(form: FormData) {
-  await assertAdmin();
+  const me = await assertAdmin("products");
   const productId = String(form.get("productId") ?? "");
   await write((db) => {
     const c = catalog(db);
+    log(db, me, "products", `Deleted product ${c.custom.find((x) => x.id === productId)?.name ?? productId}`);
     c.custom = c.custom.filter((x) => x.id !== productId);
     delete c.products[productId];
   });
@@ -218,9 +229,10 @@ export async function deleteCustomProduct(form: FormData) {
 
 /** Undo every admin edit to a code-catalogue product. */
 export async function resetProduct(form: FormData) {
-  await assertAdmin();
+  const me = await assertAdmin("products");
   const productId = String(form.get("productId") ?? "");
   await write((db) => {
+    log(db, me, "products", `Undid all edits to ${baseProduct(productId)?.name ?? productId}`, `/admin/products/${productId}`);
     delete catalog(db).products[productId];
   });
   refreshStore();
@@ -230,7 +242,7 @@ export async function resetProduct(form: FormData) {
 /* ─── Offers ─────────────────────────────────────────────── */
 
 export async function saveOffer(_: ActionState, form: FormData): Promise<ActionState> {
-  await assertAdmin();
+  const me = await assertAdmin("offers");
   const parsed = z
     .object({
       offerId: z.string().optional(),
@@ -249,6 +261,7 @@ export async function saveOffer(_: ActionState, form: FormData): Promise<ActionS
     const value = { name: d.name, percent: d.percent, scope: d.scope, active: d.active, endsAt: d.endsAt || undefined };
     if (existing) Object.assign(existing, value);
     else c.offers.push({ id: id("off"), ...value });
+    log(db, me, "offers", `${existing ? "Updated" : "Created"} offer ${d.name} (${d.percent}% off${d.active ? "" : ", off"})`, "/admin/offers");
     return done(existing ? "Offer updated." : d.active ? "Offer is live in the shop." : "Offer saved as a draft.");
   });
   refreshStore();
@@ -256,20 +269,24 @@ export async function saveOffer(_: ActionState, form: FormData): Promise<ActionS
 }
 
 export async function toggleOffer(form: FormData) {
-  await assertAdmin();
+  const me = await assertAdmin("offers");
   const offerId = String(form.get("offerId") ?? "");
   await write((db) => {
     const o = catalog(db).offers.find((x) => x.id === offerId);
-    if (o) o.active = !o.active;
+    if (o) {
+      o.active = !o.active;
+      log(db, me, "offers", `${o.active ? "Turned on" : "Turned off"} offer ${o.name}`, "/admin/offers");
+    }
   });
   refreshStore();
 }
 
 export async function deleteOffer(form: FormData) {
-  await assertAdmin();
+  const me = await assertAdmin("offers");
   const offerId = String(form.get("offerId") ?? "");
   await write((db) => {
     const c = catalog(db);
+    log(db, me, "offers", `Deleted offer ${c.offers.find((o) => o.id === offerId)?.name ?? ""}`, "/admin/offers");
     c.offers = c.offers.filter((o) => o.id !== offerId);
   });
   refreshStore();
@@ -278,7 +295,7 @@ export async function deleteOffer(form: FormData) {
 /* ─── Coupons ────────────────────────────────────────────── */
 
 export async function saveCoupon(_: ActionState, form: FormData): Promise<ActionState> {
-  await assertAdmin();
+  const me = await assertAdmin("coupons");
   const parsed = z
     .object({
       couponId: z.string().optional(),
@@ -304,6 +321,7 @@ export async function saveCoupon(_: ActionState, form: FormData): Promise<Action
     const existing = d.couponId ? list.find((c) => c.id === d.couponId) : undefined;
     if (existing) Object.assign(existing, value);
     else list.unshift({ id: id("cpn"), used: 0, createdAt: new Date().toISOString(), ...value });
+    log(db, me, "coupons", `${existing ? "Updated" : "Created"} coupon ${d.code}`, "/admin/coupons");
     return done(existing ? `${d.code} updated.` : `${d.code} created${d.active ? " — customers can use it now" : " as a draft"}.`);
   });
   revalidatePath("/admin", "layout");
@@ -311,19 +329,23 @@ export async function saveCoupon(_: ActionState, form: FormData): Promise<Action
 }
 
 export async function toggleCoupon(form: FormData) {
-  await assertAdmin();
+  const me = await assertAdmin("coupons");
   const couponId = String(form.get("couponId") ?? "");
   await write((db) => {
     const c = coupons(db).find((x) => x.id === couponId);
-    if (c) c.active = !c.active;
+    if (c) {
+      c.active = !c.active;
+      log(db, me, "coupons", `${c.active ? "Turned on" : "Turned off"} coupon ${c.code}`, "/admin/coupons");
+    }
   });
   revalidatePath("/admin", "layout");
 }
 
 export async function deleteCoupon(form: FormData) {
-  await assertAdmin();
+  const me = await assertAdmin("coupons");
   const couponId = String(form.get("couponId") ?? "");
   await write((db) => {
+    log(db, me, "coupons", `Deleted coupon ${coupons(db).find((c) => c.id === couponId)?.code ?? ""}`, "/admin/coupons");
     db.coupons = coupons(db).filter((c) => c.id !== couponId);
   });
   revalidatePath("/admin", "layout");
@@ -332,7 +354,7 @@ export async function deleteCoupon(form: FormData) {
 /* ─── Store settings ─────────────────────────────────────── */
 
 export async function saveSettings(_: ActionState, form: FormData): Promise<ActionState> {
-  await assertAdmin();
+  const me = await assertAdmin("settings");
   const texts = form.getAll("annText").map(String);
   const hrefs = form.getAll("annHref").map(String);
   const parsed = z
@@ -349,6 +371,7 @@ export async function saveSettings(_: ActionState, form: FormData): Promise<Acti
     .safeParse({ ...Object.fromEntries(form), announcements: texts.map((text, i) => ({ text, href: hrefs[i] || "/" })) });
   if (!parsed.success) return oops("Please fix the highlighted fields.", fieldErrors(parsed.error));
   await write((db) => {
+    log(db, me, "settings", "Updated store settings (message bar and shipping)", "/admin/settings");
     catalog(db).settings = parsed.data as StoreSettings;
   });
   refreshStore();
@@ -366,7 +389,7 @@ const RETURN_FLOW: Record<ReturnRequest["status"], ReturnRequest["status"][]> = 
 };
 
 export async function updateReturnStatus(_: ActionState, form: FormData): Promise<ActionState> {
-  await assertAdmin();
+  const me = await assertAdmin("returns");
   const parsed = z.object({ returnId: z.string().min(1), status: z.enum(["requested", "approved", "picked_up", "refunded", "exchanged"]) }).safeParse(Object.fromEntries(form));
   if (!parsed.success) return oops("Something in that form doesn’t look right.");
   const { returnId, status } = parsed.data;
@@ -375,6 +398,7 @@ export async function updateReturnStatus(_: ActionState, form: FormData): Promis
     if (!r) return oops("We couldn’t find that return.");
     if (!RETURN_FLOW[r.status].includes(status)) return oops("That return has already moved on. Refresh to see the latest.");
     r.status = status;
+    log(db, me, "returns", `Return ${r.id} marked ${status.replace("_", " ")}`, "/admin/returns");
     return done(`Return marked ${status.replace("_", " ")}.`);
   });
   revalidatePath("/admin", "layout");
@@ -382,9 +406,10 @@ export async function updateReturnStatus(_: ActionState, form: FormData): Promis
 }
 
 export async function deleteMessage(form: FormData) {
-  await assertAdmin();
+  const me = await assertAdmin("inbox");
   const msgId = String(form.get("id") ?? "");
   await write((db) => {
+    log(db, me, "inbox", `Deleted a message from ${db.contactMessages.find((m) => m.id === msgId)?.name ?? "a customer"}`, "/admin/inbox");
     db.contactMessages = db.contactMessages.filter((m) => m.id !== msgId);
   });
   revalidatePath("/admin/inbox");
@@ -400,7 +425,7 @@ export type UploadTicket = { ok: true; signedUrl: string; token: string; path: s
 
 /** Step 1 of an upload: check the file and hand the browser a one-time URL to send it straight to storage. */
 export async function requestUpload(input: { type: string; size: number; folder: string }): Promise<UploadTicket> {
-  await assertAdmin();
+  await assertAdmin("products");
   if (!mediaEnabled()) return { ok: false, message: "Photo uploads need Supabase. Add SUPABASE_SECRET_KEY to the environment, or paste a photo link instead." };
   if (!(MEDIA_TYPES as readonly string[]).includes(input.type)) return { ok: false, message: "Use a JPG, PNG, WebP or AVIF photo." };
   if (input.size > MEDIA_MAX_BYTES) return { ok: false, message: "That photo is over 10 MB. Export it smaller (2000px wide is plenty) and try again." };
@@ -413,7 +438,7 @@ export async function requestUpload(input: { type: string; size: number; folder:
 }
 
 export async function saveProductImages(_: ActionState, form: FormData): Promise<ActionState> {
-  await assertAdmin();
+  const me = await assertAdmin("products");
   const parsed = z
     .object({ productId: z.string().min(1), images: z.array(imageUrl).min(1, "Keep at least one photo").max(10, "Up to 10 photos") })
     .safeParse({ productId: form.get("productId"), images: form.getAll("images").map(String).filter(Boolean) });
@@ -425,6 +450,7 @@ export async function saveProductImages(_: ActionState, form: FormData): Promise
     if (!custom && !baseProduct(productId)) return oops("That product no longer exists.");
     if (custom) custom.images = images;
     c.products[productId] = { ...(c.products[productId] ?? {}), images };
+    log(db, me, "products", `Updated photos (${images.length})`, `/admin/products/${productId}`);
     return done("Photos saved. The first one is the main photo in the shop.");
   });
   refreshStore();
@@ -432,10 +458,11 @@ export async function saveProductImages(_: ActionState, form: FormData): Promise
 }
 
 export async function resetProductImages(form: FormData) {
-  await assertAdmin();
+  const me = await assertAdmin("products");
   const productId = String(form.get("productId") ?? "");
   await write((db) => {
     const patch = catalog(db).products[productId];
+    log(db, me, "products", "Restored original photos", `/admin/products/${productId}`);
     if (patch) delete patch.images;
   });
   refreshStore();
@@ -459,7 +486,7 @@ const heroSlide = z.object({
 });
 
 export async function saveHero(_: ActionState, form: FormData): Promise<ActionState> {
-  await assertAdmin();
+  const me = await assertAdmin("content");
   let raw: unknown;
   try {
     raw = JSON.parse(String(form.get("payload") ?? "[]"));
@@ -477,6 +504,7 @@ export async function saveHero(_: ActionState, form: FormData): Promise<ActionSt
     const c = catalog(db);
     for (const p of deriveProducts(c, { includeHidden: true })) known.add(p.slug);
     const hero = parsed.data.map((s) => ({ ...s, productSlug: known.has(s.productSlug) ? s.productSlug : "" }));
+    log(db, me, "content", `Updated homepage hero (${hero.length} slides)`, "/admin/content");
     c.content = { ...c.content, home: { ...currentHome(c), hero } };
   });
   refreshStore();
@@ -484,7 +512,7 @@ export async function saveHero(_: ActionState, form: FormData): Promise<ActionSt
 }
 
 export async function saveHomeText(_: ActionState, form: FormData): Promise<ActionState> {
-  await assertAdmin();
+  const me = await assertAdmin("content");
   const g = (k: string) => String(form.get(k) ?? "");
   const parsed = z
     .object({
@@ -511,6 +539,7 @@ export async function saveHomeText(_: ActionState, form: FormData): Promise<Acti
   }
   await write((db) => {
     const c = catalog(db);
+    log(db, me, "content", "Updated homepage sections", "/admin/content?tab=home");
     c.content = { ...c.content, home: { ...currentHome(c), ...parsed.data } };
   });
   refreshStore();
@@ -518,7 +547,7 @@ export async function saveHomeText(_: ActionState, form: FormData): Promise<Acti
 }
 
 export async function saveContact(_: ActionState, form: FormData): Promise<ActionState> {
-  await assertAdmin();
+  const me = await assertAdmin("content");
   const social = z.union([z.literal(""), z.string().trim().url("Use a full https:// link").max(200)]);
   const parsed = z
     .object({
@@ -540,6 +569,7 @@ export async function saveContact(_: ActionState, form: FormData): Promise<Actio
   if (!parsed.success) return oops("Please fix the highlighted fields.", fieldErrors(parsed.error));
   await write((db) => {
     const c = catalog(db);
+    log(db, me, "content", "Updated contact details and social links", "/admin/content?tab=contact");
     c.content = { ...c.content, contact: parsed.data };
   });
   refreshStore();
@@ -548,12 +578,300 @@ export async function saveContact(_: ActionState, form: FormData): Promise<Actio
 
 /** Put a section of site content back to the original. */
 export async function resetContent(form: FormData) {
-  await assertAdmin();
+  const me = await assertAdmin("content");
   const section = String(form.get("section") ?? "");
   await write((db) => {
     const c = catalog(db);
+    log(db, me, "content", `Restored original ${section === "home" ? "homepage" : "contact details"}`, "/admin/content");
     if (section === "contact" && c.content) delete c.content.contact;
     if (section === "home" && c.content) delete c.content.home;
   });
   refreshStore();
+}
+
+/* ─── Team (owner only) ──────────────────────────────────── */
+
+const staffPassword = z.string().min(10, "At least 10 characters").max(128).regex(/[A-Za-z]/, "Include a letter").regex(/\d/, "Include a number");
+
+export async function addStaff(_: ActionState, form: FormData): Promise<ActionState> {
+  const me = await assertAdmin("team");
+  const parsed = z
+    .object({
+      name: z.string().trim().min(2, "Enter their name").max(60),
+      email: z.string().trim().toLowerCase().email("Enter a valid email"),
+      role: z.enum(["manager", "support"]),
+      password: staffPassword,
+    })
+    .safeParse(Object.fromEntries(form));
+  if (!parsed.success) return oops("Please fix the highlighted fields.", fieldErrors(parsed.error));
+  const d = parsed.data;
+  if (d.email === ownerEmail()) return oops("That’s the owner’s email. Use a different one.", { email: "Already the owner" });
+  const result = await write((db) => {
+    const staff = (db.staff ??= []);
+    if (staff.some((m) => m.email === d.email)) return oops("Someone on the team already uses that email.", { email: "Already on the team" });
+    staff.push({ id: id("stf"), name: d.name, email: d.email, role: d.role, passwordHash: hashPassword(d.password), active: true, createdAt: new Date().toISOString() });
+    log(db, me, "team", `Added ${d.name} (${d.email}) as ${ROLE_LABEL[d.role].toLowerCase()}`, "/admin/team");
+    return done(`${d.name} can now sign in at /admin/login with that email and password. Share the password with them privately.`);
+  });
+  revalidatePath("/admin", "layout");
+  return result;
+}
+
+export async function updateStaff(_: ActionState, form: FormData): Promise<ActionState> {
+  const me = await assertAdmin("team");
+  const parsed = z
+    .object({ staffId: z.string().min(1), role: z.enum(["manager", "support"]), active: checkbox, password: z.union([z.literal(""), staffPassword]) })
+    .safeParse(Object.fromEntries(form));
+  if (!parsed.success) return oops("Please fix the highlighted fields.", fieldErrors(parsed.error));
+  const d = parsed.data;
+  const result = await write((db) => {
+    const m = db.staff?.find((x) => x.id === d.staffId);
+    if (!m) return oops("That person is no longer on the team.");
+    const changes: string[] = [];
+    if (m.role !== d.role) changes.push(`role → ${ROLE_LABEL[d.role].toLowerCase()}`);
+    if (m.active !== d.active) changes.push(d.active ? "access turned on" : "access turned off");
+    if (d.password) changes.push("new password");
+    if (!changes.length) return done("Nothing changed.");
+    m.role = d.role;
+    m.active = d.active;
+    if (d.password) m.passwordHash = hashPassword(d.password);
+    log(db, me, "team", `${m.name}: ${changes.join(", ")}`, "/admin/team");
+    return done(`Saved. ${d.password || changes.some((c) => c.startsWith("role")) ? `${m.name} needs to sign in again.` : ""}`.trim());
+  });
+  revalidatePath("/admin", "layout");
+  return result;
+}
+
+export async function removeStaff(form: FormData) {
+  const me = await assertAdmin("team");
+  const staffId = String(form.get("staffId") ?? "");
+  await write((db) => {
+    const m = db.staff?.find((x) => x.id === staffId);
+    if (!m) return;
+    db.staff = db.staff!.filter((x) => x.id !== staffId);
+    log(db, me, "team", `Removed ${m.name} (${m.email}) from the team`, "/admin/team");
+  });
+  revalidatePath("/admin", "layout");
+}
+
+/* ─── Refunds ────────────────────────────────────────────── */
+
+const REFUND_METHOD = { original: "Back to the original payment", bank: "Bank / UPI transfer", store_credit: "Store credit (gift card)", cash: "Cash" } as const;
+
+export async function refundOrder(_: ActionState, form: FormData): Promise<ActionState> {
+  const me = await assertAdmin("orders");
+  const parsed = z
+    .object({
+      orderId: z.string().min(1),
+      amount: z.coerce.number({ error: "Enter an amount" }).int("Use whole rupees").min(1, "At least ₹1"),
+      method: z.enum(["original", "bank", "store_credit", "cash"]),
+      reason: z.string().trim().min(3, "Say why, for your records").max(200),
+      restock: checkbox,
+    })
+    .safeParse(Object.fromEntries(form));
+  if (!parsed.success) return oops("Please fix the highlighted fields.", fieldErrors(parsed.error));
+  const d = parsed.data;
+  const result = await write((db) => {
+    const order = db.orders.find((o) => o.id === d.orderId);
+    if (!order) return oops("We couldn’t find that order.");
+    if (order.payment.status === "pending") return oops("This order hasn’t been paid, so there’s nothing to refund.");
+    if (order.payment.status === "cod" && order.status !== "delivered" && order.status !== "returned") return oops("Cash on delivery orders can only be refunded after the cash is collected (once delivered).");
+    const already = (order.refunds ?? []).reduce((a, r) => a + r.amount, 0);
+    const left = order.totals.total - already;
+    if (d.amount > left) return oops(`You can refund at most ${left.toLocaleString("en-IN")} more on this order.`, { amount: `At most ₹${left}` });
+    const anyRestocked = (order.refunds ?? []).some((r) => r.restocked);
+    const restock = d.restock && !anyRestocked && order.status !== "cancelled";
+    if (restock) for (const i of order.items) if (i.productId !== GIFT_CARD && db.inventoryAdjustments[i.sku]) db.inventoryAdjustments[i.sku] -= i.quantity;
+    let note = `Refunded ₹${d.amount.toLocaleString("en-IN")} · ${REFUND_METHOD[d.method]} · ${d.reason}`;
+    if (d.method === "store_credit") {
+      const code = `TW-CR-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
+      db.giftCards.push({ code, balance: d.amount, initial: d.amount, recipientEmail: order.email, createdAt: new Date().toISOString() });
+      note += ` · gift card ${code}`;
+    }
+    (order.refunds ??= []).push({ id: id("rfd"), amount: d.amount, reason: d.reason, method: d.method, restocked: restock, at: new Date().toISOString(), by: me.name });
+    order.timeline.push({ status: order.status, at: new Date().toISOString(), note });
+    log(db, me, "orders", `Order ${order.id}: ${note}`, `/admin/orders/${order.id}`);
+    return done(
+      d.method === "store_credit"
+        ? `Refund recorded and a gift card for ₹${d.amount.toLocaleString("en-IN")} was created for ${order.email}.`
+        : `Refund of ₹${d.amount.toLocaleString("en-IN")} recorded. Remember to send the money${d.method === "original" ? " from your payment provider’s dashboard" : ""}.`,
+    );
+  });
+  revalidatePath("/admin", "layout");
+  return result;
+}
+
+/* ─── Products: bulk changes and CSV import ──────────────── */
+
+const BULK = ["hide", "show", "new_on", "new_off", "best_on", "best_off", "sale", "unsale", "price_pct"] as const;
+
+export async function bulkProducts(_: ActionState, form: FormData): Promise<ActionState> {
+  const me = await assertAdmin("products");
+  const parsed = z
+    .object({
+      ids: z.array(z.string().min(1)).min(1, "Tick at least one product").max(500),
+      op: z.enum(BULK, { error: "Choose what to do" }),
+      value: z.preprocess((v) => (v === "" || v === null ? undefined : v), z.coerce.number().int().optional()),
+    })
+    .safeParse({ ids: form.getAll("ids").map(String), op: form.get("op"), value: form.get("value") });
+  if (!parsed.success) return oops(parsed.error.issues[0]?.message ?? "Please check your choice.");
+  const { ids, op, value } = parsed.data;
+  if ((op === "sale" && (!value || value < 1 || value > 90)) || (op === "price_pct" && (!value || value < -90 || value > 300)))
+    return oops(op === "sale" ? "Enter a sale between 1% and 90% off." : "Enter a change between −90% and +300%.");
+
+  const result = await write((db) => {
+    const c = catalog(db);
+    const own = new Map(deriveProducts({ ...c, offers: [] }, { includeHidden: true }).map((p) => [p.id, p]));
+    let n = 0;
+    for (const pid of ids) {
+      const p = own.get(pid);
+      if (!p) continue;
+      const custom = c.custom.find((x) => x.id === pid);
+      const patch = (c.products[pid] ??= {});
+      const base = p.compareAtPrice ?? p.price; // the full price before any sale
+      const setPrice = (price: number, compare: number | null) => {
+        if (custom) Object.assign(custom, { price, compareAtPrice: compare ?? undefined });
+        else Object.assign(patch, { price, compareAtPrice: compare });
+      };
+      if (op === "hide") patch.hidden = true;
+      if (op === "show") patch.hidden = false;
+      if (op === "new_on" || op === "new_off") {
+        patch.isNew = op === "new_on";
+        if (custom) custom.isNew = op === "new_on";
+      }
+      if (op === "best_on") patch.isBestSeller = true;
+      if (op === "best_off") patch.isBestSeller = false;
+      if (op === "sale") setPrice(Math.max(1, Math.round((base * (100 - value!)) / 100)), base);
+      if (op === "unsale") setPrice(base, null);
+      if (op === "price_pct") {
+        const price = Math.max(1, Math.round((p.price * (100 + value!)) / 100));
+        const compare = p.compareAtPrice ? Math.max(price + 1, Math.round((p.compareAtPrice * (100 + value!)) / 100)) : null;
+        setPrice(price, compare);
+      }
+      n++;
+    }
+    const what = { hide: "hidden", show: "shown in the shop", new_on: "marked new", new_off: "no longer marked new", best_on: "marked best seller", best_off: "no longer best sellers", sale: `put on sale (${value}% off)`, unsale: "taken off sale", price_pct: `price changed by ${value! > 0 ? "+" : ""}${value}%` }[op];
+    log(db, me, "products", `${n} ${n === 1 ? "product" : "products"} ${what}`, "/admin/products");
+    return done(`${n} ${n === 1 ? "product" : "products"} ${what}.`);
+  });
+  refreshStore();
+  return result;
+}
+
+const yes = (v: string) => /^(y|yes|true|1|hidden)$/i.test(v.trim());
+
+/** Import a products or stock CSV (exported from this page). Blank cells leave the value as it is. */
+export async function importCSV(_: ActionState, form: FormData): Promise<ActionState> {
+  const me = await assertAdmin("products");
+  const file = form.get("file");
+  if (!(file instanceof File) || !file.size) return oops("Choose a CSV file first.");
+  if (file.size > 900_000) return oops("That file is too big (over 900 KB). Split it into smaller files.");
+  const { columns, rows } = csvObjects(await file.text());
+  const isStock = columns.includes("sku") && columns.includes("stock");
+  const isProducts = columns.includes("id");
+  if (!isStock && !isProducts) return oops("This doesn’t look like a Threads Ware export. Download the products or stock CSV, edit it, and import that.");
+  if (!rows.length) return oops("The file has no rows.");
+
+  const errors: string[] = [];
+  const result = await write((db) => {
+    const c = catalog(db);
+    const own = new Map(deriveProducts({ ...c, offers: [] }, { includeHidden: true }).map((p) => [p.id, p]));
+    let changed = 0;
+    rows.forEach((r, i) => {
+      const line = i + 2;
+      if (isStock && !isProducts) {
+        const p = [...own.values()].find((x) => x.variants.some((v) => v.sku === r.sku));
+        if (!p) return void errors.push(`Row ${line}: no product has SKU ${r.sku || "(empty)"}`);
+        if (r.stock === "") return;
+        const qty = Number(r.stock);
+        if (!Number.isInteger(qty) || qty < 0 || qty > 9999) return void errors.push(`Row ${line}: stock must be a whole number 0–9999`);
+        const patch = (c.products[p.id] ??= {});
+        patch.stock = { ...patch.stock, [r.sku]: qty };
+        db.inventoryAdjustments[r.sku] = 0;
+        changed++;
+        return;
+      }
+      const p = own.get(r.id);
+      if (!p) return void errors.push(`Row ${line}: no product with id ${r.id || "(empty)"}`);
+      const custom = c.custom.find((x) => x.id === p.id);
+      const patch = { ...(c.products[p.id] ?? {}) };
+      const num = (k: string) => (r[k] === undefined || r[k] === "" ? undefined : Number(r[k].replace(/[₹,\s]/g, "")));
+      const price = num("price");
+      const compare = num("compare_at_price");
+      if (price !== undefined && (!Number.isInteger(price) || price < 1 || price > 500000)) return void errors.push(`Row ${line}: price must be a whole number of rupees`);
+      if (compare !== undefined && (!Number.isInteger(compare) || compare <= (price ?? p.price))) return void errors.push(`Row ${line}: compare_at_price must be higher than the price`);
+      const before = JSON.stringify([patch, custom]);
+      if (r.name && r.name.length >= 2) {
+        if (custom) custom.name = r.name.slice(0, 90);
+        else patch.name = r.name.slice(0, 90);
+      }
+      if (price !== undefined) {
+        if (custom) custom.price = price;
+        else patch.price = price;
+      }
+      if (columns.includes("compare_at_price")) {
+        if (custom) custom.compareAtPrice = compare;
+        else patch.compareAtPrice = compare ?? null;
+      }
+      if (r.hidden !== undefined && r.hidden !== "") patch.hidden = yes(r.hidden);
+      if (r.new !== undefined && r.new !== "") {
+        patch.isNew = yes(r.new);
+        if (custom) custom.isNew = yes(r.new);
+      }
+      if (r.bestseller !== undefined && r.bestseller !== "") patch.isBestSeller = yes(r.bestseller);
+      if (r.seo_title !== undefined) patch.seoTitle = r.seo_title.slice(0, 70) || undefined;
+      if (r.seo_description !== undefined) patch.seoDescription = r.seo_description.slice(0, 170) || undefined;
+      if (r.short_description && r.short_description.length >= 5) {
+        if (custom) custom.shortDescription = r.short_description.slice(0, 200);
+        else patch.shortDescription = r.short_description.slice(0, 200);
+      }
+      if (JSON.stringify([patch, custom]) !== before) {
+        c.products[p.id] = patch;
+        changed++;
+      }
+    });
+    if (changed) log(db, me, "products", `Imported ${isProducts ? "products" : "stock"} CSV: ${changed} ${changed === 1 ? "row" : "rows"} changed`, "/admin/products");
+    return changed;
+  });
+  refreshStore();
+  const msg = `${result} ${result === 1 ? "row" : "rows"} updated${errors.length ? `, ${errors.length} skipped` : ""}.`;
+  return errors.length ? { ok: result > 0, message: `${msg} ${errors.slice(0, 5).join(" · ")}${errors.length > 5 ? " …" : ""}` } : done(result ? msg : "Nothing changed — the file matches what’s already in the shop.");
+}
+
+/* ─── Reviews ────────────────────────────────────────────── */
+
+export async function moderateReview(form: FormData) {
+  const me = await assertAdmin("reviews");
+  const reviewId = String(form.get("reviewId") ?? "");
+  const op = String(form.get("op") ?? "");
+  if (!["approve", "reject", "delete"].includes(op)) return;
+  await write((db) => {
+    const r = db.reviews.find((x) => x.id === reviewId);
+    if (!r) return;
+    const name = getProductById(r.productId)?.name ?? r.productId;
+    if (op === "delete") db.reviews = db.reviews.filter((x) => x.id !== reviewId);
+    else r.status = op === "approve" ? "approved" : "rejected";
+    log(db, me, "reviews", `${op === "approve" ? "Approved" : op === "reject" ? "Rejected" : "Deleted"} ${r.rating}★ review of ${name} by ${r.author}`, "/admin/reviews");
+  });
+  revalidatePath("/admin", "layout");
+}
+
+/* ─── Customers ──────────────────────────────────────────── */
+
+export async function setCustomerBlocked(_: ActionState, form: FormData): Promise<ActionState> {
+  const me = await assertAdmin("customers");
+  const parsed = z.object({ userId: z.string().min(1), block: checkbox, reason: z.string().trim().max(200).optional() }).safeParse(Object.fromEntries(form));
+  if (!parsed.success) return oops("Something in that form doesn’t look right.");
+  const { userId, block, reason } = parsed.data;
+  if (block && !reason) return oops("Add a short reason, for your records.", { reason: "Required to block" });
+  const result = await write((db) => {
+    const u = db.users.find((x) => x.id === userId);
+    if (!u) return oops("That customer no longer exists.");
+    if (block) u.blocked = { at: new Date().toISOString(), reason: reason! };
+    else delete u.blocked;
+    log(db, me, "customers", `${block ? "Blocked" : "Unblocked"} ${u.firstName} ${u.lastName} (${u.email})${block ? ` · ${reason}` : ""}`, `/admin/customers/${u.id}`);
+    return done(block ? `${u.firstName} is blocked: they’re signed out and can’t sign in or place orders.` : `${u.firstName} is unblocked and can shop again.`);
+  });
+  revalidatePath("/admin", "layout");
+  return result;
 }

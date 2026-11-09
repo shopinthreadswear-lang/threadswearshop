@@ -1,4 +1,5 @@
 import { currentSettings, emptyCatalog } from "@/lib/catalog";
+import { getAdmin } from "@/lib/server/admin";
 import { read } from "@/lib/server/store";
 import { Card, PageHeader } from "@/components/admin/bits";
 import { SettingsForm } from "./SettingsForm";
@@ -6,6 +7,7 @@ import { SettingsForm } from "./SettingsForm";
 export const metadata = { title: "Settings" };
 
 export default async function SettingsPage() {
+  await getAdmin("settings");
   const settings = await read((db) => currentSettings(db.catalog ?? emptyCatalog()));
   return (
     <>

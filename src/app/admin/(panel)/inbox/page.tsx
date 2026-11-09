@@ -1,4 +1,5 @@
 import { getProductById } from "@/data/products";
+import { getAdmin } from "@/lib/server/admin";
 import { fmtDate } from "@/lib/server/admin";
 import { read } from "@/lib/server/store";
 import { Card, Empty, PageHeader, Pill, Tabs } from "@/components/admin/bits";
@@ -8,6 +9,7 @@ import { deleteMessage } from "@/app/admin/actions";
 export const metadata = { title: "Inbox" };
 
 export default async function InboxPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+  await getAdmin("inbox");
   const { tab = "messages" } = await searchParams;
   const d = await read((db) => ({
     messages: [...db.contactMessages].sort((a, b) => b.createdAt.localeCompare(a.createdAt)),

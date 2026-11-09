@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props) {
   await syncCatalog();
   const p = getProduct((await params).slug);
   if (!p) return {};
-  return pageMeta({ title: p.name, description: `${p.shortDescription} ${p.materials}. ₹${p.price.toLocaleString("en-IN")} — complimentary shipping above ₹2,999 and easy 15-day returns.`, path: `/products/${p.slug}`, image: p.images[0] });
+  return pageMeta({ title: p.seoTitle || p.name, description: p.seoDescription || `${p.shortDescription} ${p.materials}. ₹${p.price.toLocaleString("en-IN")} — complimentary shipping above ₹2,999 and easy 15-day returns.`, path: `/products/${p.slug}`, image: p.images[0] });
 }
 
 function Rail({ title, items, href, linkLabel }: { title: string; items: Product[]; href?: string; linkLabel?: string }) {

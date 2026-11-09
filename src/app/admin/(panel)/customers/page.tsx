@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getAdmin } from "@/lib/server/admin";
 import { fmtDate } from "@/lib/server/admin";
 import { read } from "@/lib/server/store";
 import { formatINR } from "@/lib/site";
@@ -7,6 +8,7 @@ import { Card, Empty, PageHeader, Pill, td, th } from "@/components/admin/bits";
 export const metadata = { title: "Customers" };
 
 export default async function CustomersPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+  await getAdmin("customers");
   const { q = "" } = await searchParams;
   const rows = await read((db) =>
     db.users
@@ -44,7 +46,7 @@ export default async function CustomersPage({ searchParams }: { searchParams: Pr
                 {shown.map(({ u, orders, spent, last, subscribed }) => (
                   <tr key={u.id}>
                     <td className={td}>
-                      <span className="flex items-center gap-2 font-semibold">{u.firstName} {u.lastName}{subscribed && <Pill tone="info">Newsletter</Pill>}</span>
+                      <Link href={`/admin/customers/${u.id}`} className="flex items-center gap-2 font-semibold hover:text-burgundy">{u.firstName} {u.lastName}{subscribed && <Pill tone="info">Newsletter</Pill>}{u.blocked && <Pill tone="bad">Blocked</Pill>}</Link>
                       <a href={`mailto:${u.email}`} className="block text-[12.5px] text-muted hover:text-burgundy">{u.email}</a>
                       {u.phone && <span className="block text-[12.5px] text-muted">{u.phone}</span>}
                     </td>

@@ -1,4 +1,5 @@
 import { emptyCatalog, deriveProducts, offerApplies } from "@/lib/catalog";
+import { getAdmin } from "@/lib/server/admin";
 import { categories } from "@/data/categories";
 import { collections } from "@/data/collections";
 import { fmtDate, hasEnded } from "@/lib/server/admin";
@@ -11,6 +12,7 @@ import { OfferForm } from "./OfferForm";
 export const metadata = { title: "Offers" };
 
 export default async function OffersPage() {
+  await getAdmin("offers");
   const { offers, all } = await read((db) => {
     const state = db.catalog ?? emptyCatalog();
     return { offers: state.offers.map((o) => ({ ...o, expired: hasEnded(o.endsAt) })), all: deriveProducts({ ...state, offers: [] }) };
@@ -24,7 +26,7 @@ export default async function OffersPage() {
   return (
     <>
       <PageHeader title="Offers" sub="Put a whole category, collection or the entire shop on sale. Prices change straight away, with the old price crossed out." />
-      <div className="grid gap-4 xl:grid-cols-[1.3fr_1fr]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-4 xl:grid-cols-[1.3fr_1fr]">
         <Card title="Your offers" pad={false}>
           {offers.length ? (
             <ul className="divide-y divide-line border-t border-line">

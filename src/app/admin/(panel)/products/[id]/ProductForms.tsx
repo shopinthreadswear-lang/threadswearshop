@@ -5,7 +5,7 @@ import { ImageList } from "@/components/admin/ImageField";
 import { ActionForm, Field, Submit, Toggle } from "@/components/admin/forms";
 import { Pill } from "@/components/admin/bits";
 
-type P = { id: string; name: string; shortDescription: string; description: string; price: number; compareAtPrice?: number; isNew: boolean; isBestSeller: boolean; hidden: boolean; badge: string };
+type P = { id: string; seoTitle?: string; seoDescription?: string; name: string; shortDescription: string; description: string; price: number; compareAtPrice?: number; isNew: boolean; isBestSeller: boolean; hidden: boolean; badge: string };
 
 export function ProductForm({ product: p, offerNote }: { product: P; offerNote?: string }) {
   return (
@@ -32,6 +32,13 @@ export function ProductForm({ product: p, offerNote }: { product: P; offerNote?:
         <Toggle name="isBestSeller" label="Best seller" defaultChecked={p.isBestSeller} hint="Listed in Best Sellers" />
         <Toggle name="hidden" label="Hide from shop" defaultChecked={p.hidden} hint="Customers can’t find or buy it" />
       </div>
+      <details className="rounded-chip border border-line bg-ivory p-3" open={!!(p.seoTitle || p.seoDescription)}>
+        <summary className="cursor-pointer text-[13px] font-bold text-ink">Search engines (SEO)</summary>
+        <div className="mt-3 space-y-3">
+          <Field label="Title in Google" name="seoTitle" defaultValue={p.seoTitle ?? ""} maxLength={70} placeholder={p.name} hint="Leave empty to use the product name. About 60 characters show." />
+          <Field label="Description in Google" name="seoDescription" as="textarea" rows={2} defaultValue={p.seoDescription ?? ""} maxLength={170} placeholder={p.shortDescription} hint="Leave empty to use the one-line description. About 155 characters show." />
+        </div>
+      </details>
       <Submit>Save changes</Submit>
     </ActionForm>
   );

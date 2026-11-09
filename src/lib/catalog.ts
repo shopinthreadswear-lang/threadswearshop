@@ -24,6 +24,8 @@ export type ProductPatch = {
   isNew?: boolean;
   isBestSeller?: boolean;
   hidden?: boolean;
+  seoTitle?: string;
+  seoDescription?: string;
   /** Replaces the product's photos (first = main, second = hover). */
   images?: string[];
   /** Units on hand per SKU, set by the admin. */
@@ -187,6 +189,8 @@ export function deriveProducts(state: CatalogState, { includeHidden = false } = 
     }
     if (patch.compareAtPrice === null) p.compareAtPrice = undefined;
     else if (patch.compareAtPrice) p.compareAtPrice = patch.compareAtPrice;
+    if (patch.seoTitle) p.seoTitle = patch.seoTitle;
+    if (patch.seoDescription) p.seoDescription = patch.seoDescription;
     if (patch.isNew !== undefined) p.isNew = patch.isNew;
     if (patch.isBestSeller !== undefined) p.isBestSeller = patch.isBestSeller;
     if (patch.stock) {

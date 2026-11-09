@@ -5,24 +5,27 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/cn";
 
 const LINKS = [
-  { href: "/admin", label: "Overview" },
-  { href: "/admin/orders", label: "Orders" },
-  { href: "/admin/products", label: "Products" },
-  { href: "/admin/content", label: "Site content" },
-  { href: "/admin/offers", label: "Offers" },
-  { href: "/admin/coupons", label: "Coupons" },
-  { href: "/admin/customers", label: "Customers" },
-  { href: "/admin/returns", label: "Returns" },
-  { href: "/admin/inbox", label: "Inbox" },
-  { href: "/admin/settings", label: "Settings" },
+  { href: "/admin", label: "Overview", area: "dashboard" },
+  { href: "/admin/orders", label: "Orders", area: "orders" },
+  { href: "/admin/products", label: "Products", area: "products" },
+  { href: "/admin/content", label: "Site content", area: "content" },
+  { href: "/admin/offers", label: "Offers", area: "offers" },
+  { href: "/admin/coupons", label: "Coupons", area: "coupons" },
+  { href: "/admin/customers", label: "Customers", area: "customers" },
+  { href: "/admin/reviews", label: "Reviews", area: "reviews" },
+  { href: "/admin/returns", label: "Returns", area: "returns" },
+  { href: "/admin/inbox", label: "Inbox", area: "inbox" },
+  { href: "/admin/settings", label: "Settings", area: "settings" },
+  { href: "/admin/team", label: "Team", area: "team" },
+  { href: "/admin/activity", label: "Activity log", area: "activity" },
 ];
 
-export function AdminNav({ badges }: { badges: Record<string, number> }) {
+export function AdminNav({ badges, allowed }: { badges: Record<string, number>; allowed: string[] }) {
   const pathname = usePathname();
   const active = (href: string) => (href === "/admin" ? pathname === "/admin" : pathname.startsWith(href));
   return (
     <nav aria-label="Admin" className="no-scrollbar -mx-4 flex gap-1.5 overflow-x-auto px-4 lg:mx-0 lg:flex-col lg:gap-0.5 lg:overflow-visible lg:px-0">
-      {LINKS.map((l) => (
+      {LINKS.filter((l) => allowed.includes(l.area)).map((l) => (
         <Link
           key={l.href}
           href={l.href}

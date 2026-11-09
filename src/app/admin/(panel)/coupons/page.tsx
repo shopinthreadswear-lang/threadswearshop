@@ -1,4 +1,5 @@
 import { coupons, usable } from "@/lib/server/promos";
+import { getAdmin } from "@/lib/server/admin";
 import { fmtDate } from "@/lib/server/admin";
 import { read } from "@/lib/server/store";
 import { formatINR } from "@/lib/site";
@@ -10,6 +11,7 @@ import { CouponForm } from "./CouponForm";
 export const metadata = { title: "Coupons" };
 
 export default async function CouponsPage({ searchParams }: { searchParams: Promise<{ edit?: string }> }) {
+  await getAdmin("coupons");
   const { edit } = await searchParams;
   const list = await read((db) => coupons(db).map((c) => ({ ...c })));
   const editing = list.find((c) => c.id === edit);
@@ -17,7 +19,7 @@ export default async function CouponsPage({ searchParams }: { searchParams: Prom
   return (
     <>
       <PageHeader title="Coupon codes" sub="Codes customers type at checkout. Changes apply to the next order." />
-      <div className="grid gap-4 xl:grid-cols-[1.3fr_1fr]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-4 xl:grid-cols-[1.3fr_1fr]">
         <Card title={`${list.length} ${list.length === 1 ? "code" : "codes"}`} pad={false}>
           {list.length ? (
             <ul className="divide-y divide-line border-t border-line">

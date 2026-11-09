@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getAdmin } from "@/lib/server/admin";
 import { currentContact, currentHome, deriveProducts, emptyCatalog } from "@/lib/catalog";
 import { read } from "@/lib/server/store";
 import { Card, PageHeader, Tabs } from "@/components/admin/bits";
@@ -15,6 +16,7 @@ const TABS = [
 ];
 
 export default async function ContentPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+  await getAdmin("content");
   const { tab = "hero" } = await searchParams;
   const current = TABS.some((t) => t.key === tab) ? tab : "hero";
   const data = await read((db) => {

@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import { z } from "zod";
+import { site } from "@/lib/site";
 import { getSessionUserId, orderToken } from "@/lib/server/auth";
 import { fail, handle, ok, parse, rateLimit, zEmail, zName, zPhone, zPincode } from "@/lib/server/http";
 import { gateway } from "@/lib/server/payments";
@@ -57,6 +58,9 @@ export const POST = handle(async (req) => {
   if ("error" in parsed) return parsed.error;
   const d = parsed.data;
   const uid = await getSessionUserId();
+  const email = d.contact.email.toLowerCase();
+  const blocked = await read((db) => db.users.some((u) => u.blocked && (u.id === uid || u.email.toLowerCase() === email)));
+  if (blocked) return fail(`We can’t take orders for this account. Please contact ${site.email} for help.`, 403);
 
   // ── Server-side price & stock verification: client-sent prices are never trusted. ──
   const items: OrderItem[] = [];

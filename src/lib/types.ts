@@ -56,6 +56,9 @@ export type Product = {
   occasion: ("Everyday" | "Work" | "Weekend" | "Evening" | "Occasion" | "Travel")[];
   completeTheLook?: string[]; // product slugs
   createdAt: string;
+  /** Search-engine title and description, set in the admin. */
+  seoTitle?: string;
+  seoDescription?: string;
 };
 
 export type Category = {
@@ -92,6 +95,8 @@ export type Review = {
   date: string;
   images?: string[];
   helpful?: number;
+  /** Moderation. Reviews without a status were published before moderation existed and count as approved. */
+  status?: "pending" | "approved" | "rejected";
 };
 
 export type JournalArticle = {
@@ -161,6 +166,8 @@ export type Order = {
   status: OrderStatus;
   timeline: { status: OrderStatus; at: string; note?: string }[];
   courier?: { name: string; trackingId: string };
+  /** Money given back to the customer, recorded in the admin. */
+  refunds?: { id: string; amount: number; reason: string; method: "original" | "bank" | "store_credit" | "cash"; restocked: boolean; at: string; by: string }[];
   expectedDelivery: string;
   createdAt: string;
 };
@@ -183,6 +190,8 @@ export type User = {
   wishlist: string[];
   preferences: { newsletter: boolean; sms: boolean; whatsapp: boolean; preferredSize?: string; preferredFit?: string };
   cart?: { lines: CartLine[]; updatedAt: string };
+  /** Set by the admin: a blocked customer can't sign in or place orders. */
+  blocked?: { at: string; reason: string };
 };
 
 export type PublicUser = Omit<User, "passwordHash">;

@@ -48,10 +48,18 @@ const SPECS: Spec[] = [
     },
   },
   {
+    // One row for the catalogue edits, one for the admin team, and one row per activity-log entry ("audit:<id>").
     table: "store_settings",
-    toRows: (db) => (db.catalog ? [{ key: "catalog", data: db.catalog }] : []),
+    toRows: (db) => [
+      ...(db.catalog ? [{ key: "catalog", data: db.catalog }] : []),
+      ...(db.staff?.length ? [{ key: "staff", data: db.staff }] : []),
+      ...(db.audit ?? []).map((e) => ({ key: `audit:${e.id}`, data: e })),
+    ],
     fromRows: (rows, db) => {
       db.catalog = (rows.find((r) => r.key === "catalog")?.data as DB["catalog"]) ?? undefined;
+      db.staff = (rows.find((r) => r.key === "staff")?.data as DB["staff"]) ?? undefined;
+      const audit = rows.filter((r) => r.key.startsWith("audit:")).map((r) => r.data as NonNullable<DB["audit"]>[number]);
+      db.audit = audit.length ? audit.sort((a, b) => b.at.localeCompare(a.at)) : undefined;
     },
   },
 ];

@@ -65,7 +65,7 @@ export async function getCurrentUser(): Promise<PublicUser | null> {
   const session = verify<{ uid: string }>((await cookies()).get(SESSION_COOKIE)?.value);
   if (!session) return null;
   const user = await read((db) => db.users.find((u) => u.id === session.uid));
-  return user ? toPublic(user) : null;
+  return user && !user.blocked ? toPublic(user) : null;
 }
 
 export async function getSessionUserId() {

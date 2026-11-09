@@ -65,7 +65,7 @@ function WriteReview({ product, open, onClose, onCreated }: { product: Product; 
       setState("idle");
       return;
     }
-    onCreated(res.review);
+    if (res.review?.status !== "pending") onCreated(res.review);
     setState("done");
   };
 
@@ -75,7 +75,7 @@ function WriteReview({ product, open, onClose, onCreated }: { product: Product; 
         <div className="py-8 text-center">
           <Check size={30} className="mx-auto text-success" />
           <p className="display-sm mt-4">Thank you for your review.</p>
-          <p className="mt-3 text-[14px] text-muted">Your thoughts help other customers choose with confidence.</p>
+          <p className="mt-3 text-[14px] text-muted">We check every review before it goes live — yours will appear here shortly. Your thoughts help other customers choose with confidence.</p>
           <button type="button" className="btn btn-primary mt-8" onClick={onClose}>
             Done
           </button>

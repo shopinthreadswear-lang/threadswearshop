@@ -6,7 +6,8 @@ import { getProductById } from "@/data/products";
 
 export const GET = handle(async (req) => {
   const id = new URL(req.url).searchParams.get("productId") ?? "";
-  const reviews = await read((db) => db.reviews.filter((r) => r.productId === id));
+  // Only reviews the team has approved (older reviews, from before moderation, have no status).
+  const reviews = await read((db) => db.reviews.filter((r) => r.productId === id && (!r.status || r.status === "approved")));
   return ok({ reviews });
 });
 
@@ -34,7 +35,7 @@ export const POST = handle(async (req) => {
   const uid = await getSessionUserId();
   const review = await write((db) => {
     const verified = !!uid && db.orders.some((o) => o.userId === uid && o.items.some((i) => i.productId === d.productId));
-    const r = { ...d, id: newId("rev"), verified, date: new Date().toISOString().slice(0, 10), helpful: 0 };
+    const r = { ...d, id: newId("rev"), verified, date: new Date().toISOString().slice(0, 10), helpful: 0, status: "pending" as const };
     db.reviews.unshift(r);
     return r;
   });

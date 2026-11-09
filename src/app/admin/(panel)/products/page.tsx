@@ -1,15 +1,17 @@
-import Image from "next/image";
+import { getAdmin } from "@/lib/server/admin";
 import Link from "next/link";
 import { deriveProducts, emptyCatalog } from "@/lib/catalog";
 import { categories } from "@/data/categories";
 import { LOW_STOCK } from "@/lib/server/admin";
 import { availableStock, read } from "@/lib/server/store";
 import { formatINR } from "@/lib/site";
-import { Card, Empty, PageHeader, Pill, Tabs } from "@/components/admin/bits";
+import { Card, Empty, PageHeader, Tabs } from "@/components/admin/bits";
+import { CsvTools, ProductTable } from "./ProductTable";
 
 export const metadata = { title: "Products" };
 
 export default async function ProductsPage({ searchParams }: { searchParams: Promise<{ q?: string; cat?: string; stock?: string; deleted?: string }> }) {
+  await getAdmin("products");
   const { q = "", cat = "", stock = "all", deleted } = await searchParams;
   const rows = await read((db) => {
     const state = db.catalog ?? emptyCatalog();
@@ -44,6 +46,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
         </select>
         <button className="btn btn-outline btn-sm">Apply</button>
       </form>
+      <CsvTools />
       <Tabs
         current={stock}
         items={[
@@ -53,39 +56,15 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
           { key: "hidden", label: "Hidden", href: link("hidden"), count: rows.filter((r) => r.hidden).length },
         ]}
       />
-      <Card pad={false}>
-        {shown.length ? (
-          <ul className="divide-y divide-line">
-            {shown.map(({ p, hidden, custom, total, low, out }) => (
-              <li key={p.id}>
-                <Link href={`/admin/products/${p.id}`} className="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-bone/60 md:px-5">
-                  <span className="relative h-16 w-13 shrink-0 overflow-hidden rounded-[10px] bg-bone">
-                    <Image src={p.images[0]} alt="" fill sizes="52px" className={hidden ? "object-cover opacity-40" : "object-cover"} />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[14px] font-semibold text-ink">{p.name}</span>
-                    <span className="mt-0.5 block truncate text-[12.5px] text-muted">{p.subcategory} · {p.sku}</span>
-                    <span className="mt-1.5 flex flex-wrap gap-1.5">
-                      {hidden && <Pill>Hidden</Pill>}
-                      {custom && <Pill tone="info">Added here</Pill>}
-                      {p.compareAtPrice && <Pill tone="info">{p.discount}% off</Pill>}
-                      {out > 0 && <Pill tone="bad">{out} sold out</Pill>}
-                      {low > 0 && <Pill tone="new">{low} low</Pill>}
-                    </span>
-                  </span>
-                  <span className="shrink-0 text-right">
-                    <span className="block text-[14px] font-semibold">{formatINR(p.price)}</span>
-                    {p.compareAtPrice && <s className="block text-[12px] text-muted">{formatINR(p.compareAtPrice)}</s>}
-                    <span className="block text-[12px] text-muted">{total} in stock</span>
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ) : (
+      {shown.length ? (
+        <ProductTable
+          rows={shown.map(({ p, hidden, custom, total, low, out }) => ({ id: p.id, name: p.name, sku: p.sku, subcategory: p.subcategory, image: p.images[0], price: formatINR(p.price), compare: p.compareAtPrice ? formatINR(p.compareAtPrice) : undefined, discount: p.discount, hidden, custom, total, low, out }))}
+        />
+      ) : (
+        <Card pad={false}>
           <Empty title="No products match">Try a different name, or clear the category.</Empty>
-        )}
-      </Card>
+        </Card>
+      )}
       <p className="mt-3 text-[12px] text-muted">{shown.length} of {rows.length} products · hidden pieces are included here but not shown in the shop.</p>
     </>
   );

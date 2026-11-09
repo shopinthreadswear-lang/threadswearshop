@@ -57,7 +57,7 @@ function Panel({ open, children }: { open: boolean; children: React.ReactNode })
   );
 }
 
-export function CheckoutForm() {
+export function CheckoutForm({ online = true }: { online?: boolean }) {
   const router = useRouter();
   const { lines, subtotal, promo, user, hydrated, clearCart } = useStore();
   const [step, setStep] = useState<Step>(1);
@@ -66,7 +66,7 @@ export function CheckoutForm() {
   const [selectedAddressId, setSelectedAddressId] = useState<string | "new">("new");
   const [saveAddress, setSaveAddress] = useState(true);
   const [delivery, setDelivery] = useState<DeliveryMethod>("standard");
-  const [method, setMethod] = useState<PayMethod>("upi");
+  const [method, setMethod] = useState<PayMethod>(online ? "upi" : "cod");
   const [pay, setPay] = useState({ vpa: "", card: "", expiry: "", cvv: "", holder: "", bank: BANKS[0], wallet: WALLETS[0], giftCode: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [placing, setPlacing] = useState(false);
@@ -429,6 +429,7 @@ export function CheckoutForm() {
                 <p className="mb-5 flex items-center gap-2 text-[12.5px] text-muted">
                   <Lock size={13} /> All transactions are secure and encrypted.
                 </p>
+                {!online && <p className="mb-3 rounded-chip bg-bone px-4 py-3 text-[13px] text-ink">Online payments are coming soon. For now, pay by cash on delivery or with a Threads Ware gift card.</p>}
                 <fieldset className="divide-y divide-line border border-line">
                   <legend className="sr-only">Payment method</legend>
                   {(
@@ -440,7 +441,9 @@ export function CheckoutForm() {
                       ["giftcard", "Threads Ware Gift Card", "Redeem your gift card balance"],
                       ["cod", "Cash on Delivery", codAllowed ? `₹${commerce.codFee} handling fee` : `Available on orders up to ₹${commerce.codLimit.toLocaleString("en-IN")}`],
                     ] as [PayMethod, string, string][]
-                  ).map(([m, label, hint]) => {
+                  )
+                    .filter(([m]) => online || m === "cod" || m === "giftcard")
+                    .map(([m, label, hint]) => {
                     const disabled = m === "cod" && !codAllowed;
                     return (
                       <div key={m}>

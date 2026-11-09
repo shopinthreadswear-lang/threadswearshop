@@ -22,8 +22,6 @@ npm run build && npm start
 
 | What | Value |
 | --- | --- |
-| Customer account | `arjun@threadsware.in` / `Threads@2026` (2 orders, addresses, saved cards, wishlist) |
-| Track an order (guest) | `TW-517406` + `arjun@threadsware.in` |
 | Promo codes | `WELCOME10` (10%), `TW500` (₹500 off ≥ ₹4,999), `SIGNATURE15` (15% off ≥ ₹9,999) |
 | Gift card | `TWGC-DEMO-2026` (₹5,000 balance) |
 | Simulate a declined payment | Card ending `0002` (e.g. `4000 0000 0000 0002`) or UPI `fail@upi` |
@@ -168,3 +166,10 @@ read any customer data; only the server, with the secret key, can.
 5. **Photography:** `src/data/images.ts` currently uses Unsplash placeholder photography as stand-ins. Replace every entry with Threads Ware campaign and product photography (and your own CDN loader in `src/lib/image-loader.ts`) **before launch**.
 6. **Admin:** the schema already covers products, variants, inventory, collections, orders, returns, coupons, reviews (with moderation status), banners, journal, campaigns and subscribers, so an admin dashboard can be added as an `(admin)` route group behind `role = 'admin'`.
 7. **Legal copy:** the company details (GSTIN, address, phone numbers, emails) are realistic placeholders. Replace them in `src/lib/site.ts`, and have the policy pages reviewed by counsel.
+
+## Payments
+
+The live site takes **cash on delivery and gift cards only** until a real gateway is connected: card, UPI, net
+banking and wallets are hidden at checkout and refused by the server. Set `PAYMENT_PROVIDER=razorpay` with
+`RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` once the Razorpay integration in `src/lib/server/payments.ts` is finished.
+In local development the simulated `sandbox` gateway is used so checkout can be tested.

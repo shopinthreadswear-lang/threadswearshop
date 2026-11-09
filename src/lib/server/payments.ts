@@ -3,7 +3,9 @@ import crypto from "crypto";
 
 /**
  * Payment gateway abstraction.
- * - `sandbox` (default): deterministic test gateway for local development and demos.
+ * - `sandbox`: simulated test gateway. Used in local development, or in production only when PAYMENT_PROVIDER=sandbox
+ *   is set on purpose. Otherwise the live site takes no online payments (cash on delivery and gift cards only),
+ *   so an order can never be marked paid without real money.
  * - `razorpay` / `stripe`: implement `createIntent` + `verify` with the official SDKs.
  *   Keys are read from env only — never shipped to the client except publishable ids.
  */
@@ -49,7 +51,23 @@ const stripe: Gateway = {
   },
 };
 
+/** Card / UPI / net banking / wallets can be offered at checkout. */
+export function onlinePaymentsEnabled() {
+  const p = process.env.PAYMENT_PROVIDER;
+  if (p === "razorpay") return !!(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET);
+  if (p === "stripe") return !!process.env.STRIPE_SECRET_KEY;
+  return p === "sandbox" || process.env.NODE_ENV !== "production";
+}
+
+const offline: Gateway = {
+  async charge({ method }) {
+    if (method === "cod") return { ok: true, reference: `cod_${crypto.randomBytes(5).toString("hex")}`, status: "cod" };
+    return { ok: false, error: "Online payment isn’t available yet. Please choose Cash on Delivery." };
+  },
+};
+
 export function gateway(): Gateway {
+  if (!process.env.PAYMENT_PROVIDER && process.env.NODE_ENV === "production") return offline;
   switch (process.env.PAYMENT_PROVIDER) {
     case "razorpay":
       return razorpay;

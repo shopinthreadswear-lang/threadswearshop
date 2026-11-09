@@ -66,7 +66,6 @@ export function TrackOrder() {
           {loading ? (<><span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border border-current border-t-transparent" aria-hidden /> Finding…</>) : "Track"}
         </button>
       </form>
-      <p className="mt-3 text-[12px] text-faint">Try the demo: TW-517406 · arjun@threadsware.in</p>
       {error && (
         <p role="alert" className="mt-8 max-w-3xl border-l-2 border-error bg-error/5 px-5 py-4 text-[13.5px] text-error">
           {error}

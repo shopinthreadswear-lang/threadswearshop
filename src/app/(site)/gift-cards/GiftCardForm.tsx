@@ -80,7 +80,6 @@ export function BalanceCheck() {
         <button type="submit" className="btn btn-outline" disabled={code.length < 6}>Check</button>
       </div>
       {res && <p className={cn("mt-3 text-[13px]", res.ok ? "text-success" : "text-error")} role="status">{res.text}</p>}
-      <p className="mt-2 text-[11.5px] text-faint">Demo code: TWGC-DEMO-2026</p>
     </form>
   );
 }

@@ -9,12 +9,16 @@ import { CookieSettingsLink } from "@/components/common/CookieBanner";
 import { Reveal } from "@/components/ui/Reveal";
 import { FooterMeta } from "./FooterMeta";
 
-const SOCIAL = [
-  [site.social.instagram, "Instagram", Instagram],
-  [site.social.youtube, "YouTube", Youtube],
-  [site.social.pinterest, "Pinterest", Pinterest],
-  [site.social.facebook, "Facebook", Facebook],
-] as const;
+// A function so links edited in Admin → Site content show up; empty links are hidden.
+const social = () =>
+  (
+    [
+      [site.social.instagram, "Instagram", Instagram],
+      [site.social.youtube, "YouTube", Youtube],
+      [site.social.pinterest, "Pinterest", Pinterest],
+      [site.social.facebook, "Facebook", Facebook],
+    ] as const
+  ).filter(([href]) => !!href);
 
 export function Footer() {
   return (
@@ -67,7 +71,7 @@ export function Footer() {
         </p>
         <PaymentBadges light />
         <ul className="flex gap-2">
-          {SOCIAL.map(([href, label, Icon]) => (
+          {social().map(([href, label, Icon]) => (
             <li key={label}>
               <a href={href} target="_blank" rel="noopener noreferrer" aria-label={`Threads Ware on ${label}`} className="grid h-11 w-11 place-items-center rounded-full bg-cream/10 text-cream transition-colors duration-300 hover:bg-ochre hover:text-ink">
                 <Icon size={16} />

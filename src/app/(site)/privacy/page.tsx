@@ -1,10 +1,12 @@
 import { PolicyPage } from "@/components/content/PolicyPage";
 import { pageMeta } from "@/lib/seo";
 import { site } from "@/lib/site";
+import { syncCatalog } from "@/lib/server/store";
 
 export const metadata = pageMeta({ title: "Privacy Policy", description: "How Threads Ware collects, uses and protects your personal data, in line with India's Digital Personal Data Protection Act, 2023.", path: "/privacy" });
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  await syncCatalog(); // contact details are edited in Admin → Site content
   return (
     <PolicyPage
       crumb="Privacy Policy"

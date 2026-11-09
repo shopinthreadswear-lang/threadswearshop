@@ -2,6 +2,7 @@ import { ContactForm } from "./ContactForm";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Chat, Mail, Phone, Pin } from "@/components/ui/Icons";
 import { site } from "@/lib/site";
+import { syncCatalog } from "@/lib/server/store";
 import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 
@@ -15,7 +16,8 @@ const TOPICS = [
   ["General Enquiries", "Press, partnerships and wholesale.", "mailto:hello@threadsware.in"],
 ];
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  await syncCatalog(); // contact details are edited in Admin → Site content
   return (
     <div className="container-site pb-24 pt-10 md:pt-16">
       <Breadcrumb items={[{ label: "Contact" }]} className="mb-8" />

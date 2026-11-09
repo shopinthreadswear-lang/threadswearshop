@@ -206,3 +206,10 @@ end $$;
 
 revoke all on function tw_apply(bigint, jsonb) from public, anon, authenticated;
 grant execute on function tw_apply(bigint, jsonb) to service_role;
+
+-- ─── Photo storage: admin uploads (products, homepage) ──────────────────────
+-- Public to read (photos are shown in the shop). Only the server's secret key can create upload links,
+-- so customers can't upload anything.
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('media', 'media', true, 10485760, array['image/jpeg','image/png','image/webp','image/avif'])
+on conflict (id) do update set public = excluded.public, file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;

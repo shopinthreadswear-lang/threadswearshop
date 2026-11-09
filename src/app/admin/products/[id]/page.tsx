@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deriveProducts, emptyCatalog } from "@/lib/catalog";
@@ -6,8 +5,8 @@ import { availableStock, read } from "@/lib/server/store";
 import { formatINR } from "@/lib/site";
 import { Card, PageHeader, Pill } from "@/components/admin/bits";
 import { QuickAction } from "@/components/admin/forms";
-import { deleteCustomProduct, resetProduct } from "@/app/admin/actions";
-import { ProductForm, StockRow } from "./ProductForms";
+import { deleteCustomProduct, resetProduct, resetProductImages } from "@/app/admin/actions";
+import { PhotosForm, ProductForm, StockRow } from "./ProductForms";
 
 export default async function EditProduct({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ created?: string; reset?: string }> }) {
   const { id } = await params;
@@ -55,14 +54,11 @@ export default async function EditProduct({ params, searchParams }: { params: Pr
           />
         </Card>
         <div className="space-y-4">
-          <Card title="Photos">
-            <div className="grid grid-cols-3 gap-2">
-              {p.images.slice(0, 6).map((src) => (
-                <span key={src} className="relative aspect-[4/5] overflow-hidden rounded-[12px] bg-bone">
-                  <Image src={src} alt="" fill sizes="120px" className="object-cover" />
-                </span>
-              ))}
-            </div>
+          <Card
+            title="Photos"
+            action={!custom && patch.images ? <QuickAction action={resetProductImages} fields={{ productId: p.id }} label="Use original photos" confirm="Go back to the original photos for this product?" /> : undefined}
+          >
+            <PhotosForm productId={p.id} images={p.images} />
           </Card>
           <Card title="In the shop">
             <div className="flex flex-wrap gap-1.5">

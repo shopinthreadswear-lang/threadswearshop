@@ -1,6 +1,7 @@
 import type { Badge, Product, ProductColor, Size } from "@/lib/types";
 import { products } from "@/data/products";
-import { announcements, commerce } from "@/lib/site";
+import { announcements, commerce, site } from "@/lib/site";
+import { DEFAULT_HOME, home, type ContactContent, type HomeContent, type SiteContent } from "@/lib/content";
 
 /**
  * Admin-editable layer over the code catalogue.
@@ -23,6 +24,8 @@ export type ProductPatch = {
   isNew?: boolean;
   isBestSeller?: boolean;
   hidden?: boolean;
+  /** Replaces the product's photos (first = main, second = hover). */
+  images?: string[];
   /** Units on hand per SKU, set by the admin. */
   stock?: Record<string, number>;
 };
@@ -70,6 +73,8 @@ export type CatalogState = {
   custom: CustomProductInput[];
   offers: Offer[];
   settings?: StoreSettings;
+  /** Homepage copy and photos, contact details. */
+  content?: SiteContent;
 };
 
 export const emptyCatalog = (): CatalogState => ({ products: {}, custom: [], offers: [] });
@@ -78,6 +83,28 @@ export const emptyCatalog = (): CatalogState => ({ products: {}, custom: [], off
 const BASE: Product[] = products.map((p) => structuredClone(p));
 const BASE_COMMERCE = { ...commerce };
 const BASE_ANNOUNCEMENTS = announcements.map((a) => ({ ...a }));
+const BASE_SITE = structuredClone(site);
+
+export const defaultContact = (): ContactContent => ({
+  email: BASE_SITE.email,
+  phone: BASE_SITE.phone,
+  whatsapp: BASE_SITE.whatsapp,
+  hours: BASE_SITE.hours,
+  line1: BASE_SITE.address.line1,
+  line2: BASE_SITE.address.line2,
+  city: BASE_SITE.address.city,
+  state: BASE_SITE.address.state,
+  pincode: BASE_SITE.address.pincode,
+  instagram: BASE_SITE.social.instagram,
+  facebook: BASE_SITE.social.facebook,
+  youtube: BASE_SITE.social.youtube,
+  pinterest: BASE_SITE.social.pinterest,
+});
+
+export const currentHome = (state: CatalogState): HomeContent => ({ ...structuredClone(DEFAULT_HOME), ...structuredClone(state.content?.home ?? {}) });
+export const currentContact = (state: CatalogState): ContactContent => ({ ...defaultContact(), ...(state.content?.contact ?? {}) });
+
+const digits = (s: string) => s.replace(/[^\d+]/g, "");
 
 export function baseProduct(id: string) {
   return BASE.find((p) => p.id === id);
@@ -154,6 +181,10 @@ export function deriveProducts(state: CatalogState, { includeHidden = false } = 
     if (patch.shortDescription) p.shortDescription = patch.shortDescription;
     if (patch.description) p.description = patch.description;
     if (patch.price) p.price = patch.price;
+    if (patch.images?.length) {
+      p.images = [...patch.images];
+      for (const c of p.colors) delete c.images; // the admin's photos win over per-colour sets
+    }
     if (patch.compareAtPrice === null) p.compareAtPrice = undefined;
     else if (patch.compareAtPrice) p.compareAtPrice = patch.compareAtPrice;
     if (patch.isNew !== undefined) p.isNew = patch.isNew;
@@ -197,6 +228,23 @@ export function applyCatalog(state: CatalogState | null | undefined) {
     codFee: s.settings.codFee,
   } : {});
   announcements.splice(0, announcements.length, ...(s.settings?.announcements?.length ? s.settings.announcements : BASE_ANNOUNCEMENTS).map((a) => ({ ...a })));
+
+  // Homepage content: replace each key in place so importers keep the same object.
+  const h = currentHome(s);
+  for (const k of Object.keys(h) as (keyof HomeContent)[]) (home as Record<string, unknown>)[k] = h[k];
+
+  // Contact details and social links.
+  const c = currentContact(s);
+  Object.assign(site, structuredClone(BASE_SITE), {
+    email: c.email,
+    phone: c.phone,
+    phoneHref: `tel:${digits(c.phone)}`,
+    whatsapp: c.whatsapp,
+    whatsappHref: `https://wa.me/${digits(c.whatsapp).replace(/^\+/, "")}`,
+    hours: c.hours,
+    address: { ...BASE_SITE.address, line1: c.line1, line2: c.line2, city: c.city, state: c.state, pincode: c.pincode },
+    social: { instagram: c.instagram, facebook: c.facebook, youtube: c.youtube, pinterest: c.pinterest },
+  });
 }
 
 export function currentSettings(state: CatalogState): StoreSettings {

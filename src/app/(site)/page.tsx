@@ -15,6 +15,7 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { ArrowRight } from "@/components/ui/Icons";
 import { bestSellers, newArrivals, products } from "@/data/products";
 import { pageMeta } from "@/lib/seo";
+import { home } from "@/lib/content";
 import { syncCatalog } from "@/lib/server/store";
 
 export const metadata = pageMeta({
@@ -40,7 +41,7 @@ export default async function HomePage() {
       {/* The shelf */}
       <section aria-labelledby="shelf-title" className="relative overflow-x-clip py-20 md:py-24">
         <div className="container-site">
-          <SectionTitle id="shelf-title" title="Not-so-ordinary" accent="shirts & tees" sub="Our best sellers — the pieces customers come back for." />
+          <SectionTitle id="shelf-title" title={home.shelf.title} accent={home.shelf.accent} sub={home.shelf.sub} />
           <Spotlight ids={bestSellers().slice(0, 7).map((p) => p.id)} />
         </div>
       </section>
@@ -52,7 +53,7 @@ export default async function HomePage() {
       {/* New this season */}
       <section aria-labelledby="na-title" className="border-t border-line py-20 md:py-28">
         <div className="container-site">
-          <SectionTitle id="na-title" title="Fresh off the" accent="cutting table" sub="New this season, in small runs." />
+          <SectionTitle id="na-title" title={home.fresh.title} accent={home.fresh.accent} sub={home.fresh.sub} />
           <ProductGrid products={newArrivals().slice(0, 4)} />
           <Reveal className="mt-10 text-center">
             <Link href="/new-arrivals" className="btn btn-dark btn-sm">

@@ -6,15 +6,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight } from "@/components/ui/Icons";
 import { getProduct } from "@/data/products";
-import { IMG } from "@/data/images";
+import { home } from "@/lib/content";
 import { formatINR } from "@/lib/site";
 import { cn } from "@/lib/cn";
 
-const LOOKS = [
-  { img: IMG.teeWhiteModel2, alt: "Man in a white crew-neck tee against a warm wall", focus: "50% 30%", tag: "Supima cotton for every day", title: ["Everyday", "collection"], slug: "arden-supima-crew", href: "/men/t-shirts" },
-  { img: IMG.teeCharcoalModel, alt: "Man in a charcoal heavyweight tee and jeans", focus: "50% 30%", tag: "Heavyweight cotton, cut in Mumbai", title: ["Heavyweight", "collection"], slug: "mercer-heavyweight-tee", href: "/men/t-shirts" },
-  { img: IMG.manWhiteShirt, alt: "Man in a crisp white shirt and sunglasses", focus: "50% 25%", tag: "Oxford and poplin, pressed and ready", title: ["Shirting", "collection"], slug: "kensington-oxford-shirt", href: "/men/shirts" },
-];
 const AUTOPLAY_MS = 6500;
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -23,25 +18,28 @@ const EASE = [0.22, 1, 0.36, 1] as const;
  * button on the left. Looks cross-fade with a slow push-in; a round price tag floats beside the piece.
  */
 export function HeroBanner() {
+  // Slides are edited in Admin → Site content.
+  const LOOKS = home.hero.map((h) => ({ ...h, title: [h.line1, h.line2].filter(Boolean) }));
   const reduce = useReducedMotion();
   const ref = useRef<HTMLElement>(null);
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
   const [warm, setWarm] = useState(false);
   const [startX, setStartX] = useState<number | null>(null);
-  const go = useCallback((d: number) => setI((x) => (x + d + LOOKS.length) % LOOKS.length), []);
-  const look = LOOKS[i];
-  const product = getProduct(look.slug);
+  const count = LOOKS.length;
+  const go = useCallback((d: number) => setI((x) => (x + d + count) % count), [count]);
+  const look = LOOKS[i % count] ?? LOOKS[0];
+  const product = look?.productSlug ? getProduct(look.productSlug) : undefined;
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const photoY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "12%"]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -60]);
 
   useEffect(() => {
-    if (paused || reduce) return;
+    if (paused || reduce || count < 2) return;
     const t = setTimeout(() => go(1), AUTOPLAY_MS);
     return () => clearTimeout(t);
-  }, [i, paused, reduce, go]);
+  }, [i, paused, reduce, go, count]);
   // Fetch the other looks after the page settles, so a slide never arrives as an empty frame.
   useEffect(() => {
     const t = setTimeout(() => setWarm(true), 1800);
@@ -66,8 +64,8 @@ export function HeroBanner() {
     >
       {warm && (
         <div aria-hidden className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0">
-          {LOOKS.map((l) => (
-            <Image key={l.img} src={l.img} alt="" width={900} height={1100} loading="eager" sizes="(max-width:1024px) 100vw, 60vw" />
+          {LOOKS.map((l, n) => (
+            <Image key={l.img + n} src={l.img} alt="" width={900} height={1100} loading="eager" sizes="(max-width:1024px) 100vw, 60vw" />
           ))}
         </div>
       )}
@@ -150,18 +148,18 @@ export function HeroBanner() {
 
           <motion.div initial={reduce ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE, delay: 0.35 } }} className="mt-6 sm:mt-8">
             <Link href={look.href} className="btn btn-primary">
-              Shop collection <ArrowRight size={13} className="btn-arrow" />
+              {look.button || "Shop collection"} <ArrowRight size={13} className="btn-arrow" />
             </Link>
           </motion.div>
 
           {/* Controls */}
-          <div className="mt-7 flex items-center justify-center gap-4 lg:mt-12 lg:justify-start">
+          <div className={cn("mt-7 flex items-center justify-center gap-4 lg:mt-12 lg:justify-start", count < 2 && "hidden")}>
             <button type="button" onClick={() => go(-1)} aria-label="Previous look" className="grid h-10 w-10 place-items-center rounded-full border border-burgundy/30 text-burgundy transition-[transform,background-color,color] duration-300 hover:bg-burgundy hover:text-cream active:scale-90">
               <ChevronLeft size={14} />
             </button>
             <div className="flex items-center gap-2">
               {LOOKS.map((l, n) => (
-                <button key={l.slug} type="button" aria-current={n === i} aria-label={`Show look ${n + 1}: ${l.title.join(" ")}`} onClick={() => setI(n)} className="grid h-11 min-w-6 place-items-center">
+                <button key={n} type="button" aria-current={n === i} aria-label={`Show look ${n + 1}: ${l.title.join(" ")}`} onClick={() => setI(n)} className="grid h-11 min-w-6 place-items-center">
                   <span className={cn("block h-[5px] rounded-full transition-all duration-500", n === i ? "w-8 bg-burgundy" : "w-[5px] bg-burgundy/30")} />
                 </button>
               ))}

@@ -1,6 +1,7 @@
 "use client";
 
-import { saveProduct, setStock } from "@/app/admin/actions";
+import { saveProduct, saveProductImages, setStock } from "@/app/admin/actions";
+import { ImageList } from "@/components/admin/ImageField";
 import { ActionForm, Field, Submit, Toggle } from "@/components/admin/forms";
 import { Pill } from "@/components/admin/bits";
 
@@ -52,5 +53,15 @@ export function StockRow({ productId, sku, label, available }: { productId: stri
         <Submit variant="outline" pendingText="…">Save</Submit>
       </ActionForm>
     </li>
+  );
+}
+
+export function PhotosForm({ productId, images }: { productId: string; images: string[] }) {
+  return (
+    <ActionForm action={saveProductImages} className="space-y-4">
+      <input type="hidden" name="productId" value={productId} />
+      <ImageList name="images" defaultValue={images} folder="products" />
+      <Submit>Save photos</Submit>
+    </ActionForm>
   );
 }

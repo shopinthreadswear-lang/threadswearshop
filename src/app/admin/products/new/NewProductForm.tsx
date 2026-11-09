@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createProduct } from "@/app/admin/actions";
 import { ActionForm, Field, FieldError, Submit, Toggle } from "@/components/admin/forms";
+import { ImageList } from "@/components/admin/ImageField";
 
 const LETTER_SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 const CHEST_SIZES = ["36", "38", "40", "42", "44", "46"];
@@ -39,7 +40,11 @@ export function NewProductForm({ categories }: { categories: { slug: string; nam
 
       <section className="space-y-4 border-t border-line pt-6">
         <h2 className="text-[14px] font-bold text-ink">Photos, colours and sizes</h2>
-        <Field label="Photo links" name="images" as="textarea" rows={3} placeholder={"https://…/front.jpg\nhttps://…/back.jpg"} hint="One link per line. The first is the main photo, the second shows on hover." />
+        <div>
+          <p className="mb-1.5 text-[12px] font-bold text-ink">Photos</p>
+          <ImageList name="images" folder="products" />
+          <FieldError name="images" />
+        </div>
         <Field label="Colours" name="colors" as="textarea" rows={3} placeholder={"Sand, #d9c7a7\nNavy, #1f2a44"} hint="One per line: name, then a hex colour code." />
         <fieldset>
           <legend className="mb-2 text-[12px] font-bold text-ink">Sizes</legend>

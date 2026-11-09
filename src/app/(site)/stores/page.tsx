@@ -4,11 +4,13 @@ import { NewsletterForm } from "@/components/common/NewsletterForm";
 import { Reveal } from "@/components/ui/Reveal";
 import { IMG } from "@/data/images";
 import { site } from "@/lib/site";
+import { syncCatalog } from "@/lib/server/store";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({ title: "Stores — Coming Soon", description: "The first Threads Ware store opens in Mumbai in early 2027. Visit our Lower Parel studio by appointment in the meantime.", path: "/stores", image: IMG.storeInterior });
 
-export default function StoresPage() {
+export default async function StoresPage() {
+  await syncCatalog(); // contact details are edited in Admin → Site content
   return (
     <>
       <section className="relative h-[70vh] min-h-[480px] overflow-hidden bg-night text-ivory">

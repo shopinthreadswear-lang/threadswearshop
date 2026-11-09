@@ -5,7 +5,8 @@ import { redirect } from "next/navigation";
 import crypto from "crypto";
 import { z } from "zod";
 import type { Badge, OrderStatus, ReturnRequest, Size } from "@/lib/types";
-import { baseProduct, buildCustomProduct, deriveProducts, emptyCatalog, type CustomProductInput, type StoreSettings } from "@/lib/catalog";
+import { baseProduct, buildCustomProduct, currentHome, deriveProducts, emptyCatalog, type CustomProductInput, type StoreSettings } from "@/lib/catalog";
+import { mediaEnabled, MEDIA_MAX_BYTES, MEDIA_TYPES, signUpload } from "@/lib/server/media";
 import { categories } from "@/data/categories";
 import { assertAdmin, nextStatuses, STATUS_LABEL } from "@/lib/server/admin";
 import { coupons } from "@/lib/server/promos";
@@ -146,10 +147,7 @@ export async function createProduct(_: ActionState, form: FormData): Promise<Act
       compareAtPrice: optionalNumber,
       shortDescription: z.string().trim().min(5, "Add a one-line description").max(200),
       description: z.string().trim().min(10, "Add a fuller description").max(2000),
-      images: z
-        .string()
-        .transform((s) => s.split(/\s+/).map((x) => x.trim()).filter(Boolean))
-        .pipe(z.array(z.string().url("Each image must be a full https:// link")).min(1, "Add at least one image link").max(8)),
+      images: z.array(z.string().trim().regex(/^(https:\/\/|\/)\S+$/, "Each photo needs a full https:// link")).min(1, "Add at least one photo").max(10),
       colors: z
         .string()
         .transform((s) =>
@@ -169,7 +167,7 @@ export async function createProduct(_: ActionState, form: FormData): Promise<Act
       materials: z.string().trim().min(2, "Say what it’s made of").max(120),
       isNew: checkbox,
     })
-    .safeParse({ ...raw, sizes: form.getAll("sizes") });
+    .safeParse({ ...raw, sizes: form.getAll("sizes"), images: form.getAll("images").map(String).filter(Boolean) });
   if (!parsed.success) return oops("Please fix the highlighted fields.", fieldErrors(parsed.error));
   const d = parsed.data;
   if (d.compareAtPrice && d.compareAtPrice <= d.price) return oops("The original price must be higher than the selling price.", { compareAtPrice: "Must be more than the price" });
@@ -390,4 +388,172 @@ export async function deleteMessage(form: FormData) {
     db.contactMessages = db.contactMessages.filter((m) => m.id !== msgId);
   });
   revalidatePath("/admin/inbox");
+}
+
+/* ─── Photos ─────────────────────────────────────────────── */
+
+/** A link to a photo: a full https:// address or a path on this site. */
+const imageUrl = z.string().trim().regex(/^(https:\/\/|\/)\S+$/, "Add a photo");
+const link = z.string().trim().max(200).regex(/^(\/|https:\/\/|mailto:|tel:)/, "Links start with / or https://");
+
+export type UploadTicket = { ok: true; signedUrl: string; token: string; path: string; publicUrl: string } | { ok: false; message: string };
+
+/** Step 1 of an upload: check the file and hand the browser a one-time URL to send it straight to storage. */
+export async function requestUpload(input: { type: string; size: number; folder: string }): Promise<UploadTicket> {
+  await assertAdmin();
+  if (!mediaEnabled()) return { ok: false, message: "Photo uploads need Supabase. Add SUPABASE_SECRET_KEY to the environment, or paste a photo link instead." };
+  if (!(MEDIA_TYPES as readonly string[]).includes(input.type)) return { ok: false, message: "Use a JPG, PNG, WebP or AVIF photo." };
+  if (input.size > MEDIA_MAX_BYTES) return { ok: false, message: "That photo is over 10 MB. Export it smaller (2000px wide is plenty) and try again." };
+  try {
+    return { ok: true, ...(await signUpload(input.folder, input.type)) };
+  } catch (e) {
+    console.error(e);
+    return { ok: false, message: "The upload couldn’t start. Check the storage bucket “media” exists in Supabase, then try again." };
+  }
+}
+
+export async function saveProductImages(_: ActionState, form: FormData): Promise<ActionState> {
+  await assertAdmin();
+  const parsed = z
+    .object({ productId: z.string().min(1), images: z.array(imageUrl).min(1, "Keep at least one photo").max(10, "Up to 10 photos") })
+    .safeParse({ productId: form.get("productId"), images: form.getAll("images").map(String).filter(Boolean) });
+  if (!parsed.success) return oops(parsed.error.issues[0]?.message ?? "Please check the photos.", fieldErrors(parsed.error));
+  const { productId, images } = parsed.data;
+  const result = await write((db) => {
+    const c = catalog(db);
+    const custom = c.custom.find((x) => x.id === productId);
+    if (!custom && !baseProduct(productId)) return oops("That product no longer exists.");
+    if (custom) custom.images = images;
+    c.products[productId] = { ...(c.products[productId] ?? {}), images };
+    return done("Photos saved. The first one is the main photo in the shop.");
+  });
+  refreshStore();
+  return result;
+}
+
+export async function resetProductImages(form: FormData) {
+  await assertAdmin();
+  const productId = String(form.get("productId") ?? "");
+  await write((db) => {
+    const patch = catalog(db).products[productId];
+    if (patch) delete patch.images;
+  });
+  refreshStore();
+}
+
+/* ─── Site content ───────────────────────────────────────── */
+
+const text = (max: number, msg = "Required") => z.string().trim().min(1, msg).max(max, `Keep it under ${max} characters`);
+const optText = (max: number) => z.string().trim().max(max, `Keep it under ${max} characters`);
+
+const heroSlide = z.object({
+  img: imageUrl,
+  alt: optText(140),
+  tag: optText(80),
+  line1: text(24, "Add the first title line"),
+  line2: optText(24),
+  productSlug: optText(120),
+  href: link,
+  button: text(30, "Add the button text"),
+  focus: z.string().trim().regex(/^\d{1,3}% \d{1,3}%$/).catch("50% 30%"),
+});
+
+export async function saveHero(_: ActionState, form: FormData): Promise<ActionState> {
+  await assertAdmin();
+  let raw: unknown;
+  try {
+    raw = JSON.parse(String(form.get("payload") ?? "[]"));
+  } catch {
+    return oops("Something went wrong reading the slides. Refresh and try again.");
+  }
+  const parsed = z.array(heroSlide).min(1, "Keep at least one slide").max(6, "Up to 6 slides").safeParse(raw);
+  if (!parsed.success) {
+    const i = parsed.error.issues[0];
+    const n = typeof i?.path[0] === "number" ? `Slide ${i.path[0] + 1}: ` : "";
+    return oops(`${n}${i?.message ?? "Please check the slides."}`);
+  }
+  const known = new Set(deriveProducts(emptyCatalog(), { includeHidden: true }).map((p) => p.slug));
+  await write((db) => {
+    const c = catalog(db);
+    for (const p of deriveProducts(c, { includeHidden: true })) known.add(p.slug);
+    const hero = parsed.data.map((s) => ({ ...s, productSlug: known.has(s.productSlug) ? s.productSlug : "" }));
+    c.content = { ...c.content, home: { ...currentHome(c), hero } };
+  });
+  refreshStore();
+  return done("Hero saved. The homepage is showing the new slides.");
+}
+
+export async function saveHomeText(_: ActionState, form: FormData): Promise<ActionState> {
+  await assertAdmin();
+  const g = (k: string) => String(form.get(k) ?? "");
+  const parsed = z
+    .object({
+      promises: z.array(z.object({ title: text(40, "Add a title"), text: optText(80) })).length(4),
+      shelf: z.object({ title: text(40), accent: optText(40), sub: optText(140) }),
+      fresh: z.object({ title: text(40), accent: optText(40), sub: optText(140) }),
+      story: z.object({ eyebrow: optText(40), title: text(60), accent: optText(40), body: text(900), button: text(30), href: link, img1: imageUrl, img2: imageUrl, badge: optText(30) }),
+    })
+    .safeParse({
+      promises: [0, 1, 2, 3].map((i) => ({ title: g(`promise${i}Title`), text: g(`promise${i}Text`) })),
+      shelf: { title: g("shelfTitle"), accent: g("shelfAccent"), sub: g("shelfSub") },
+      fresh: { title: g("freshTitle"), accent: g("freshAccent"), sub: g("freshSub") },
+      story: { eyebrow: g("storyEyebrow"), title: g("storyTitle"), accent: g("storyAccent"), body: g("storyBody"), button: g("storyButton"), href: g("storyHref"), img1: g("storyImg1"), img2: g("storyImg2"), badge: g("storyBadge") },
+    });
+  if (!parsed.success) {
+    // Map nested paths back to the form's field names.
+    const names: Record<string, string> = {};
+    for (const i of parsed.error.issues) {
+      const [a, b, c2] = i.path.map(String);
+      const key = a === "promises" ? `promise${b}${c2 === "title" ? "Title" : "Text"}` : `${a}${b.charAt(0).toUpperCase()}${b.slice(1)}`;
+      names[key] ??= i.message;
+    }
+    return oops("Please fix the highlighted fields.", names);
+  }
+  await write((db) => {
+    const c = catalog(db);
+    c.content = { ...c.content, home: { ...currentHome(c), ...parsed.data } };
+  });
+  refreshStore();
+  return done("Saved. The homepage is showing the new text and photos.");
+}
+
+export async function saveContact(_: ActionState, form: FormData): Promise<ActionState> {
+  await assertAdmin();
+  const social = z.union([z.literal(""), z.string().trim().url("Use a full https:// link").max(200)]);
+  const parsed = z
+    .object({
+      email: z.string().trim().email("Enter a valid email"),
+      phone: text(30),
+      whatsapp: text(30),
+      hours: text(80),
+      line1: text(100),
+      line2: optText(100),
+      city: text(40),
+      state: text(40),
+      pincode: z.string().trim().regex(/^\d{6}$/, "Use a 6-digit PIN code"),
+      instagram: social,
+      facebook: social,
+      youtube: social,
+      pinterest: social,
+    })
+    .safeParse(Object.fromEntries(form));
+  if (!parsed.success) return oops("Please fix the highlighted fields.", fieldErrors(parsed.error));
+  await write((db) => {
+    const c = catalog(db);
+    c.content = { ...c.content, contact: parsed.data };
+  });
+  refreshStore();
+  return done("Contact details saved. They’re updated across the site.");
+}
+
+/** Put a section of site content back to the original. */
+export async function resetContent(form: FormData) {
+  await assertAdmin();
+  const section = String(form.get("section") ?? "");
+  await write((db) => {
+    const c = catalog(db);
+    if (section === "contact" && c.content) delete c.content.contact;
+    if (section === "home" && c.content) delete c.content.home;
+  });
+  refreshStore();
 }

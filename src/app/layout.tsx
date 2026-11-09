@@ -85,7 +85,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 url: site.url,
                 logo: absoluteUrl("/icon.svg"),
                 email: site.email,
-                sameAs: Object.values(site.social),
+                sameAs: Object.values(site.social).filter(Boolean),
                 contactPoint: [{ "@type": "ContactPoint", contactType: "customer service", email: site.email, telephone: site.phone, areaServed: "IN", availableLanguage: ["English", "Hindi"] }],
                 address: { "@type": "PostalAddress", streetAddress: `${site.address.line1}, ${site.address.line2}`, addressLocality: site.address.city, addressRegion: site.address.state, postalCode: site.address.pincode, addressCountry: "IN" },
               },

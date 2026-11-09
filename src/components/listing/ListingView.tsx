@@ -275,6 +275,7 @@ export function ListingView({ ids, listName, facets = DEFAULT_FACETS, defaultSor
           </div>
         ) : (
           <>
+            <h2 className="sr-only">Products</h2>
             <ul className={cn("grid grid-cols-2 gap-x-3 gap-y-10 md:gap-x-5 md:gap-y-14", cols === 2 && "md:grid-cols-2", cols === 3 && "md:grid-cols-3", cols === 4 && "md:grid-cols-3 xl:grid-cols-4")}>
               {visible.map((p, i) => (
                 <li key={p.id} className="page-enter">

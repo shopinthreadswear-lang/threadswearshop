@@ -24,12 +24,23 @@ export function Toaster() {
           >
             {t.tone !== "error" && <Check size={15} className="shrink-0 text-champagne-soft" />}
             <span className="flex-1">{t.message}</span>
-            {t.action && (
-              <Link href={t.action.href} className="label-sm text-[11px] link-static" onClick={() => dismissToast(t.id)}>
+            {t.action?.href ? (
+              <Link href={t.action.href} className="label-sm link-static text-[11px]" onClick={() => dismissToast(t.id)}>
                 {t.action.label}
               </Link>
-            )}
-            <button type="button" onClick={() => dismissToast(t.id)} aria-label="Dismiss" className="opacity-60 hover:opacity-100">
+            ) : t.action?.onClick ? (
+              <button
+                type="button"
+                className="label-sm link-static text-[11px] text-champagne-soft"
+                onClick={() => {
+                  t.action?.onClick?.();
+                  dismissToast(t.id);
+                }}
+              >
+                {t.action.label}
+              </button>
+            ) : null}
+            <button type="button" onClick={() => dismissToast(t.id)} aria-label="Dismiss" className="-my-2 -mr-3 grid h-11 w-11 place-items-center opacity-70 transition-opacity hover:opacity-100">
               <CloseIcon size={14} />
             </button>
           </motion.div>

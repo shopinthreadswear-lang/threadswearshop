@@ -13,9 +13,9 @@ const TONES = ["bg-ochre text-ink", "bg-burgundy text-cream"];
 
 function Card({ r, tone }: { r: (typeof featuredReviews)[number]; tone: string }) {
   return (
-    <figure className={cn("flex min-h-[300px] flex-col rounded-[22px] p-7 md:min-h-[340px] md:p-9", tone)}>
+    <figure className={cn("flex min-h-[300px] flex-col rounded-card p-7 md:min-h-[340px] md:p-9", tone)}>
       <div className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.1em]">
-        <span className="flex gap-0.5" aria-label="Rated 5 out of 5">
+        <span className="flex gap-0.5" role="img" aria-label="Rated 5 out of 5">
           {Array.from({ length: 5 }, (_, k) => (
             <Star key={k} size={12} />
           ))}
@@ -67,7 +67,7 @@ export function Testimonials() {
           <div className="relative mx-auto hidden w-40 md:block lg:w-52">
             {p && (
               <motion.div key={p.id} initial={{ scale: 0.6, rotate: -25, opacity: 0 }} animate={{ scale: 1, rotate: 0, opacity: 1 }} transition={{ type: "spring", stiffness: 220, damping: 14 }}>
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[22px] shadow-[0_24px_40px_-24px_rgb(62_33_23/0.55)]">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-card shadow-[0_24px_40px_-24px_rgb(62_33_23/0.55)]">
                   <Image src={imagesFor(p)[0]} alt={p.name} fill sizes="208px" className="object-cover" />
                 </div>
               </motion.div>

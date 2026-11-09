@@ -8,7 +8,7 @@ import { GIFT_CARD_ID } from "@/lib/giftcards";
 import { IMG } from "@/data/images";
 import { track } from "@/lib/analytics";
 
-type Toast = { id: number; message: string; tone?: "default" | "success" | "error"; action?: { label: string; href: string } };
+type Toast = { id: number; message: string; tone?: "default" | "success" | "error"; action?: { label: string; href?: string; onClick?: () => void }; duration?: number };
 
 type StoreCtx = {
   hydrated: boolean;
@@ -167,7 +167,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const toast = useCallback((message: string, opts?: Omit<Toast, "id" | "message">) => {
     const id = ++toastId.current;
     setToasts((t) => [...t.slice(-2), { id, message, ...opts }]);
-    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 4200);
+    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), opts?.duration ?? 4200);
   }, []);
   const dismissToast = useCallback((id: number) => setToasts((t) => t.filter((x) => x.id !== id)), []);
 

@@ -250,7 +250,7 @@ export function Reviews({ product, seeded }: { product: Product; seeded: Review[
                 ["photos", "With Photos"],
               ] as [SortKey, string][]
             ).map(([k, l]) => (
-              <button key={k} type="button" aria-pressed={sort === k} onClick={() => setSort(k)} className={cn("border px-4 py-2 text-[12px] transition-colors", sort === k ? "border-ink bg-ink text-ivory" : "border-line hover:border-ink")}>
+              <button key={k} type="button" aria-pressed={sort === k} onClick={() => setSort(k)} className={cn("h-11 rounded-full border px-4 text-[12px] transition-colors", sort === k ? "border-burgundy bg-burgundy text-cream" : "border-line hover:border-burgundy")}>
                 {l}
               </button>
             ))}

@@ -100,7 +100,7 @@ export function LookBuilder({ outer, mid, base }: { outer: string[]; mid: string
                       animate="center"
                       exit="exit"
                       whileHover={{ scale: 1.04, rotate: 0, transition: { type: "spring", stiffness: 300, damping: 18 } }}
-                      className="relative aspect-[4/5] overflow-hidden rounded-[22px] bg-bone shadow-[0_26px_44px_-26px_rgb(62_33_23/0.55)]"
+                      className="relative aspect-[4/5] overflow-hidden rounded-card bg-bone shadow-[0_26px_44px_-26px_rgb(62_33_23/0.55)]"
                     >
                       <Image src={imagesFor(p)[0]} alt="" fill sizes="(max-width:1024px) 50vw, 280px" className="object-cover" />
                       <span className="absolute bottom-2.5 left-2.5 rounded-full bg-ivory/95 px-2.5 py-1 text-[11px] font-bold text-burgundy">{formatINR(p.price)}</span>
@@ -163,7 +163,7 @@ export function LookBuilder({ outer, mid, base }: { outer: string[]; mid: string
               </motion.button>
             </div>
 
-            <div className="mt-8 flex flex-wrap items-center justify-between gap-5 rounded-[22px] bg-burgundy p-6 text-cream md:p-7">
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-5 rounded-card bg-burgundy p-6 text-cream md:p-7">
               <div aria-live="polite">
                 <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-cream/75">The look, together</p>
                 <AnimatePresence mode="wait" initial={false}>

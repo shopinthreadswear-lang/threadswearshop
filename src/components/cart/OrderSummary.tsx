@@ -21,7 +21,11 @@ export function OrderSummary({ totals, shippingPending = false, className, promo
       )}
       <div className={row}>
         <dt className="text-muted">Shipping</dt>
-        <dd>{shippingPending ? <span className="text-muted">Calculated at checkout</span> : totals.shipping === 0 ? "Complimentary" : formatINR(totals.shipping)}</dd>
+        <dd>{shippingPending ? (
+            <span>
+              {formatINR(totals.shipping)} <span className="text-muted">standard</span>
+            </span>
+          ) : totals.shipping === 0 ? "Complimentary" : formatINR(totals.shipping)}</dd>
       </div>
       {!!totals.codFee && (
         <div className={row}>
@@ -34,7 +38,7 @@ export function OrderSummary({ totals, shippingPending = false, className, promo
         <dd className="text-muted">Included · GST {formatINR(totals.tax)}</dd>
       </div>
       <div className="flex items-baseline justify-between border-t border-line pt-4">
-        <dt className="label-sm">Total</dt>
+        <dt className="label-sm">{shippingPending ? "Estimated total" : "Total"}</dt>
         <dd className="text-[19px]">
           {formatINR(totals.total)}
         </dd>

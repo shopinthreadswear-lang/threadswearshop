@@ -51,13 +51,16 @@
   --duration-base: 400ms;
   --duration-slow: 700ms;
 
-  /* Radii — the brand is square-cut; radius is reserved for round controls only */
+  /* Radii — pills for controls, one soft corner for image cards, a smaller one for chips and panels */
   --radius-none: 0px;
+  --radius-chip: 14px;
+  --radius-card: 22px;
   --radius-pill: 999px;
 
   /* Elevation — used sparingly: floating UI only, never cards */
   --shadow-float: 0 18px 50px -24px rgb(28 23 20 / 0.28);
   --shadow-lift: 0 30px 60px -30px rgb(28 23 20 / 0.35);
+  --shadow-card: 0 26px 44px -26px rgb(62 33 23 / 0.55);
 
   /* Layout */
   --container-site: 1680px;
@@ -113,10 +116,10 @@
     letter-spacing: 0.005em;
   }
   /* Anything set in the display face without its own weight (product names, prices, quotes) gets a firm bold cut. */
-  :where(.font-serif) { font-weight: 700; letter-spacing: -0.01em; }
+  .font-serif { font-weight: 700; letter-spacing: -0.01em; }
   ::selection { background: var(--color-burgundy); color: var(--color-cream); }
-  :focus-visible { outline: 1.5px solid var(--color-ink); outline-offset: 3px; }
-  .on-dark :focus-visible, .bg-night :focus-visible { outline-color: var(--color-ivory); }
+  :focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
+  .on-dark :focus-visible, .bg-night :focus-visible, .bg-burgundy :focus-visible, .bg-espresso :focus-visible, .bg-burgundy:focus-visible { outline-color: var(--color-cream); }
   button { cursor: pointer; }
   button:disabled { cursor: not-allowed; }
   img { -webkit-user-drag: none; }

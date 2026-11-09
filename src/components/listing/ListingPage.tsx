@@ -46,14 +46,14 @@ export function ListingPage({
   return (
     <>
       {image ? (
-        <section className="relative h-[46vh] min-h-[340px] overflow-hidden bg-night text-ivory md:h-[58vh]">
+        <section className="relative flex min-h-[240px] overflow-hidden bg-night text-ivory sm:min-h-[300px] md:h-[52vh] md:min-h-[340px]">
           <Image src={image} alt="" fill priority sizes="100vw" className="ken-burns img-grade object-cover object-[50%_35%] opacity-80" />
           <div className="absolute inset-0 bg-gradient-to-t from-night/75 via-night/15 to-night/10" />
-          <div className="container-site relative flex h-full flex-col justify-end pb-10 md:pb-14">
-            <Breadcrumb items={crumbs} light className="mb-6" />
-            {eyebrow && <p className="eyebrow mb-4 text-champagne-soft">{eyebrow}</p>}
+          <div className="container-site relative flex w-full flex-col justify-end pb-7 pt-10 md:pb-14 md:pt-0">
+            <Breadcrumb items={crumbs} light className="mb-4 md:mb-6" />
+            {eyebrow && <p className="eyebrow mb-3 text-champagne-soft md:mb-4">{eyebrow}</p>}
             <h1 className="display-lg max-w-4xl">{title}</h1>
-            <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-ivory/75">{description}</p>
+            <p className="mt-3 line-clamp-2 max-w-xl text-[14px] leading-relaxed text-ivory/80 md:mt-5 md:line-clamp-none md:text-[15px]">{description}</p>
           </div>
         </section>
       ) : (

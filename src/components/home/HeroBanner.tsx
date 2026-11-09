@@ -161,7 +161,7 @@ export function HeroBanner() {
             </button>
             <div className="flex items-center gap-2">
               {LOOKS.map((l, n) => (
-                <button key={l.slug} type="button" aria-current={n === i} aria-label={`Show look ${n + 1}: ${l.title.join(" ")}`} onClick={() => setI(n)} className="hit grid h-6 place-items-center">
+                <button key={l.slug} type="button" aria-current={n === i} aria-label={`Show look ${n + 1}: ${l.title.join(" ")}`} onClick={() => setI(n)} className="grid h-11 min-w-6 place-items-center">
                   <span className={cn("block h-[5px] rounded-full transition-all duration-500", n === i ? "w-8 bg-burgundy" : "w-[5px] bg-burgundy/30")} />
                 </button>
               ))}

@@ -27,6 +27,7 @@ export function SearchResults() {
     <>
       <section className="container-site pb-10 pt-10 md:pt-16">
         <Breadcrumb items={[{ label: "Search" }]} className="mb-8" />
+        <h1 className="sr-only">{q ? `Search results for ${q}` : "Search Threads Ware"}</h1>
         <form
           role="search"
           onSubmit={(e) => {
@@ -58,17 +59,17 @@ export function SearchResults() {
         <section className="container-site pb-24">
           {q && (
             <div className="border-y border-line py-14 text-center">
-              <h1 className="display-md">No results for “{q}”</h1>
-              <p className="mt-3 text-[14px] text-muted">Check the spelling, try a broader term, or explore the suggestions below.</p>
+              <h2 className="display-md">Nothing yet for “{q}”</h2>
+              <p className="mt-3 text-[14px] text-muted">Try a shorter word like “shirt” or “linen”, check the spelling, or start from one of the ideas below.</p>
             </div>
           )}
           <div className="grid gap-12 py-14 md:grid-cols-2">
             <div>
-              <p className="eyebrow mb-5 text-muted">Suggested Searches</p>
+              <h2 className="eyebrow mb-5 text-muted">Suggested searches</h2>
               <ul className="flex flex-wrap gap-2">
                 {trendingSearches.map((t) => (
                   <li key={t}>
-                    <Link href={`/search?q=${encodeURIComponent(t)}`} className="block border border-line px-4 py-2 text-[13px] transition-colors hover:border-ink hover:bg-ink hover:text-ivory">
+                    <Link href={`/search?q=${encodeURIComponent(t)}`} className="block rounded-full border border-line px-4 py-2.5 text-[13px] transition-colors hover:border-burgundy hover:bg-burgundy hover:text-cream">
                       {t}
                     </Link>
                   </li>
@@ -76,7 +77,7 @@ export function SearchResults() {
               </ul>
             </div>
             <div>
-              <p className="eyebrow mb-5 text-muted">Popular Categories</p>
+              <h2 className="eyebrow mb-5 text-muted">Popular categories</h2>
               <ul className="grid grid-cols-2 gap-y-2">
                 {popularCategories.map((c) => (
                   <li key={c.href}>
@@ -88,7 +89,7 @@ export function SearchResults() {
               </ul>
             </div>
           </div>
-          <p className="eyebrow mb-8 text-muted">Best Sellers</p>
+          <h2 className="eyebrow mb-8 text-muted">Best sellers</h2>
           <ProductGrid products={bestSellers().slice(0, 8)} />
         </section>
       )}

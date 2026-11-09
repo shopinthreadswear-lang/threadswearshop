@@ -20,7 +20,7 @@ export function LookCircles() {
         <ul className="grid gap-4 md:grid-cols-3 md:gap-5">
           {LOOKS.map((l, i) => (
             <Reveal as="li" key={l.id} delay={i * 110}>
-              <Link href={l.href} className={cn("lift group relative block aspect-[4/5] overflow-hidden rounded-[22px] md:aspect-[3/4.2]", l.tone)}>
+              <Link href={l.href} className={cn("lift group relative block aspect-[4/5] overflow-hidden rounded-card md:aspect-[3/4.2]", l.tone)}>
                 <Image src={l.img} alt={l.alt} fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover" style={{ objectPosition: l.focus }} />
                 <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/55 via-transparent to-black/20" />
                 <div className="absolute inset-x-0 top-0 p-6 text-cream md:p-7">

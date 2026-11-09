@@ -57,7 +57,7 @@ export function NewsletterForm({ source = "footer", light = false, className, on
           autoComplete="email"
           aria-invalid={state === "error"}
           aria-describedby={state === "error" ? `nl-${source}-err` : undefined}
-          className={cn("h-14 flex-1 bg-transparent text-[15px] focus:outline-none", light ? "placeholder:text-ivory/45" : "placeholder:text-faint")}
+          className={cn("h-14 flex-1 bg-transparent text-[15px] focus:outline-none", light ? "placeholder:text-ivory/60" : "placeholder:text-faint")}
         />
         <button type="submit" disabled={state === "loading"} className="group flex items-center gap-3 py-3 pl-4 label-sm">
           {state === "loading" ? "Subscribing…" : "Subscribe"}
@@ -69,7 +69,7 @@ export function NewsletterForm({ source = "footer", light = false, className, on
           {msg}
         </p>
       )}
-      <p className={cn("mt-3 text-[11.5px]", light ? "text-ivory/45" : "text-faint")}>
+      <p className={cn("mt-3 text-[11.5px]", light ? "text-ivory/70" : "text-faint")}>
         By subscribing you agree to our Privacy Policy. Unsubscribe at any time.
       </p>
     </form>

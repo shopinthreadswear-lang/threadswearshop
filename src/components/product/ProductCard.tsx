@@ -102,8 +102,8 @@ function Card({ product: p, priority = false, sizes = "(max-width: 768px) 50vw, 
             </button>
             <div
               className={cn(
-                "absolute inset-x-0 bottom-0 bg-ivory/95 backdrop-blur-[2px] transition-transform duration-500 ease-[var(--ease-lux)]",
-                quickOpen ? "translate-y-0" : "translate-y-full md:group-hover/card:translate-y-0 md:group-focus-within/card:translate-y-0",
+                "absolute inset-x-0 bottom-0 bg-ivory/95 backdrop-blur-[2px] transition-[transform,visibility] duration-500 ease-[var(--ease-lux)]",
+                quickOpen ? "translate-y-0" : "translate-y-full max-md:invisible md:group-hover/card:translate-y-0 md:group-focus-within/card:translate-y-0",
                 "max-md:mr-14",
               )}
             >
@@ -120,7 +120,7 @@ function Card({ product: p, priority = false, sizes = "(max-width: 768px) 50vw, 
                         onClick={() => quickAdd(s)}
                         aria-label={`Add size ${s} to bag${out ? " (out of stock)" : ""}`}
                         className={cn(
-                          "min-w-[2.4rem] flex-1 rounded-full border px-1.5 py-2.5 font-mono text-[11px] transition-colors duration-300",
+                          "h-11 min-w-[2.75rem] flex-1 rounded-full border px-1.5 font-mono text-[11px] transition-colors duration-300",
                           added === s ? "border-ink bg-ink text-ivory" : "border-line hover:border-ink hover:bg-ink hover:text-ivory",
                           out && "border-transparent text-faint line-through hover:bg-transparent hover:text-faint",
                         )}

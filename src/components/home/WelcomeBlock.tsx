@@ -37,7 +37,7 @@ export function WelcomeBlock() {
           <motion.div {...slide(0)} className="relative ml-auto aspect-[4/5] w-[78%] overflow-hidden rounded-[26px]">
             <Image src={IMG.manCasualSeated} alt="Man in a camel blazer and white tee seated on a stool" fill sizes="(max-width:768px) 70vw, 440px" className="object-cover object-[50%_30%]" />
           </motion.div>
-          <motion.div {...slide(0.18)} className="absolute -bottom-8 left-0 aspect-square w-[44%] overflow-hidden rounded-[22px] ring-[6px] ring-burgundy">
+          <motion.div {...slide(0.18)} className="absolute -bottom-8 left-0 aspect-square w-[44%] overflow-hidden rounded-card ring-[6px] ring-burgundy">
             <Image src={IMG.manWindow} alt="Man sitting in a circular window in a field jacket" fill sizes="(max-width:768px) 40vw, 250px" className="object-cover" />
           </motion.div>
           <motion.span {...slide(0.35)} className="absolute right-[6%] top-6 rounded-full bg-ochre px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.08em] text-ink">

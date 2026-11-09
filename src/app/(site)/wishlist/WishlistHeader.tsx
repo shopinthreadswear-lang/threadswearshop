@@ -9,7 +9,7 @@ export function WishlistHeader() {
     <div className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
       <div>
         <h1 className="display-lg">Wishlist</h1>
-        <p className="mt-3 text-[14px] text-muted">{hydrated ? `${wishlist.length} ${wishlist.length === 1 ? "piece" : "pieces"} saved` : " "}</p>
+        <p className="mt-3 text-[14px] text-muted">{hydrated && wishlist.length > 0 ? `${wishlist.length} ${wishlist.length === 1 ? "piece" : "pieces"} saved` : " "}</p>
       </div>
       {hydrated && !user && wishlist.length > 0 && (
         <p className="text-[13px] text-muted">

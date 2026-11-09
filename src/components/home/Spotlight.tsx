@@ -48,7 +48,7 @@ export function Spotlight({ ids }: { ids: string[] }) {
     const card = el.querySelector("li");
     el.scrollBy({ left: d * ((card?.clientWidth ?? 300) + 16), behavior: "smooth" });
   };
-  const arrow = "grid h-11 w-11 place-items-center rounded-full transition-[background-color,color,opacity] duration-300 disabled:opacity-30";
+  const arrow = "grid h-11 w-11 shrink-0 place-items-center rounded-full transition-[background-color,color,opacity] duration-300 disabled:opacity-30";
 
   return (
     <div>
@@ -56,7 +56,7 @@ export function Spotlight({ ids }: { ids: string[] }) {
         {items.map((p, k) => (
           <li key={p.id} className="w-[76vw] max-w-[360px] shrink-0 snap-start sm:w-[44vw] lg:w-[calc((100%-3rem)/3.4)]" style={{ animation: `fade-up 800ms var(--ease-lux) ${k * 70}ms both` }}>
             <Link href={`/products/${p.slug}`} className="group block">
-              <span className="lift relative block aspect-[4/5] overflow-hidden rounded-[22px] bg-bone">
+              <span className="lift relative block aspect-[4/5] overflow-hidden rounded-card bg-bone">
                 <Image src={imagesFor(p)[0]} alt={p.name} fill sizes="(max-width:640px) 76vw, 360px" className="object-cover" />
                 <span className="absolute bottom-4 left-4 inline-flex h-9 items-center gap-1.5 rounded-full bg-burgundy px-4 text-[10.5px] font-bold uppercase tracking-[0.08em] text-cream shadow-[0_10px_24px_-12px_rgb(62_33_23/0.7)] transition-[background-color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:bg-burgundy-deep">
                   Shop now <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-0.5" />

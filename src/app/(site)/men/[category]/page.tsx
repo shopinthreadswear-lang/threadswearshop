@@ -51,7 +51,7 @@ export default async function CategoryPage({ params }: Props) {
           {r.types
             .filter((t) => stocked.has(t))
             .map((t) => (
-              <Link key={t} href={`/men/${category}?type=${slugifyType(t)}`} className="shrink-0 border border-line px-4 py-2 text-[12.5px] transition-colors hover:border-ink">
+              <Link key={t} href={`/men/${category}?type=${slugifyType(t)}`} className="inline-flex h-11 shrink-0 items-center rounded-full border border-line px-4 text-[12.5px] transition-colors hover:border-burgundy hover:text-burgundy">
                 {t}
               </Link>
             ))}

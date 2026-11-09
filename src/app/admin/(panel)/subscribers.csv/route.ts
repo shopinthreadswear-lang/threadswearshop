@@ -1,12 +1,11 @@
-import { getCurrentUser } from "@/lib/server/auth";
-import { isAdmin } from "@/lib/server/admin";
+import { getAdminSession } from "@/lib/server/admin";
 import { read } from "@/lib/server/store";
 
 export const dynamic = "force-dynamic";
 
 /** Newsletter list as a spreadsheet. Admins only. */
 export async function GET() {
-  if (!isAdmin(await getCurrentUser())) return new Response("Not found", { status: 404 });
+  if (!(await getAdminSession())) return new Response("Not found", { status: 404 });
   const rows = await read((db) => db.newsletter.map((s) => [s.email, s.source, s.createdAt]));
   const cell = (v: string) => (/[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
   const csv = [["email", "source", "signed_up"], ...rows].map((r) => r.map((v) => cell(String(v))).join(",")).join("\n");

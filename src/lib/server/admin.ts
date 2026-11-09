@@ -1,37 +1,73 @@
 import "server-only";
+import crypto from "crypto";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import type { OrderStatus, PublicUser } from "@/lib/types";
+import type { OrderStatus } from "@/lib/types";
 import { products } from "@/data/products";
-import { getCurrentUser } from "./auth";
+import { sign, verify } from "./auth";
 import { availableStock, type DB } from "./store";
 
 /**
- * Who can open /admin. Set ADMIN_EMAILS to a comma-separated list in production.
- * In development only, the demo account is an admin when the list is empty, so the dashboard can be tried out.
+ * The admin has its own sign-in at /admin/login, separate from customer accounts.
+ * The only login that works is ADMIN_EMAIL + ADMIN_PASSWORD from the environment (set them in Vercel).
+ * Signing in sets a short-lived, signed `tw_admin` cookie; changing the password signs everyone out.
  */
-function adminEmails() {
-  const list = (process.env.ADMIN_EMAILS ?? "")
-    .split(",")
-    .map((e) => e.trim().toLowerCase())
-    .filter(Boolean);
-  if (!list.length && process.env.NODE_ENV !== "production") return ["arjun@threadsware.in"];
-  return list;
+export const ADMIN_COOKIE = "tw_admin";
+const ADMIN_MAX_AGE = 60 * 60 * 12; // 12 hours
+
+const sha = (s: string) => crypto.createHash("sha256").update(s).digest();
+
+function credentials() {
+  const email = (process.env.ADMIN_EMAIL ?? "").trim().toLowerCase();
+  const password = process.env.ADMIN_PASSWORD ?? "";
+  return email && password ? { email, password } : null;
 }
 
-export const isAdmin = (user: Pick<PublicUser, "email"> | null | undefined) => !!user && adminEmails().includes(user.email.toLowerCase());
+export const adminConfigured = () => !!credentials();
 
-/** For admin pages: signed-out visitors go to sign-in; signed-in non-admins get `null` (the layout shows "no access"). */
+/** A fingerprint of the current password, stored in the cookie so a password change ends old sessions. */
+const passwordStamp = (password: string) => sha(`tw-admin:${password}`).toString("base64url").slice(0, 16);
+
+/** Constant-time check of an email + password against the admin login. */
+export function checkAdminLogin(email: string, password: string) {
+  const c = credentials();
+  if (!c) return false;
+  const okEmail = crypto.timingSafeEqual(sha(email.trim().toLowerCase()), sha(c.email));
+  const okPassword = crypto.timingSafeEqual(sha(password), sha(c.password));
+  return okEmail && okPassword;
+}
+
+export async function startAdminSession() {
+  const c = credentials()!;
+  const token = sign({ role: "admin", email: c.email, v: passwordStamp(c.password), exp: Date.now() + ADMIN_MAX_AGE * 1000 });
+  (await cookies()).set(ADMIN_COOKIE, token, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict", path: "/admin", maxAge: ADMIN_MAX_AGE });
+}
+
+export async function endAdminSession() {
+  (await cookies()).set(ADMIN_COOKIE, "", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict", path: "/admin", maxAge: 0 });
+}
+
+/** The signed-in admin, or null. */
+export async function getAdminSession(): Promise<{ email: string } | null> {
+  const c = credentials();
+  if (!c) return null;
+  const s = verify<{ role: string; email: string; v: string }>((await cookies()).get(ADMIN_COOKIE)?.value);
+  if (!s || s.role !== "admin" || s.email !== c.email || s.v !== passwordStamp(c.password)) return null;
+  return { email: s.email };
+}
+
+/** For admin pages: anyone not signed in to the admin goes to the admin sign-in. */
 export async function getAdmin() {
-  const user = await getCurrentUser();
-  if (!user) redirect("/account/login?next=/admin");
-  return isAdmin(user) ? user : null;
+  const admin = await getAdminSession();
+  if (!admin) redirect("/admin/login");
+  return admin;
 }
 
-/** For server actions and route handlers: throws unless the caller is an admin. Never trust the page that called it. */
+/** For server actions and route handlers: throws unless the caller is signed in to the admin. Never trust the page that called it. */
 export async function assertAdmin() {
-  const user = await getCurrentUser();
-  if (!isAdmin(user)) throw new Error("Not authorised");
-  return user!;
+  const admin = await getAdminSession();
+  if (!admin) throw new Error("Not authorised");
+  return admin;
 }
 
 /* ─── Order workflow ─────────────────────────────────────── */

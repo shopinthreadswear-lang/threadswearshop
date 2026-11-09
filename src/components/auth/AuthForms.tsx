@@ -94,7 +94,6 @@ export function LoginForm() {
         <button type="submit" disabled={loading} className="btn btn-primary btn-block">
           {loading ? "Signing in…" : "Sign In"}
         </button>
-        <p className="text-center text-[12px] text-faint">Demo account: arjun@threadsware.in · Threads@2026</p>
       </form>
       <div className="mt-10 border-t border-line pt-8 text-center">
         <p className="text-[13px] text-muted">Checking out without an account?</p>

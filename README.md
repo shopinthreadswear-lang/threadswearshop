@@ -109,8 +109,9 @@ Every page has a unique title, description, canonical URL, Open Graph and Twitte
 
 ## Store admin
 
-`/admin` is the back office. Sign in with an account whose email is in `ADMIN_EMAILS` (comma-separated). In local
-development, if `ADMIN_EMAILS` is empty, the demo account `arjun@threadsware.in` is an admin so you can try it.
+`/admin` is the back office, with its own sign-in at `/admin/login`, separate from customer accounts. The only login
+that works is `ADMIN_EMAIL` + `ADMIN_PASSWORD` from the environment. Sessions last 12 hours; changing the password
+signs everyone out. Five wrong attempts lock an address out for 15 minutes.
 
 | Section | What you can do |
 |---|---|

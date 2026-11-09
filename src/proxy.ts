@@ -10,7 +10,14 @@ const PUBLIC_ACCOUNT = ["/account/login", "/account/register", "/account/forgot-
  */
 export async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
-  const gated = pathname.startsWith("/admin") || (pathname.startsWith("/account") && !PUBLIC_ACCOUNT.some((p) => pathname.startsWith(p)));
+  // The admin has its own sign-in, separate from customer accounts (full check happens server-side).
+  if (pathname.startsWith("/admin") && pathname !== "/admin/login" && !req.cookies.get("tw_admin")) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/admin/login";
+    url.search = `?next=${encodeURIComponent(pathname + search)}`;
+    return NextResponse.redirect(url);
+  }
+  const gated = pathname.startsWith("/account") && !PUBLIC_ACCOUNT.some((p) => pathname.startsWith(p));
   if (gated) {
     if (!req.cookies.get("tw_session")) {
       const url = req.nextUrl.clone();

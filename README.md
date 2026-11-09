@@ -126,8 +126,20 @@ Edits are stored in the same data store as orders (`catalog` and `coupons`) and 
 `src/data/products.ts` by `src/lib/catalog.ts`, on the server and in the browser. Every admin page and action checks
 admin access on the server.
 
-> On Vercel the local JSON store lives in `/tmp` and is reset between deployments and instances, so admin edits,
-> like orders, only persist once the store is moved to Supabase (see `supabase/schema.sql`).
+> Data is stored in Supabase when `SUPABASE_SECRET_KEY` is set (see "Database" below); otherwise in a local JSON file.
+
+## Database (Supabase)
+
+1. In the Supabase dashboard open **SQL Editor → New query**, paste `supabase/schema.sql`, and **Run**. It creates
+   the tables (customers, orders, returns, reviews, coupons, gift_cards, newsletter_subscribers, contact_messages,
+   stock_alerts, password_resets, inventory, store_settings) and the `tw_apply` save function. Safe to re-run.
+2. Copy the **secret** key (Project Settings → API Keys) into `SUPABASE_SECRET_KEY` in `.env.local` and in Vercel.
+   Never prefix it with `NEXT_PUBLIC_`.
+3. Start the site. On first connection an empty database is filled from your local `.data/store.json`
+   (or the demo data on Vercel).
+
+Row Level Security is on for every table with no public policies, so the publishable key in the browser can't
+read any customer data; only the server, with the secret key, can.
 
 ## Going to production
 

@@ -6,6 +6,7 @@ import type { Order, ReturnRequest, Review, User } from "@/lib/types";
 import { getProduct } from "@/data/products";
 import { applyCatalog, type CatalogState } from "@/lib/catalog";
 import type { Coupon } from "./promos";
+import { supabaseEnabled, supabaseLoad, supabaseWrite } from "./supabase-store";
 
 /**
  * Persistence layer.
@@ -35,14 +36,37 @@ export type DB = {
 const DATA_DIR = process.env.VERCEL ? "/tmp/threads-ware" : path.join(process.cwd(), ".data");
 const FILE = path.join(DATA_DIR, "store.json");
 
+/**
+ * Where data lives:
+ * - Supabase, when SUPABASE_SECRET_KEY (or SUPABASE_SERVICE_ROLE_KEY) and the project URL are set — see supabase/schema.sql.
+ * - Otherwise a JSON file in `.data/` (zero-config local development).
+ */
+export const storeBackend = () => (supabaseEnabled() ? "supabase" : "file");
+
 let cache: DB | null = null;
 let queue: Promise<unknown> = Promise.resolve();
 
-// Apply the admin's catalogue edits as soon as the server starts, before any page renders.
-try {
-  applyCatalog((JSON.parse(readFileSync(FILE, "utf8")) as DB).catalog);
-} catch {
-  /* no store yet: the code catalogue is used as-is */
+// Apply the admin's catalogue edits as soon as the server starts, before any page renders (file mode).
+if (!supabaseEnabled()) {
+  try {
+    applyCatalog((JSON.parse(readFileSync(FILE, "utf8")) as DB).catalog);
+  } catch {
+    /* no store yet: the code catalogue is used as-is */
+  }
+}
+
+const empty = (): DB => ({ users: [], orders: [], reviews: [], returns: [], newsletter: [], stockAlerts: [], contactMessages: [], resetTokens: [], giftCards: [], inventoryAdjustments: {} });
+
+/** First data for a brand-new Supabase database: your local store if there is one, otherwise the demo data. */
+async function startingData(): Promise<DB> {
+  if (!process.env.VERCEL) {
+    try {
+      return { ...empty(), ...(JSON.parse(await fs.readFile(FILE, "utf8")) as DB) };
+    } catch {
+      /* no local file */
+    }
+  }
+  return seed();
 }
 
 export function hashPassword(password: string) {
@@ -161,6 +185,11 @@ let cacheMtime = 0;
  * in-memory copy is only trusted while the file on disk is unchanged; if another bundle has saved since, re-read it.
  */
 async function load(): Promise<DB> {
+  if (supabaseEnabled()) {
+    const db = await supabaseLoad(empty, startingData);
+    applyCatalog(db.catalog);
+    return db;
+  }
   try {
     const { mtimeMs } = await fs.stat(FILE);
     if (!cache || mtimeMs !== cacheMtime) {
@@ -201,6 +230,11 @@ export async function read<T>(fn: (db: DB) => T): Promise<T> {
 
 /** Serialised write transaction — prevents lost updates under concurrent requests. */
 export function write<T>(fn: (db: DB) => T | Promise<T>): Promise<T> {
+  if (supabaseEnabled()) {
+    const run = queue.then(() => supabaseWrite(empty, startingData, fn, (db) => applyCatalog(db.catalog)));
+    queue = run.catch(() => undefined);
+    return run;
+  }
   const run = queue.then(async () => {
     const db = await load();
     const result = await fn(db);

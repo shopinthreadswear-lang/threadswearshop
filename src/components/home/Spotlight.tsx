@@ -8,8 +8,6 @@ import { ChevronLeft, ChevronRight, ArrowRight } from "@/components/ui/Icons";
 import { formatINR } from "@/lib/site";
 import { cn } from "@/lib/cn";
 
-const TONES = ["bg-espresso", "bg-burgundy", "bg-ochre"];
-
 /** Little wave mark in a card's corner. */
 const Wave = () => (
   <svg viewBox="0 0 24 10" className="h-3 w-6" fill="none" aria-hidden>
@@ -57,18 +55,19 @@ export function Spotlight({ ids }: { ids: string[] }) {
       <ul ref={track} className="no-scrollbar -mx-[var(--spacing-gutter)] flex snap-x snap-mandatory scroll-px-[var(--spacing-gutter)] gap-4 overflow-x-auto px-[var(--spacing-gutter)] pb-2 pt-2">
         {items.map((p, k) => (
           <li key={p.id} className="w-[76vw] max-w-[360px] shrink-0 snap-start sm:w-[44vw] lg:w-[calc((100%-3rem)/3.4)]" style={{ animation: `fade-up 800ms var(--ease-lux) ${k * 70}ms both` }}>
-            <Link href={`/products/${p.slug}`} className={cn("lift group relative block aspect-[4/5.3] overflow-hidden rounded-[22px]", TONES[k % 3])}>
-              <Image src={imagesFor(p)[0]} alt={p.name} fill sizes="(max-width:640px) 76vw, 360px" className="object-cover" />
-              <div aria-hidden className="absolute inset-x-0 top-0 h-2/5 bg-gradient-to-b from-black/55 to-transparent" />
-              <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-5 text-cream md:p-6">
+            <Link href={`/products/${p.slug}`} className="group block">
+              <span className="lift relative block aspect-[4/5] overflow-hidden rounded-[22px] bg-bone">
+                <Image src={imagesFor(p)[0]} alt={p.name} fill sizes="(max-width:640px) 76vw, 360px" className="object-cover" />
+                <span className="absolute bottom-4 left-4 inline-flex h-9 items-center gap-1.5 rounded-full bg-burgundy px-4 text-[10.5px] font-bold uppercase tracking-[0.08em] text-cream shadow-[0_10px_24px_-12px_rgb(62_33_23/0.7)] transition-[background-color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:bg-burgundy-deep">
+                  Shop now <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+                </span>
+              </span>
+              <div className="mt-4 flex items-start justify-between gap-3 px-1">
                 <div className="min-w-0">
-                  <h3 className="font-serif text-[22px] font-extrabold leading-[1.05] md:text-[25px]">{p.name.replace(/^The /, "")}</h3>
-                  <p className="mt-1.5 text-[13px] font-bold text-cream/85">{formatINR(p.price)}</p>
-                  <span className="mt-4 inline-flex h-8 items-center gap-1.5 rounded-full bg-burgundy px-4 text-[10.5px] font-bold uppercase tracking-[0.08em] transition-colors duration-300 group-hover:bg-ochre group-hover:text-ink">
-                    Shop now
-                  </span>
+                  <h3 className="truncate font-serif text-[16px] font-bold leading-snug text-ink transition-colors group-hover:text-burgundy md:text-[17px]">{p.name.replace(/^The /, "")}</h3>
+                  <span className="mt-0.5 block text-[14px] font-bold text-burgundy">{formatINR(p.price)}</span>
                 </div>
-                <span className="mt-2 shrink-0 text-cream/90">
+                <span className="mt-1 shrink-0 text-burgundy/70">
                   <Wave />
                 </span>
               </div>
@@ -87,7 +86,7 @@ export function Spotlight({ ids }: { ids: string[] }) {
         <div aria-hidden className="relative h-[3px] w-28 overflow-hidden rounded-full bg-ink/12 sm:w-40">
           <div className="absolute inset-y-0 left-0 w-1/3 rounded-full bg-burgundy transition-transform duration-200" style={{ transform: `translateX(${progress * 200}%)` }} />
         </div>
-        <Link href="/best-sellers" className="btn btn-dark btn-sm ml-auto">
+        <Link href="/best-sellers" className="btn btn-primary btn-sm ml-auto">
           View all <ArrowRight size={13} className="btn-arrow" />
         </Link>
       </div>

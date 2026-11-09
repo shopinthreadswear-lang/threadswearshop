@@ -279,11 +279,6 @@
   .btn-light::before { background: var(--color-ochre); }
   .btn-light:hover:not(:disabled) { color: var(--color-wine); border-color: var(--color-ochre); }
 
-  /* Cream pill that floods to deep oxblood: for use on burgundy */
-  .btn-cream { background: var(--color-cream); color: var(--color-burgundy); border-color: var(--color-cream); }
-  .btn-cream::before { background: var(--color-burgundy-deep); }
-  .btn-cream:hover:not(:disabled) { color: var(--color-cream); border-color: var(--color-cream); }
-
   .btn-dark { background: var(--color-ink); color: var(--color-cream); border-color: var(--color-ink); }
   .btn-dark::before { background: var(--color-burgundy); }
   .btn-dark:hover:not(:disabled) { color: var(--color-cream); border-color: var(--color-burgundy); }

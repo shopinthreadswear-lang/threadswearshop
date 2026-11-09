@@ -13,7 +13,7 @@ import { BagIcon, HeartIcon, SearchIcon, UserIcon } from "@/components/ui/Icons"
 import { useStore } from "@/components/providers/StoreProvider";
 import { cn } from "@/lib/cn";
 
-const OVERLAY_ROUTES = ["/", "/about", "/our-story"];
+const OVERLAY_ROUTES = ["/about", "/our-story"];
 
 const NAV: { label: string; href: string; menu?: MenuKey; wideOnly?: boolean }[] = [
   { label: "Shop", href: "/shop", menu: "shop" },

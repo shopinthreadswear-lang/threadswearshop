@@ -1,9 +1,11 @@
 import "server-only";
-import { promises as fs } from "fs";
+import { promises as fs, readFileSync } from "fs";
 import path from "path";
 import crypto from "crypto";
 import type { Order, ReturnRequest, Review, User } from "@/lib/types";
 import { getProduct } from "@/data/products";
+import { applyCatalog, type CatalogState } from "@/lib/catalog";
+import type { Coupon } from "./promos";
 
 /**
  * Persistence layer.
@@ -24,6 +26,10 @@ export type DB = {
   giftCards: { code: string; balance: number; initial: number; recipientEmail: string; createdAt: string }[];
   /** Units sold per SKU — subtracted from catalogue stock. */
   inventoryAdjustments: Record<string, number>;
+  /** Admin edits to products, offers and store settings. */
+  catalog?: CatalogState;
+  /** Discount codes. Seeded from the defaults in promos.ts on first use. */
+  coupons?: Coupon[];
 };
 
 const DATA_DIR = process.env.VERCEL ? "/tmp/threads-ware" : path.join(process.cwd(), ".data");
@@ -31,6 +37,13 @@ const FILE = path.join(DATA_DIR, "store.json");
 
 let cache: DB | null = null;
 let queue: Promise<unknown> = Promise.resolve();
+
+// Apply the admin's catalogue edits as soon as the server starts, before any page renders.
+try {
+  applyCatalog((JSON.parse(readFileSync(FILE, "utf8")) as DB).catalog);
+} catch {
+  /* no store yet: the code catalogue is used as-is */
+}
 
 export function hashPassword(password: string) {
   const salt = crypto.randomBytes(16).toString("hex");
@@ -141,26 +154,44 @@ function seed(): DB {
   };
 }
 
+let cacheMtime = 0;
+
+/**
+ * API routes and pages are built as separate server bundles, each with its own copy of this module. So the
+ * in-memory copy is only trusted while the file on disk is unchanged; if another bundle has saved since, re-read it.
+ */
 async function load(): Promise<DB> {
-  if (cache) return cache;
   try {
-    cache = JSON.parse(await fs.readFile(FILE, "utf8")) as DB;
+    const { mtimeMs } = await fs.stat(FILE);
+    if (!cache || mtimeMs !== cacheMtime) {
+      cache = JSON.parse(await fs.readFile(FILE, "utf8")) as DB;
+      cacheMtime = mtimeMs;
+    }
   } catch {
-    cache = seed();
-    await persist(cache);
+    if (!cache) {
+      cache = seed();
+      await persist(cache);
+    }
   }
+  applyCatalog(cache!.catalog);
   return cache!;
 }
 
 async function persist(db: DB) {
   try {
     await fs.mkdir(DATA_DIR, { recursive: true });
-    const tmp = `${FILE}.${process.pid}.tmp`;
+    const tmp = `${FILE}.${process.pid}.${crypto.randomBytes(4).toString("hex")}.tmp`;
     await fs.writeFile(tmp, JSON.stringify(db, null, 2));
     await fs.rename(tmp, FILE);
+    cacheMtime = (await fs.stat(FILE)).mtimeMs;
   } catch (e) {
     console.error("[store] persist failed", e);
   }
+}
+
+/** Make sure the shared catalogue reflects the latest admin edits before a page reads it. */
+export async function syncCatalog() {
+  await load();
 }
 
 export async function read<T>(fn: (db: DB) => T): Promise<T> {
@@ -173,6 +204,7 @@ export function write<T>(fn: (db: DB) => T | Promise<T>): Promise<T> {
   const run = queue.then(async () => {
     const db = await load();
     const result = await fn(db);
+    applyCatalog(db.catalog);
     await persist(db);
     return result;
   });

@@ -2,10 +2,12 @@ import { ListingPage } from "@/components/listing/ListingPage";
 import { bestSellers } from "@/data/products";
 import { IMG } from "@/data/images";
 import { pageMeta } from "@/lib/seo";
+import { syncCatalog } from "@/lib/server/store";
 
 export const metadata = pageMeta({ title: "Best Sellers", description: "Our most-loved menswear — the Mercer Heavyweight Tee, Kensington Oxford Shirt, Regent Knitted Polo and more. Rated 4.8/5 by our customers.", path: "/best-sellers" });
 
-export default function BestSellersPage() {
+export default async function BestSellersPage() {
+  await syncCatalog();
   return (
     <ListingPage
       eyebrow="Most Wanted"

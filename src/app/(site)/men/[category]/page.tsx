@@ -4,12 +4,14 @@ import { ListingPage } from "@/components/listing/ListingPage";
 import { categories, categoryGroups, getCategory, slugifyType } from "@/data/categories";
 import { products, bestSellers } from "@/data/products";
 import { pageMeta } from "@/lib/seo";
+import { syncCatalog } from "@/lib/server/store";
 
 type Props = { params: Promise<{ category: string }> };
 
 export const dynamicParams = false;
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  await syncCatalog();
   return [...categories.map((c) => ({ category: c.slug })), ...Object.keys(categoryGroups).map((category) => ({ category }))];
 }
 
@@ -22,6 +24,7 @@ function resolve(slug: string) {
 }
 
 export async function generateMetadata({ params }: Props) {
+  await syncCatalog();
   const { category } = await params;
   const r = resolve(category);
   if (!r) return {};
@@ -29,6 +32,7 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function CategoryPage({ params }: Props) {
+  await syncCatalog();
   const { category } = await params;
   const r = resolve(category);
   if (!r) notFound();

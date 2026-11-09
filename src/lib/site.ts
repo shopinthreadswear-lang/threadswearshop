@@ -29,6 +29,14 @@ export const commerce = {
   returnWindowDays: 15,
 };
 
+/** Rotating messages in the top bar. Admin-editable (see src/lib/catalog.ts). */
+export const announcements: { text: string; href: string }[] = [
+  { text: "Complimentary shipping on orders above ₹2,999", href: "/shipping" },
+  { text: "Easy 15-day returns & free exchanges", href: "/returns" },
+  { text: "Secure payments · UPI, cards, net banking & COD", href: "/faq#payments" },
+  { text: "The Autumn / Winter ’26 collection is here", href: "/collections/new-season" },
+];
+
 export const formatINR = (n: number) =>
   "₹" + new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(Math.round(n));
 

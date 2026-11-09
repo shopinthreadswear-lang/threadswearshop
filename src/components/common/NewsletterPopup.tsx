@@ -32,7 +32,7 @@ export function NewsletterPopup() {
       } catch {
         return true;
       }
-      return !readConsent() || /^\/(checkout|account|bag|order-confirmation)/.test(pathname);
+      return !readConsent() || /^\/(checkout|account|bag|order-confirmation|admin)/.test(pathname);
     };
     if (blocked()) return;
     const timer = setTimeout(() => {

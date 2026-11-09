@@ -17,7 +17,7 @@ export function Loader() {
   const video = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || location.pathname.startsWith("/admin")) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- runs once per full page load
     setState("show");
     const cap = setTimeout(() => setState((s) => (s === "show" ? "hide" : s)), 1800); // never longer than this

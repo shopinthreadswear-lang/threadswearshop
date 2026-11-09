@@ -16,7 +16,7 @@ const LINKS = [
   ["Returns & Exchanges", "/returns/request"],
 ];
 
-export function AccountSidebar({ name, email }: { name: string; email: string }) {
+export function AccountSidebar({ name, email, isAdmin = false }: { name: string; email: string; isAdmin?: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
   const { setUser } = useStore();
@@ -42,6 +42,13 @@ export function AccountSidebar({ name, email }: { name: string; email: string })
             </li>
           );
         })}
+        {isAdmin && (
+          <li className="shrink-0">
+            <Link href="/admin" className="block whitespace-nowrap rounded-full bg-burgundy px-4 py-2 text-[13px] font-semibold text-cream lg:mt-4 lg:inline-block">
+              Store admin →
+            </Link>
+          </li>
+        )}
         <li className="shrink-0">
           <button type="button" onClick={logout} className="block whitespace-nowrap border border-line px-4 py-2 text-left text-[13px] text-muted hover:text-ink lg:mt-6 lg:border-0 lg:border-l lg:border-transparent">
             Sign Out

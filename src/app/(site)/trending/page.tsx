@@ -2,10 +2,12 @@ import { ListingPage } from "@/components/listing/ListingPage";
 import { trending } from "@/data/products";
 import { IMG } from "@/data/images";
 import { pageMeta } from "@/lib/seo";
+import { syncCatalog } from "@/lib/server/store";
 
 export const metadata = pageMeta({ title: "Trending Now", description: "What's trending at Threads Ware this week — the pieces our community is adding to their wardrobes right now.", path: "/trending" });
 
-export default function TrendingPage() {
+export default async function TrendingPage() {
+  await syncCatalog();
   return (
     <ListingPage
       eyebrow="This Week"

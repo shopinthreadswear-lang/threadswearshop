@@ -13,16 +13,20 @@ import { TextLink } from "@/components/ui/CTA";
 import { absoluteUrl, site } from "@/lib/site";
 import { pageMeta } from "@/lib/seo";
 import type { Product } from "@/lib/types";
+import { syncCatalog } from "@/lib/server/store";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const dynamicParams = false;
+// Products added in the admin don’t exist at build time, so render unknown slugs on demand (unknown → 404).
+export const dynamicParams = true;
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  await syncCatalog();
   return products.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props) {
+  await syncCatalog();
   const p = getProduct((await params).slug);
   if (!p) return {};
   return pageMeta({ title: p.name, description: `${p.shortDescription} ${p.materials}. ₹${p.price.toLocaleString("en-IN")} — complimentary shipping above ₹2,999 and easy 15-day returns.`, path: `/products/${p.slug}`, image: p.images[0] });
@@ -42,6 +46,7 @@ function Rail({ title, items, href, linkLabel }: { title: string; items: Product
 }
 
 export default async function ProductPage({ params }: Props) {
+  await syncCatalog();
   const p = getProduct((await params).slug);
   if (!p) notFound();
   const cat = getCategory(p.category);

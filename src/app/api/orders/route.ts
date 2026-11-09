@@ -3,7 +3,7 @@ import { z } from "zod";
 import { getSessionUserId, orderToken } from "@/lib/server/auth";
 import { fail, handle, ok, parse, rateLimit, zEmail, zName, zPhone, zPincode } from "@/lib/server/http";
 import { gateway } from "@/lib/server/payments";
-import { findPromo } from "@/lib/server/promos";
+import { coupons, findPromo } from "@/lib/server/promos";
 import { availableStock, generateOrderId, newId, read, write } from "@/lib/server/store";
 import { getProductById } from "@/data/products";
 import { computeTotals, deliveryOptions } from "@/lib/pricing";
@@ -92,7 +92,7 @@ export const POST = handle(async (req) => {
   if (stockIssues.length) return fail(stockIssues[0], 409);
 
   const subtotal = items.reduce((a, i) => a + i.lineTotal, 0);
-  const promo = findPromo(d.promoCode);
+  const promo = await findPromo(d.promoCode);
   const giftCardOnly = items.every((i) => i.productId === GIFT_CARD_ID);
   const cod = d.payment.method === "cod";
   if (cod && (subtotal > commerce.codLimit || giftCardOnly)) return fail("Cash on Delivery isn't available for this order.", 422);
@@ -143,6 +143,10 @@ export const POST = handle(async (req) => {
     if (d.payment.method === "giftcard") {
       const gc = db.giftCards.find((g) => g.code === d.payment.giftCardCode?.trim().toUpperCase());
       if (gc) gc.balance -= totals.total;
+    }
+    if (promo) {
+      const c = coupons(db).find((x) => x.code === promo.code);
+      if (c) c.used += 1;
     }
     db.orders.unshift(order);
     if (uid) {

@@ -2,10 +2,12 @@ import { ListingPage } from "@/components/listing/ListingPage";
 import { products } from "@/data/products";
 import { IMG } from "@/data/images";
 import { pageMeta } from "@/lib/seo";
+import { syncCatalog } from "@/lib/server/store";
 
 export const metadata = pageMeta({ title: "Shop All Topwear", description: "Shop every Threads Ware piece — heavyweight tees, oxford shirts, polos, knitwear, outerwear and designer tailoring. Complimentary shipping above ₹2,999.", path: "/shop" });
 
-export default function ShopPage() {
+export default async function ShopPage() {
+  await syncCatalog();
   return (
     <ListingPage
       eyebrow="Shop All"

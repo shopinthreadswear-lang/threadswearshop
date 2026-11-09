@@ -11,22 +11,26 @@ import { Reveal } from "@/components/ui/Reveal";
 import { absoluteUrl, site } from "@/lib/site";
 import { pageMeta } from "@/lib/seo";
 import type { Product } from "@/lib/types";
+import { syncCatalog } from "@/lib/server/store";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export const dynamicParams = false;
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  await syncCatalog();
   return articles.map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: Props) {
+  await syncCatalog();
   const a = getArticle((await params).slug);
   if (!a) return {};
   return pageMeta({ title: a.title, description: a.excerpt, path: `/journal/${a.slug}`, image: a.image, type: "article" });
 }
 
 export default async function ArticlePage({ params }: Props) {
+  await syncCatalog();
   const a = getArticle((await params).slug);
   if (!a) notFound();
   const products = (a.products ?? []).map(getProduct).filter(Boolean) as Product[];

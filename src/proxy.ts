@@ -10,7 +10,8 @@ const PUBLIC_ACCOUNT = ["/account/login", "/account/register", "/account/forgot-
  */
 export async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
-  if (pathname.startsWith("/account") && !PUBLIC_ACCOUNT.some((p) => pathname.startsWith(p))) {
+  const gated = pathname.startsWith("/admin") || (pathname.startsWith("/account") && !PUBLIC_ACCOUNT.some((p) => pathname.startsWith(p)));
+  if (gated) {
     if (!req.cookies.get("tw_session")) {
       const url = req.nextUrl.clone();
       url.pathname = "/account/login";

@@ -7,10 +7,12 @@ import { ProductCarousel } from "@/components/product/ProductCarousel";
 import { TextLink } from "@/components/ui/CTA";
 import { getProductById, related, bestSellers } from "@/data/products";
 import type { Product } from "@/lib/types";
+import { syncCatalog } from "@/lib/server/store";
 
 export const metadata = { title: "My Account", robots: { index: false } };
 
 export default async function AccountOverview() {
+  await syncCatalog();
   const user = (await getCurrentUser())!;
   const orders = await read((db) => db.orders.filter((o) => o.userId === user.id));
   const recent = orders[0];

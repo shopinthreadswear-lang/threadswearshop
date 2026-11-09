@@ -107,6 +107,28 @@ Every page has a unique title, description, canonical URL, Open Graph and Twitte
 
 `lib/analytics.ts` emits GA4-shaped e-commerce events (`view_item`, `view_item_list`, `add_to_cart`, `begin_checkout`, `add_shipping_info`, `add_payment_info`, `purchase`, `search`, `sign_up`, `newsletter_signup`, …) to `dataLayer` and mirrors them to Meta Pixel. GTM, GA4 and Meta Pixel load **only after cookie consent** (`components/common/Analytics.tsx`). Set `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_GA_ID`, `NEXT_PUBLIC_META_PIXEL_ID` and `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` to enable them. Signed-in carts are snapshotted server-side (`/api/cart`), ready for abandoned-cart email flows.
 
+## Store admin
+
+`/admin` is the back office. Sign in with an account whose email is in `ADMIN_EMAILS` (comma-separated). In local
+development, if `ADMIN_EMAILS` is empty, the demo account `arjun@threadsware.in` is an admin so you can try it.
+
+| Section | What you can do |
+|---|---|
+| Overview | Sales, orders, customers, sizes running low, what needs attention |
+| Orders | Search and filter; move an order through packed → shipped (courier + tracking) → delivered; cancel (stock goes back) |
+| Products | Edit name, descriptions, price, sale price, photo label, New / Best seller, hide from shop; set stock per colour and size; add new products; undo edits |
+| Offers | Percentage off everything, a category or a collection, with an optional end date |
+| Coupons | Create, edit, pause and delete codes: % or ₹ off, minimum order, usage limit, last day |
+| Customers, Returns, Inbox | Spend per customer; move returns to approved → picked up → refunded/exchanged; contact messages, newsletter (CSV export), back-in-stock requests |
+| Settings | Top message bar and shipping charges |
+
+Edits are stored in the same data store as orders (`catalog` and `coupons`) and applied over the catalogue in
+`src/data/products.ts` by `src/lib/catalog.ts`, on the server and in the browser. Every admin page and action checks
+admin access on the server.
+
+> On Vercel the local JSON store lives in `/tmp` and is reset between deployments and instances, so admin edits,
+> like orders, only persist once the store is moved to Supabase (see `supabase/schema.sql`).
+
 ## Going to production
 
 1. **Database:** run `supabase/schema.sql` in Supabase. Then re-implement `read`/`write` in `src/lib/server/store.ts` against Supabase with the service-role key (server only). Each JSON collection maps to a table. The JSON store is single-instance and is meant for local use and demos only; on Vercel it writes to `/tmp` and does not persist.

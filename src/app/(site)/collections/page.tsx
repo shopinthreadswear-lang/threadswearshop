@@ -6,10 +6,12 @@ import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Reveal } from "@/components/ui/Reveal";
 import { pageMeta } from "@/lib/seo";
 import { cn } from "@/lib/cn";
+import { syncCatalog } from "@/lib/server/store";
 
 export const metadata = pageMeta({ title: "Collections", description: "Explore Threads Ware collections — The Signature Collection, The Essentials, Modern Tailoring, The Linen Edit, After Dark, Winter Layers and more.", path: "/collections" });
 
-export default function CollectionsPage() {
+export default async function CollectionsPage() {
+  await syncCatalog();
   const [first, ...rest] = collections;
   return (
     <>

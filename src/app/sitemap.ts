@@ -4,8 +4,10 @@ import { categories, categoryGroups } from "@/data/categories";
 import { collections } from "@/data/collections";
 import { articles } from "@/data/journal";
 import { absoluteUrl } from "@/lib/site";
+import { syncCatalog } from "@/lib/server/store";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  await syncCatalog();
   const now = new Date();
   const s = (path: string, priority: number, changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"] = "weekly") => ({ url: absoluteUrl(path), lastModified: now, changeFrequency, priority });
   return [

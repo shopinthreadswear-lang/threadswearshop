@@ -8,6 +8,7 @@ import { Monogram } from "@/components/ui/Logo";
 import { ArrowRight, Check } from "@/components/ui/Icons";
 import { ProductCarousel } from "@/components/product/ProductCarousel";
 import { bestSellers } from "@/data/products";
+import { syncCatalog } from "@/lib/server/store";
 
 export const metadata = { title: "Order Confirmed", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
@@ -15,6 +16,7 @@ export const dynamic = "force-dynamic";
 type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ t?: string }> };
 
 export default async function ConfirmationPage({ params, searchParams }: Props) {
+  await syncCatalog();
   const { id } = await params;
   const { t } = await searchParams;
   const order = await read((db) => db.orders.find((o) => o.id === id));

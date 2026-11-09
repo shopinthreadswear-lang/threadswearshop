@@ -5,22 +5,26 @@ import { collections, getCollection } from "@/data/collections";
 import { byCollection } from "@/data/products";
 import { Reveal } from "@/components/ui/Reveal";
 import { pageMeta } from "@/lib/seo";
+import { syncCatalog } from "@/lib/server/store";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export const dynamicParams = false;
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  await syncCatalog();
   return collections.map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({ params }: Props) {
+  await syncCatalog();
   const c = getCollection((await params).slug);
   if (!c) return {};
   return pageMeta({ title: c.name, description: `${c.tagline} ${c.description}`, path: `/collections/${c.slug}`, image: c.image });
 }
 
 export default async function CollectionPage({ params }: Props) {
+  await syncCatalog();
   const c = getCollection((await params).slug);
   if (!c) notFound();
   const list = byCollection(c.slug);

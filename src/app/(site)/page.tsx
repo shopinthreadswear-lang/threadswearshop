@@ -15,6 +15,7 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { ArrowRight } from "@/components/ui/Icons";
 import { bestSellers, newArrivals, products } from "@/data/products";
 import { pageMeta } from "@/lib/seo";
+import { syncCatalog } from "@/lib/server/store";
 
 export const metadata = pageMeta({
   title: "Premium Shirts, T-Shirts & Tailoring",
@@ -29,7 +30,8 @@ const layer = (cats: string[]) => products.filter((p) => cats.includes(p.categor
  * Homepage, same story as before in a bolder storefront UI: brand-colour hero slider, trust bar, the shelf as a
  * card carousel, the oxblood story block, looks, the outfit builder, new arrivals, notes, makers, delivery and snapshots.
  */
-export default function HomePage() {
+export default async function HomePage() {
+  await syncCatalog();
   return (
     <>
       <HeroBanner />

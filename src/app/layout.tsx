@@ -9,6 +9,8 @@ import { Toaster } from "@/components/ui/Toaster";
 import { CookieBanner } from "@/components/common/CookieBanner";
 import { NewsletterPopup } from "@/components/common/NewsletterPopup";
 import { Loader } from "@/components/common/Loader";
+import { CatalogSync } from "@/components/common/CatalogSync";
+import { read } from "@/lib/server/store";
 import { Analytics } from "@/components/common/Analytics";
 import { RouteEffects } from "@/components/common/RouteEffects";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
@@ -47,7 +49,8 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const catalog = await read((db) => db.catalog ?? null);
   return (
     <html lang="en-IN" className={`${display.variable} ${body.variable}`}>
       <head>
@@ -57,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[300] focus:bg-ink focus:px-4 focus:py-3 focus:text-ivory">
           Skip to content
         </a>
+        <CatalogSync state={catalog} />
         <Providers>
           {children}
           <CartDrawer />

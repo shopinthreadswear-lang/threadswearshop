@@ -3,13 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/cn";
+import { announcements as MESSAGES } from "@/lib/site";
 
-const MESSAGES = [
-  { text: "Complimentary shipping on orders above ₹2,999", href: "/shipping" },
-  { text: "Easy 15-day returns & free exchanges", href: "/returns" },
-  { text: "Secure payments · UPI, cards, net banking & COD", href: "/faq#payments" },
-  { text: "The Autumn / Winter ’26 collection is here", href: "/collections/new-season" },
-];
 
 export function AnnouncementBar() {
   const [i, setI] = useState(0);

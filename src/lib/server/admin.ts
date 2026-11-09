@@ -22,7 +22,8 @@ export type Role = "owner" | "manager" | "support";
 export type Area = "dashboard" | "orders" | "returns" | "customers" | "inbox" | "reviews" | "products" | "content" | "offers" | "coupons" | "settings" | "team" | "activity";
 
 export const ROLE_LABEL: Record<Role, string> = { owner: "Owner", manager: "Manager", support: "Support" };
-export const ROLE_HINT: Record<Exclude<Role, "owner">, string> = {
+export const ROLE_HINT: Record<Role, string> = {
+  owner: "Everything, including adding and removing team members",
   manager: "Everything except managing the team",
   support: "Orders, returns, customers, inbox and reviews — no prices, products or settings",
 };
@@ -33,7 +34,7 @@ const ACCESS: Record<Role, Area[] | "all"> = {
   support: ["dashboard", "orders", "returns", "customers", "inbox", "reviews"],
 };
 
-export type StaffMember = { id: string; name: string; email: string; role: Exclude<Role, "owner">; passwordHash: string; active: boolean; createdAt: string; lastLoginAt?: string };
+export type StaffMember = { id: string; name: string; email: string; role: Role; passwordHash: string; active: boolean; createdAt: string; lastLoginAt?: string };
 export type AdminUser = { id: string; name: string; email: string; role: Role };
 export type AuditEntry = { id: string; at: string; actor: { id: string; name: string; role: Role }; area: Area; action: string; href?: string };
 
@@ -55,7 +56,8 @@ function owner() {
   return email && password ? { email, password } : null;
 }
 
-export const adminConfigured = () => !!owner();
+/** True when someone can sign in: the owner login from the environment, or an active login stored in the database. */
+export const adminConfigured = async () => !!owner() || (await read((db) => !!db.staff?.some((m) => m.active)));
 export const ownerEmail = () => owner()?.email ?? "";
 
 /** Who is signing in, or null. Checks the owner login first, then active team members. */

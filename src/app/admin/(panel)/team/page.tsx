@@ -8,7 +8,7 @@ import { AddStaffForm, StaffForm } from "./TeamForms";
 export const metadata = { title: "Team" };
 
 export default async function TeamPage() {
-  await getAdmin("team");
+  const me = await getAdmin("team");
   const staff = await read((db) => (db.staff ?? []).map(({ passwordHash: _p, ...m }) => (void _p, m)));
   return (
     <>
@@ -16,25 +16,27 @@ export default async function TeamPage() {
 
       <Card title="Who can sign in">
         <ul className="divide-y divide-line">
-          <li className="flex flex-wrap items-center justify-between gap-3 py-3">
-            <span className="min-w-0">
-              <span className="block text-[14px] font-semibold text-ink">You (owner)</span>
-              <span className="block truncate text-[12.5px] text-muted">{ownerEmail()} · login set in Vercel (ADMIN_EMAIL / ADMIN_PASSWORD)</span>
-            </span>
-            <Pill tone="good">{ROLE_LABEL.owner} · full access</Pill>
-          </li>
+          {ownerEmail() && (
+            <li className="flex flex-wrap items-center justify-between gap-3 py-3">
+              <span className="min-w-0">
+                <span className="block text-[14px] font-semibold text-ink">Owner (backup login)</span>
+                <span className="block truncate text-[12.5px] text-muted">{ownerEmail()} · set in Vercel (ADMIN_EMAIL / ADMIN_PASSWORD)</span>
+              </span>
+              <Pill tone="good">{ROLE_LABEL.owner} · full access</Pill>
+            </li>
+          )}
           {staff.map((m) => (
             <li key={m.id} className="py-4">
               <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
                 <span className="min-w-0">
                   <span className="flex items-center gap-2 text-[14px] font-semibold text-ink">
-                    {m.name} {!m.active && <Pill tone="bad">Access off</Pill>}
+                    {m.name} {m.id === me.id && <Pill tone="info">You</Pill>} <Pill tone={m.role === "owner" ? "good" : "muted"}>{ROLE_LABEL[m.role]}</Pill> {!m.active && <Pill tone="bad">Access off</Pill>}
                   </span>
                   <span className="block truncate text-[12.5px] text-muted">
                     {m.email} · added {fmtDate(m.createdAt)} · {m.lastLoginAt ? `last signed in ${fmtDate(m.lastLoginAt, true)}` : "hasn’t signed in yet"}
                   </span>
                 </span>
-                <QuickAction action={removeStaff} fields={{ staffId: m.id }} label="Remove" tone="danger" confirm={`Remove ${m.name} from the team? They’ll be signed out straight away.`} />
+                {m.id !== me.id && <QuickAction action={removeStaff} fields={{ staffId: m.id }} label="Remove" tone="danger" confirm={`Remove ${m.name} from the team? They’ll be signed out straight away.`} />}
               </div>
               <StaffForm member={{ id: m.id, role: m.role, active: m.active }} />
             </li>

@@ -16,7 +16,7 @@ export async function adminLogin(_: LoginState, form: FormData): Promise<LoginSt
   const email = String(form.get("email") ?? "").slice(0, 200);
   const password = String(form.get("password") ?? "").slice(0, 200);
   const next = String(form.get("next") ?? "");
-  if (!adminConfigured()) return { error: "Admin sign-in isn’t set up yet. Add ADMIN_EMAIL and ADMIN_PASSWORD to the environment variables, then redeploy.", email };
+  if (!(await adminConfigured())) return { error: "Admin sign-in isn’t set up yet. Ask the developer to create the owner login.", email };
 
   const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
   const now = Date.now();

@@ -599,13 +599,13 @@ export async function addStaff(_: ActionState, form: FormData): Promise<ActionSt
     .object({
       name: z.string().trim().min(2, "Enter their name").max(60),
       email: z.string().trim().toLowerCase().email("Enter a valid email"),
-      role: z.enum(["manager", "support"]),
+      role: z.enum(["owner", "manager", "support"]),
       password: staffPassword,
     })
     .safeParse(Object.fromEntries(form));
   if (!parsed.success) return oops("Please fix the highlighted fields.", fieldErrors(parsed.error));
   const d = parsed.data;
-  if (d.email === ownerEmail()) return oops("That’s the owner’s email. Use a different one.", { email: "Already the owner" });
+  if (ownerEmail() && d.email === ownerEmail()) return oops("That’s the owner’s email. Use a different one.", { email: "Already the owner" });
   const result = await write((db) => {
     const staff = (db.staff ??= []);
     if (staff.some((m) => m.email === d.email)) return oops("Someone on the team already uses that email.", { email: "Already on the team" });
@@ -620,13 +620,14 @@ export async function addStaff(_: ActionState, form: FormData): Promise<ActionSt
 export async function updateStaff(_: ActionState, form: FormData): Promise<ActionState> {
   const me = await assertAdmin("team");
   const parsed = z
-    .object({ staffId: z.string().min(1), role: z.enum(["manager", "support"]), active: checkbox, password: z.union([z.literal(""), staffPassword]) })
+    .object({ staffId: z.string().min(1), role: z.enum(["owner", "manager", "support"]), active: checkbox, password: z.union([z.literal(""), staffPassword]) })
     .safeParse(Object.fromEntries(form));
   if (!parsed.success) return oops("Please fix the highlighted fields.", fieldErrors(parsed.error));
   const d = parsed.data;
   const result = await write((db) => {
     const m = db.staff?.find((x) => x.id === d.staffId);
     if (!m) return oops("That person is no longer on the team.");
+    if (m.id === me.id && (d.role !== m.role || !d.active)) return oops("You can’t change your own role or turn off your own access. Ask another owner.");
     const changes: string[] = [];
     if (m.role !== d.role) changes.push(`role → ${ROLE_LABEL[d.role].toLowerCase()}`);
     if (m.active !== d.active) changes.push(d.active ? "access turned on" : "access turned off");
@@ -647,7 +648,7 @@ export async function removeStaff(form: FormData) {
   const staffId = String(form.get("staffId") ?? "");
   await write((db) => {
     const m = db.staff?.find((x) => x.id === staffId);
-    if (!m) return;
+    if (!m || m.id === me.id) return; // nobody removes themselves (keeps at least one owner)
     db.staff = db.staff!.filter((x) => x.id !== staffId);
     log(db, me, "team", `Removed ${m.name} (${m.email}) from the team`, "/admin/team");
   });

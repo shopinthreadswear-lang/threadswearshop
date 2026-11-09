@@ -12,6 +12,7 @@ export function AddStaffForm() {
         <Field label="Role" name="role" as="select" defaultValue="support">
           <option value="support">Support</option>
           <option value="manager">Manager</option>
+          <option value="owner">Owner</option>
         </Field>
         <Field label="Password" name="password" type="text" autoComplete="new-password" hint="At least 10 characters with a letter and a number. Share it with them privately." />
       </div>
@@ -20,13 +21,14 @@ export function AddStaffForm() {
   );
 }
 
-export function StaffForm({ member }: { member: { id: string; role: "manager" | "support"; active: boolean } }) {
+export function StaffForm({ member }: { member: { id: string; role: "owner" | "manager" | "support"; active: boolean } }) {
   return (
     <ActionForm action={updateStaff} className="grid items-end gap-3 sm:grid-cols-[160px_1fr_auto]">
       <input type="hidden" name="staffId" value={member.id} />
       <Field label="Role" name="role" as="select" defaultValue={member.role}>
         <option value="support">Support</option>
         <option value="manager">Manager</option>
+        <option value="owner">Owner</option>
       </Field>
       <Field label="New password (optional)" name="password" type="text" autoComplete="new-password" placeholder="Leave empty to keep" />
       <Submit variant="outline">Save</Submit>

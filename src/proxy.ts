@@ -1,9 +1,14 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { updateSession } from "@/utils/supabase/middleware";
 
 const PUBLIC_ACCOUNT = ["/account/login", "/account/register", "/account/forgot-password", "/account/reset-password"];
 
-/** Fast gate for protected routes. Full session verification happens server-side in the account layout. */
-export function proxy(req: NextRequest) {
+/**
+ * Runs before matching requests:
+ * 1. Fast gate for protected account routes (full session verification happens server-side in the account layout).
+ * 2. Keeps a Supabase auth session fresh, so server code always sees a valid user.
+ */
+export async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
   if (pathname.startsWith("/account") && !PUBLIC_ACCOUNT.some((p) => pathname.startsWith(p))) {
     if (!req.cookies.get("tw_session")) {
@@ -13,7 +18,10 @@ export function proxy(req: NextRequest) {
       return NextResponse.redirect(url);
     }
   }
-  return NextResponse.next();
+  return updateSession(req);
 }
 
-export const config = { matcher: ["/account/:path*"] };
+export const config = {
+  // Every page and API route, but not static files, images or Next internals.
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|brand/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|mp4|webm|woff2?)$).*)"],
+};

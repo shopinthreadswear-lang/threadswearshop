@@ -4,7 +4,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { IMG } from "@/data/images";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "Careers", description: "Join the Threads Ware studio in Mumbai. Open roles in design, production, retail and customer experience.", path: "/careers" });
+export const metadata = pageMeta({ title: "Careers", description: "Join the Threads Wear studio in Mumbai. Open roles in design, production, retail and customer experience.", path: "/careers" });
 
 const ROLES = [
   ["Senior Menswear Designer — Tailoring", "Design", "Mumbai · Full-time"],
@@ -26,7 +26,7 @@ export default function CareersPage() {
           <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-muted">We’re a small team of designers, makers and operators in Mumbai who care about the details. If you do too, we’d like to hear from you.</p>
         </div>
         <Reveal variant="image" className="relative aspect-[16/11]">
-          <Image src={IMG.storeBrowse} alt="The Threads Ware team at work" fill sizes="50vw" className="img-grade object-cover" priority />
+          <Image src={IMG.storeBrowse} alt="The Threads Wear team at work" fill sizes="50vw" className="img-grade object-cover" priority />
         </Reveal>
       </div>
       <section className="mt-20" aria-labelledby="roles">
@@ -34,7 +34,7 @@ export default function CareersPage() {
         <ul className="divide-y divide-line border-y border-line">
           {ROLES.map(([t, team, loc]) => (
             <li key={t}>
-              <a href={`mailto:careers@threadsware.in?subject=${encodeURIComponent(t)}`} className="group grid gap-2 py-6 md:grid-cols-12 md:items-center">
+              <a href={`mailto:shopinthreadswear@gmail.com?subject=${encodeURIComponent(t)}`} className="group grid gap-2 py-6 md:grid-cols-12 md:items-center">
                 <span className="font-serif text-[23px] md:col-span-6 group-hover:underline">{t}</span>
                 <span className="text-[13px] text-muted md:col-span-2">{team}</span>
                 <span className="text-[13px] text-muted md:col-span-3">{loc}</span>
@@ -43,7 +43,7 @@ export default function CareersPage() {
             </li>
           ))}
         </ul>
-        <p className="mt-8 text-[13.5px] text-muted">Don’t see your role? Write to <a href="mailto:careers@threadsware.in" className="link-static text-ink">careers@threadsware.in</a> with your portfolio or CV.</p>
+        <p className="mt-8 text-[13.5px] text-muted">Don’t see your role? Write to <a href="mailto:shopinthreadswear@gmail.com" className="link-static text-ink">shopinthreadswear@gmail.com</a> with your portfolio or CV.</p>
       </section>
       <section className="mt-20 grid gap-px bg-line md:grid-cols-3">
         {[

@@ -2,7 +2,7 @@ import { SizeGuideContent } from "@/components/common/SizeGuide";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "Size Guide", description: "Threads Ware size guide for T-shirts, shirts, knitwear, outerwear and tailoring — measurements in centimetres and inches, with how-to-measure advice.", path: "/size-guide" });
+export const metadata = pageMeta({ title: "Size Guide", description: "Threads Wear size guide for T-shirts, shirts, knitwear, outerwear and tailoring — measurements in centimetres and inches, with how-to-measure advice.", path: "/size-guide" });
 
 export default function SizeGuidePage() {
   return (

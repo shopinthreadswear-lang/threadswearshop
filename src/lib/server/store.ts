@@ -37,7 +37,7 @@ export type DB = {
   audit?: AuditEntry[];
 };
 
-const DATA_DIR = process.env.VERCEL ? "/tmp/threads-ware" : path.join(process.cwd(), ".data");
+const DATA_DIR = process.env.VERCEL ? "/tmp/threads-wear" : path.join(process.cwd(), ".data");
 const FILE = path.join(DATA_DIR, "store.json");
 
 /**

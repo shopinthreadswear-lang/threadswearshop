@@ -4,7 +4,7 @@ import { CTA, TextLink } from "@/components/ui/CTA";
 import { IMG } from "@/data/images";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "About Threads Ware", description: "Threads Ware — for the modern man. Clean silhouettes, premium materials and pieces designed to move effortlessly between work, weekends and everything in between.", path: "/about", image: IMG.walkSuit });
+export const metadata = pageMeta({ title: "About Threads Wear", description: "Threads Wear — for the modern man. Clean silhouettes, premium materials and pieces designed to move effortlessly between work, weekends and everything in between.", path: "/about", image: IMG.walkSuit });
 
 const PILLARS = [
   { id: "philosophy", n: "01", title: "Our Philosophy", text: "Everyday menswear should feel considered. We design fewer pieces, better — and we make each one to be worn hard and kept for years.", image: IMG.walkSuit },
@@ -23,7 +23,7 @@ export default function AboutPage() {
         <div className="container-site relative pb-20">
           <p className="eyebrow text-champagne-soft">About Us</p>
           <h1 className="display-xl mt-6">
-            <LineReveal lines={["Threads Ware", <em key="e" className="font-serif italic">for the modern man.</em>]} />
+            <LineReveal lines={["Threads Wear", <em key="e" className="font-serif italic">for the modern man.</em>]} />
           </h1>
         </div>
       </section>
@@ -31,7 +31,7 @@ export default function AboutPage() {
       <section className="container-site section-y">
         <div className="grid gap-10 md:grid-cols-12">
           <Reveal className="md:col-span-7 md:col-start-2">
-            <p className="font-serif text-[clamp(1.7rem,3.2vw,2.8rem)] leading-[1.2]">Threads Ware was created around a simple belief — everyday menswear should feel considered.</p>
+            <p className="font-serif text-[clamp(1.7rem,3.2vw,2.8rem)] leading-[1.2]">Threads Wear was created around a simple belief — everyday menswear should feel considered.</p>
           </Reveal>
           <Reveal delay={150} className="space-y-5 text-[15.5px] leading-relaxed text-charcoal md:col-span-4 md:col-start-9 md:pt-3">
             <p>We focus on clean silhouettes, premium materials and pieces designed to move effortlessly between work, weekends and everything in between.</p>
@@ -58,7 +58,7 @@ export default function AboutPage() {
       <section className="on-dark bg-night text-ivory">
         <div className="container-site grid items-center gap-12 py-24 md:grid-cols-2 md:py-32">
           <Reveal>
-            <p className="eyebrow text-champagne-soft">06 — The Threads Ware Man</p>
+            <p className="eyebrow text-champagne-soft">06 — The Threads Wear Man</p>
             <h2 className="display-lg mt-6">Confident, never loud.</h2>
             <p className="mt-6 max-w-md text-[16px] leading-relaxed text-ivory/70">He buys less and chooses better. He knows the difference between fashionable and well-made. He dresses for the room he’s walking into — the boardroom on Monday, a long lunch on Saturday, a wedding in December — and wants clothes that work as hard as he does.</p>
             <div className="mt-10 flex flex-wrap gap-3">
@@ -66,7 +66,7 @@ export default function AboutPage() {
             </div>
           </Reveal>
           <Reveal variant="image" className="relative aspect-[4/5]">
-            <Image src={IMG.manPortraitKnit} alt="The Threads Ware man" fill sizes="(max-width:768px) 100vw, 50vw" className="img-grade object-cover" />
+            <Image src={IMG.manPortraitKnit} alt="The Threads Wear man" fill sizes="(max-width:768px) 100vw, 50vw" className="img-grade object-cover" />
           </Reveal>
         </div>
       </section>

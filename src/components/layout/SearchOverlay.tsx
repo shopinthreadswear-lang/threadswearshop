@@ -87,7 +87,7 @@ export function SearchOverlay() {
                 <span className="hidden sm:inline">Close</span> <CloseIcon size={18} />
               </button>
             </div>
-            <p className="eyebrow mt-6 text-muted md:mt-10">Search Threads Ware</p>
+            <p className="eyebrow mt-6 text-muted md:mt-10">Search Threads Wear</p>
             <form
               role="search"
               onSubmit={(e) => {

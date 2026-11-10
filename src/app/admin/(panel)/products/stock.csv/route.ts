@@ -12,5 +12,5 @@ export async function GET() {
     deriveProducts(db.catalog ?? emptyCatalog(), { includeHidden: true }).flatMap((p) => p.variants.map((v) => [v.sku, p.name, v.color, v.size, availableStock(db, v.sku, v.stock)])),
   );
   const csv = toCSV(["sku", "product", "colour", "size", "stock"], rows);
-  return new Response(csv, { headers: { "content-type": "text/csv; charset=utf-8", "content-disposition": `attachment; filename="threadsware-stock-${new Date().toISOString().slice(0, 10)}.csv"`, "cache-control": "no-store" } });
+  return new Response(csv, { headers: { "content-type": "text/csv; charset=utf-8", "content-disposition": `attachment; filename="threadswear-stock-${new Date().toISOString().slice(0, 10)}.csv"`, "cache-control": "no-store" } });
 }

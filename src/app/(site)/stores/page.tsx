@@ -7,19 +7,19 @@ import { site } from "@/lib/site";
 import { syncCatalog } from "@/lib/server/store";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "Stores — Coming Soon", description: "The first Threads Ware store opens in Mumbai in early 2027. Visit our Lower Parel studio by appointment in the meantime.", path: "/stores", image: IMG.storeInterior });
+export const metadata = pageMeta({ title: "Stores — Coming Soon", description: "The first Threads Wear store opens in Mumbai in early 2027. Visit our Lower Parel studio by appointment in the meantime.", path: "/stores", image: IMG.storeInterior });
 
 export default async function StoresPage() {
   await syncCatalog(); // contact details are edited in Admin → Site content
   return (
     <>
       <section className="relative h-[70vh] min-h-[480px] overflow-hidden bg-night text-ivory">
-        <Image src={IMG.storeInterior} alt="Threads Ware store concept" fill priority sizes="100vw" className="ken-burns img-grade object-cover opacity-70" />
+        <Image src={IMG.storeInterior} alt="Threads Wear store concept" fill priority sizes="100vw" className="ken-burns img-grade object-cover opacity-70" />
         <div className="absolute inset-0 bg-gradient-to-t from-night/85 to-night/20" />
         <div className="container-site relative flex h-full flex-col justify-end pb-14">
           <Breadcrumb items={[{ label: "Stores" }]} light className="mb-6" />
           <p className="eyebrow text-champagne-soft">Coming Early 2027</p>
-          <h1 className="display-lg mt-4 max-w-3xl">The Threads Ware House, Mumbai.</h1>
+          <h1 className="display-lg mt-4 max-w-3xl">The Threads Wear House, Mumbai.</h1>
         </div>
       </section>
       <section className="container-site grid gap-14 section-y md:grid-cols-2">

@@ -104,7 +104,7 @@ function FindMySize({ product, onPick }: { product: Product; onPick: (s: string)
         Find my size
       </button>
       <Modal open={open} onClose={() => setOpen(false)} title="Find Your Size">
-        <p className="text-[13.5px] text-muted">Based on thousands of Threads Ware orders and returns. {product.fit} fit.</p>
+        <p className="text-[13.5px] text-muted">Based on thousands of Threads Wear orders and returns. {product.fit} fit.</p>
         <div className="mt-6 space-y-6">
           <label className="block">
             <span className="field-label flex justify-between">
@@ -284,7 +284,7 @@ export function ProductView({ product: p, children }: { product: Product; childr
 
         <div className="md:col-span-5">
           <div className="md:sticky md:top-[84px] md:pb-10">
-            <p className="eyebrow text-muted">THREADS WARE</p>
+            <p className="eyebrow text-muted">THREADS WEAR</p>
             <h1 className="mt-3 font-serif text-[clamp(2rem,3.2vw,2.9rem)] leading-[1.05]">{p.name}</h1>
             <p className="mt-3 text-[14px] text-muted">{p.shortDescription}</p>
             <div className="mt-5 flex flex-wrap items-center justify-between gap-3">

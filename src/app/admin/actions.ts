@@ -770,7 +770,7 @@ export async function importCSV(_: ActionState, form: FormData): Promise<ActionS
   const { columns, rows } = csvObjects(await file.text());
   const isStock = columns.includes("sku") && columns.includes("stock");
   const isProducts = columns.includes("id");
-  if (!isStock && !isProducts) return oops("This doesn’t look like a Threads Ware export. Download the products or stock CSV, edit it, and import that.");
+  if (!isStock && !isProducts) return oops("This doesn’t look like a Threads Wear export. Download the products or stock CSV, edit it, and import that.");
   if (!rows.length) return oops("The file has no rows.");
 
   const errors: string[] = [];

@@ -2,7 +2,7 @@ import { PolicyPage } from "@/components/content/PolicyPage";
 import { CookieSettingsLink } from "@/components/common/CookieBanner";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "Cookie Policy", description: "How Threads Ware uses cookies and similar technologies, and how to manage your preferences.", path: "/cookies" });
+export const metadata = pageMeta({ title: "Cookie Policy", description: "How Threads Wear uses cookies and similar technologies, and how to manage your preferences.", path: "/cookies" });
 
 export default function CookiesPage() {
   return (

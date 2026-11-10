@@ -1,4 +1,4 @@
-# THREADS WARE — Premium Menswear E-commerce
+# THREADS WEAR — Premium Menswear E-commerce
 
 A complete, multi-page luxury **topwear and designer wear** storefront (T-shirts, shirts, polos, knitwear, outerwear and tailoring) built with **Next.js 16 (App Router)**, **React 19**, **TypeScript**, **Tailwind CSS 4** and **Framer Motion**. It covers the whole customer journey: discovery → product → bag → checkout → confirmation → account → tracking → returns → support.
 
@@ -163,7 +163,7 @@ read any customer data; only the server, with the secret key, can.
 2. **Auth:** keep the current scrypt + signed-cookie sessions, or switch `lib/server/auth.ts` to Supabase Auth (the `profiles` table already references `auth.users`). Wire password-reset emails in `api/auth/forgot` (in development the reset link is logged to the console instead).
 3. **Payments:** set `PAYMENT_PROVIDER=razorpay` or `stripe` and implement the adapter in `lib/server/payments.ts` (create the order/intent server-side, confirm on the client, fulfil on the webhook).
 4. **Email/SMS:** forward newsletter sign-ups, order confirmations, stock alerts and contact messages from their route handlers to your provider.
-5. **Photography:** `src/data/images.ts` currently uses Unsplash placeholder photography as stand-ins. Replace every entry with Threads Ware campaign and product photography (and your own CDN loader in `src/lib/image-loader.ts`) **before launch**.
+5. **Photography:** `src/data/images.ts` currently uses Unsplash placeholder photography as stand-ins. Replace every entry with Threads Wear campaign and product photography (and your own CDN loader in `src/lib/image-loader.ts`) **before launch**.
 6. **Admin:** the schema already covers products, variants, inventory, collections, orders, returns, coupons, reviews (with moderation status), banners, journal, campaigns and subscribers, so an admin dashboard can be added as an `(admin)` route group behind `role = 'admin'`.
 7. **Legal copy:** the company details (GSTIN, address, phone numbers, emails) are realistic placeholders. Replace them in `src/lib/site.ts`, and have the policy pages reviewed by counsel.
 

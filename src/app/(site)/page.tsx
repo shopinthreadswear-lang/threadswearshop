@@ -20,7 +20,7 @@ import { syncCatalog } from "@/lib/server/store";
 
 export const metadata = pageMeta({
   title: "Premium Shirts, T-Shirts & Tailoring",
-  description: "Threads Ware — premium menswear designed in Mumbai. Heavyweight T-shirts, oxford and linen shirts, knitwear, outerwear and designer tailoring. Free shipping above ₹2,999, 15-day returns.",
+  description: "Threads Wear — premium menswear designed in Mumbai. Heavyweight T-shirts, oxford and linen shirts, knitwear, outerwear and designer tailoring. Free shipping above ₹2,999, 15-day returns.",
   path: "/",
 });
 

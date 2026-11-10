@@ -19,5 +19,5 @@ export async function GET() {
     });
   });
   const csv = toCSV(["id", "name", "category", "type", "price", "compare_at_price", "hidden", "new", "bestseller", "stock_total", "seo_title", "seo_description", "short_description", "url"], rows);
-  return new Response(csv, { headers: { "content-type": "text/csv; charset=utf-8", "content-disposition": `attachment; filename="threadsware-products-${new Date().toISOString().slice(0, 10)}.csv"`, "cache-control": "no-store" } });
+  return new Response(csv, { headers: { "content-type": "text/csv; charset=utf-8", "content-disposition": `attachment; filename="threadswear-products-${new Date().toISOString().slice(0, 10)}.csv"`, "cache-control": "no-store" } });
 }

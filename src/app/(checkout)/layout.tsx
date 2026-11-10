@@ -12,7 +12,7 @@ export default function CheckoutLayout({ children }: { children: React.ReactNode
           <Link href="/bag" aria-label="Back to bag" className="-ml-2 inline-flex min-h-11 min-w-11 items-center justify-self-start px-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted hover:text-ink">
             ← <span className="hidden sm:inline">Back to Bag</span>
           </Link>
-          <Link href="/" aria-label="Threads Ware — home">
+          <Link href="/" aria-label="Threads Wear — home">
             <Wordmark compact />
           </Link>
           <p className="flex items-center justify-end gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">

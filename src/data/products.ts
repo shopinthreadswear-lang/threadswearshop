@@ -135,7 +135,7 @@ export const products: Product[] = [
     fit: "Oversized",
     modelInfo: MODEL_M,
     careInstructions: CARE.cotton,
-    features: ["Premium heavyweight cotton jersey", "240 GSM", "Relaxed oversized silhouette", "Drop shoulder construction", "Pre-shrunk fabric", "Soft enzyme wash", "Designed exclusively for Threads Ware"],
+    features: ["Premium heavyweight cotton jersey", "240 GSM", "Relaxed oversized silhouette", "Drop shoulder construction", "Pre-shrunk fabric", "Soft enzyme wash", "Designed exclusively for Threads Wear"],
     rating: 4.8,
     reviewCount: 128,
     isNew: false,

@@ -6,14 +6,14 @@ import { syncCatalog } from "@/lib/server/store";
 import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 
-export const metadata = pageMeta({ title: "Contact Us", description: "Reach Threads Ware Customer Care by WhatsApp, email or phone — Monday to Saturday, 10am to 8pm IST. Help with orders, delivery, returns, sizing and more.", path: "/contact" });
+export const metadata = pageMeta({ title: "Contact Us", description: "Reach Threads Wear Customer Care by WhatsApp, email or phone — Monday to Saturday, 10am to 8pm IST. Help with orders, delivery, returns, sizing and more.", path: "/contact" });
 
 const TOPICS = [
   ["Customer Care", "General help with your account, orders and payments.", "/faq#orders"],
   ["Orders & Delivery", "Track a parcel, change an address or ask about timelines.", "/track-order"],
   ["Returns & Exchanges", "Free pickup within 15 days of delivery.", "/returns/request"],
   ["Product Information", "Fabrics, fit and care — our stylists can help.", "/size-guide"],
-  ["General Enquiries", "Press, partnerships and wholesale.", "mailto:hello@threadsware.in"],
+  ["General Enquiries", "Press, partnerships and wholesale.", "mailto:shopinthreadswear@gmail.com"],
 ];
 
 export default async function ContactPage() {
@@ -65,7 +65,7 @@ export default async function ContactPage() {
             ))}
           </ul>
           <p className="mt-8 text-[13px] text-muted">
-            Threads Ware Private Limited · {site.address.line1}, {site.address.line2}, {site.address.city} {site.address.pincode} · GSTIN {site.gstin}
+            Threads Wear Private Limited · {site.address.line1}, {site.address.line2}, {site.address.city} {site.address.pincode} · GSTIN {site.gstin}
           </p>
         </section>
         <section className="lg:col-span-7" aria-labelledby="form-title">

@@ -73,7 +73,7 @@ export function Footer() {
         <ul className="flex gap-2">
           {social().map(([href, label, Icon]) => (
             <li key={label}>
-              <a href={href} target="_blank" rel="noopener noreferrer" aria-label={`Threads Ware on ${label}`} className="grid h-11 w-11 place-items-center rounded-full bg-cream/10 text-cream transition-colors duration-300 hover:bg-ochre hover:text-ink">
+              <a href={href} target="_blank" rel="noopener noreferrer" aria-label={`Threads Wear on ${label}`} className="grid h-11 w-11 place-items-center rounded-full bg-cream/10 text-cream transition-colors duration-300 hover:bg-ochre hover:text-ink">
                 <Icon size={16} />
               </a>
             </li>
@@ -93,7 +93,7 @@ export function Footer() {
       <div className="container-site flex flex-col items-start justify-between gap-5 border-t border-line-dark py-7 md:flex-row md:items-center">
         <Wordmark compact className="text-cream" />
         <p className="text-[11.5px] font-medium tracking-wide text-cream/55">
-          © {new Date().getFullYear()} THREADS WARE. GSTIN {site.gstin}.
+          © {new Date().getFullYear()} THREADS WEAR. GSTIN {site.gstin}.
         </p>
         <FooterMeta />
       </div>

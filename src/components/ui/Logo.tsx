@@ -5,7 +5,7 @@ import { cn } from "@/lib/cn";
 export function Wordmark({ className, compact = false }: { className?: string; compact?: boolean }) {
   return (
     <span className={cn("inline-block whitespace-nowrap font-serif text-[length:var(--wm)] font-black uppercase italic leading-none tracking-[-0.04em] transition-[font-size] duration-500 ease-[var(--ease-lux)]", compact ? "[--wm:18px] md:[--wm:21px]" : "[--wm:19px] sm:[--wm:21px] md:[--wm:25px]", className)}>
-      Threads Ware
+      Threads Wear
     </span>
   );
 }
@@ -33,7 +33,7 @@ export function Monogram({ size = 44, className, animated = false }: { size?: nu
 
 export function LogoLink({ className, compact }: { className?: string; compact?: boolean }) {
   return (
-    <Link href="/" aria-label="Threads Ware — home" className={cn("inline-flex", className)}>
+    <Link href="/" aria-label="Threads Wear — home" className={cn("inline-flex", className)}>
       <Wordmark compact={compact} />
     </Link>
   );

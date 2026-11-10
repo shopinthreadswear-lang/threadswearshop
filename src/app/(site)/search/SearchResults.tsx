@@ -27,7 +27,7 @@ export function SearchResults() {
     <>
       <section className="container-site pb-10 pt-10 md:pt-16">
         <Breadcrumb items={[{ label: "Search" }]} className="mb-8" />
-        <h1 className="sr-only">{q ? `Search results for ${q}` : "Search Threads Ware"}</h1>
+        <h1 className="sr-only">{q ? `Search results for ${q}` : "Search Threads Wear"}</h1>
         <form
           role="search"
           onSubmit={(e) => {
@@ -40,7 +40,7 @@ export function SearchResults() {
           <label htmlFor="search-page" className="sr-only">
             Search
           </label>
-          <input id="search-page" data-big value={input} onChange={(e) => setInput(e.target.value)} placeholder="Search Threads Ware" className="w-full bg-transparent font-serif text-[clamp(1.8rem,3.4vw,3rem)] leading-none placeholder:text-ink/25 focus:outline-none" />
+          <input id="search-page" data-big value={input} onChange={(e) => setInput(e.target.value)} placeholder="Search Threads Wear" className="w-full bg-transparent font-serif text-[clamp(1.8rem,3.4vw,3rem)] leading-none placeholder:text-ink/25 focus:outline-none" />
         </form>
         {q && (
           <p className="mt-6 text-[14px] text-muted" aria-live="polite">

@@ -23,7 +23,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <header className="sticky top-0 z-40 border-b border-line bg-ivory/95 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between gap-4 px-4 md:px-8">
           <Link href="/admin" className="flex min-w-0 items-baseline gap-2 whitespace-nowrap">
-            <span className="font-serif text-[16px] font-black uppercase italic sm:text-[18px] tracking-[-0.04em] text-burgundy">Threads Ware</span>
+            <span className="font-serif text-[16px] font-black uppercase italic sm:text-[18px] tracking-[-0.04em] text-burgundy">Threads Wear</span>
             <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted sm:text-[12px]">Admin</span>
           </Link>
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">

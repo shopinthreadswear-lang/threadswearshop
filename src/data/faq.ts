@@ -23,14 +23,14 @@ export const faqs: { category: string; items: { q: string; a: string }[] }[] = [
       { q: "What is your return policy?", a: "Unworn items with original tags may be returned within 15 days of delivery. We arrange a free pickup from your address. Refunds are processed within 5–7 working days of the item reaching our studio." },
       { q: "How do I exchange for a different size?", a: "Start an exchange from My Account → Orders or the Returns page. We'll collect your item and dispatch the new size as soon as the pickup is complete — exchanges are always free." },
       { q: "Are any items non-returnable?", a: "Altered or made-to-measure tailoring is final sale. Limited Edition items can be exchanged for size only." },
-      { q: "How will I be refunded?", a: "Refunds are made to your original payment method, or instantly as Threads Ware store credit if you prefer. Cash on Delivery orders are refunded by bank transfer or store credit." },
+      { q: "How will I be refunded?", a: "Refunds are made to your original payment method, or instantly as Threads Wear store credit if you prefer. Cash on Delivery orders are refunded by bank transfer or store credit." },
     ],
   },
   {
     category: "Payments",
     items: [
       { q: "Which payment methods do you accept?", a: "UPI, all major debit and credit cards (Visa, Mastercard, RuPay, American Express), net banking, popular wallets and Cash on Delivery on eligible orders under ₹10,000." },
-      { q: "Is it safe to pay on Threads Ware?", a: "Yes. All payments are processed by PCI-DSS Level 1 certified payment partners over 256-bit encrypted connections. We never store your full card details." },
+      { q: "Is it safe to pay on Threads Wear?", a: "Yes. All payments are processed by PCI-DSS Level 1 certified payment partners over 256-bit encrypted connections. We never store your full card details." },
       { q: "Is there a Cash on Delivery fee?", a: "A ₹49 handling fee applies to Cash on Delivery orders. COD is available for orders up to ₹10,000 in serviceable pin codes." },
       { q: "Are prices inclusive of GST?", a: "Yes, all prices shown are inclusive of GST. A full tax invoice is included with every order and available to download from your account." },
     ],
@@ -55,7 +55,7 @@ export const faqs: { category: string; items: { q: string; a: string }[] }[] = [
     category: "Account",
     items: [
       { q: "How do I reset my password?", a: "Select Forgot Password on the sign-in page and enter your email. We'll send you a secure link to reset it, valid for 30 minutes." },
-      { q: "How do I delete my account?", a: "Email care@threadsware.in from your registered address and we'll permanently delete your account and personal data within 7 days, in line with our Privacy Policy." },
+      { q: "How do I delete my account?", a: "Email shopinthreadswear@gmail.com from your registered address and we'll permanently delete your account and personal data within 7 days, in line with our Privacy Policy." },
     ],
   },
   {

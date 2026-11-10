@@ -429,7 +429,7 @@ export function CheckoutForm({ online = true }: { online?: boolean }) {
                 <p className="mb-5 flex items-center gap-2 text-[12.5px] text-muted">
                   <Lock size={13} /> All transactions are secure and encrypted.
                 </p>
-                {!online && <p className="mb-3 rounded-chip bg-bone px-4 py-3 text-[13px] text-ink">Online payments are coming soon. For now, pay by cash on delivery or with a Threads Ware gift card.</p>}
+                {!online && <p className="mb-3 rounded-chip bg-bone px-4 py-3 text-[13px] text-ink">Online payments are coming soon. For now, pay by cash on delivery or with a Threads Wear gift card.</p>}
                 <fieldset className="divide-y divide-line border border-line">
                   <legend className="sr-only">Payment method</legend>
                   {(
@@ -438,7 +438,7 @@ export function CheckoutForm({ online = true }: { online?: boolean }) {
                       ["card", "Credit / Debit Card", "Visa, Mastercard, RuPay, Amex"],
                       ["netbanking", "Net Banking", "All major Indian banks"],
                       ["wallet", "Wallets", "Paytm, PhonePe, Amazon Pay"],
-                      ["giftcard", "Threads Ware Gift Card", "Redeem your gift card balance"],
+                      ["giftcard", "Threads Wear Gift Card", "Redeem your gift card balance"],
                       ["cod", "Cash on Delivery", codAllowed ? `₹${commerce.codFee} handling fee` : `Available on orders up to ₹${commerce.codLimit.toLocaleString("en-IN")}`],
                     ] as [PayMethod, string, string][]
                   )
@@ -512,7 +512,7 @@ export function CheckoutForm({ online = true }: { online?: boolean }) {
                                       <input id="holder" autoComplete="cc-name" className="field bg-ivory" value={pay.holder} onChange={(e) => setPay({ ...pay, holder: e.target.value })} aria-invalid={!!errors.holder} />
                                       {inputErr("holder")}
                                     </div>
-                                    <p className="text-[11.5px] text-faint sm:col-span-2">Your card details are encrypted and tokenised by our payment partner — they are never stored on Threads Ware servers.</p>
+                                    <p className="text-[11.5px] text-faint sm:col-span-2">Your card details are encrypted and tokenised by our payment partner — they are never stored on Threads Wear servers.</p>
                                   </>
                                 )}
                                 {m === "netbanking" && (

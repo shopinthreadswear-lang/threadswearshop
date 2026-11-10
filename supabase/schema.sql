@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- THREADS WARE — Supabase database
+-- THREADS WEAR — Supabase database
 --
 -- Everything the store keeps: customers, orders, returns, reviews, coupons, gift cards,
 -- newsletter, contact messages, back-in-stock requests, stock counts and admin settings.

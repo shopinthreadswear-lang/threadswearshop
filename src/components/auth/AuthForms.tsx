@@ -73,7 +73,7 @@ export function LoginForm() {
       <p className="eyebrow text-muted">Welcome Back</p>
       <h1 className="display-md mt-4">Sign in</h1>
       <p className="mt-3 text-[14px] text-muted">
-        New to Threads Ware?{" "}
+        New to Threads Wear?{" "}
         <Link href="/account/register" onClick={(e) => { const n = query().get("next"); if (n) { e.preventDefault(); router.push(`/account/register?next=${encodeURIComponent(n)}`); } }} className="link-static text-ink">
           Create an account
         </Link>
@@ -149,7 +149,7 @@ export function RegisterForm() {
 
   return (
     <>
-      <p className="eyebrow text-muted">Join Threads Ware</p>
+      <p className="eyebrow text-muted">Join Threads Wear</p>
       <h1 className="display-md mt-4">Create an account</h1>
       <p className="mt-3 text-[14px] text-muted">
         Already a member?{" "}

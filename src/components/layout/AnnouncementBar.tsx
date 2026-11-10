@@ -25,7 +25,7 @@ export function AnnouncementBar() {
     >
       {/* Desktop corners, as on a brand's top bar: who we are on the left, the most-used help link on the right */}
       <span className="pointer-events-none absolute left-[var(--spacing-gutter)] top-1/2 z-10 hidden -translate-y-1/2 font-black uppercase italic tracking-[-0.02em] text-cream lg:block">
-        Threads Ware <span className="ml-2 font-semibold not-italic tracking-normal text-cream/55">Mumbai</span>
+        Threads Wear <span className="ml-2 font-semibold not-italic tracking-normal text-cream/55">Mumbai</span>
       </span>
       <Link href="/track-order" className="absolute right-[var(--spacing-gutter)] top-1/2 z-10 hidden -translate-y-1/2 items-center gap-1.5 uppercase tracking-[0.08em] text-cream hover:text-champagne-soft lg:flex">
         <span aria-hidden className="text-ochre">●</span> Track order

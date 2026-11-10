@@ -75,7 +75,7 @@ export const POST = handle(async (req) => {
           continue;
         }
         for (let i = 0; i < l.quantity; i++) giftCards.push({ amount, recipientEmail: l.giftCard.recipientEmail });
-        items.push({ productId: GIFT_CARD_ID, slug: "gift-cards", name: "Threads Ware Digital Gift Card", image: IMG.giftPattern, color: "Digital", size: `₹${amount.toLocaleString("en-IN")}`, quantity: l.quantity, unitPrice: amount, lineTotal: amount * l.quantity, sku: `TW-GC-${amount}` });
+        items.push({ productId: GIFT_CARD_ID, slug: "gift-cards", name: "Threads Wear Digital Gift Card", image: IMG.giftPattern, color: "Digital", size: `₹${amount.toLocaleString("en-IN")}`, quantity: l.quantity, unitPrice: amount, lineTotal: amount * l.quantity, sku: `TW-GC-${amount}` });
         continue;
       }
       const p = getProductById(l.productId);

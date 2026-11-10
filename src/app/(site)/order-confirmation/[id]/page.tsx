@@ -33,7 +33,7 @@ export default async function ConfirmationPage({ params, searchParams }: Props) 
         <p className="eyebrow mt-8 flex items-center justify-center gap-2 text-success">
           <Check size={14} /> Order Confirmed
         </p>
-        <h1 className="display-lg mt-5">Thank you for choosing Threads Ware.</h1>
+        <h1 className="display-lg mt-5">Thank you for choosing Threads Wear.</h1>
         <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-muted">
           Your order <span className="text-ink">{order.id}</span> has been received. A confirmation has been sent to <span className="text-ink">{order.email}</span>. We’ll message you again when it ships.
         </p>

@@ -8,7 +8,7 @@ import { pageMeta } from "@/lib/seo";
 import { cn } from "@/lib/cn";
 import { syncCatalog } from "@/lib/server/store";
 
-export const metadata = pageMeta({ title: "Collections", description: "Explore Threads Ware collections — The Signature Collection, The Essentials, Modern Tailoring, The Linen Edit, After Dark, Winter Layers and more.", path: "/collections" });
+export const metadata = pageMeta({ title: "Collections", description: "Explore Threads Wear collections — The Signature Collection, The Essentials, Modern Tailoring, The Linen Edit, After Dark, Winter Layers and more.", path: "/collections" });
 
 export default async function CollectionsPage() {
   await syncCatalog();
@@ -19,7 +19,7 @@ export default async function CollectionsPage() {
         <Breadcrumb items={[{ label: "Collections" }]} className="mb-8" />
         <p className="eyebrow mb-4 text-muted">The Edits</p>
         <h1 className="display-lg max-w-3xl">Collections</h1>
-        <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-muted">Curated stories, each built around a mood, a season or a moment. Explore the full Threads Ware world.</p>
+        <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-muted">Curated stories, each built around a mood, a season or a moment. Explore the full Threads Wear world.</p>
       </section>
 
       <section className="container-site pb-24">

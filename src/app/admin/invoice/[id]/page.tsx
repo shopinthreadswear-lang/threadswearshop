@@ -39,7 +39,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
           <div>
             <p className="font-serif text-[24px] font-black uppercase italic tracking-[-0.04em] text-burgundy">{site.shortName}</p>
             <p className="mt-2 text-[12px] leading-relaxed text-muted">
-              Threads Ware Private Limited<br />
+              Threads Wear Private Limited<br />
               {site.address.line1}<br />
               {site.address.line2 && <>{site.address.line2}<br /></>}
               {site.address.city}, {site.address.state} {site.address.pincode}<br />

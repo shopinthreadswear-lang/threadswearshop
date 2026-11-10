@@ -137,7 +137,7 @@ export function Header() {
             </div>
 
             {/* Center */}
-            <Link href="/" aria-label="Threads Ware — home" className="justify-self-center">
+            <Link href="/" aria-label="Threads Wear — home" className="justify-self-center">
               <Wordmark compact={scrolled} className={transparent ? undefined : "text-burgundy"} />
             </Link>
 

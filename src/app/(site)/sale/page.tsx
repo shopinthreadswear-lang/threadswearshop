@@ -3,7 +3,7 @@ import { onSale } from "@/data/products";
 import { pageMeta } from "@/lib/seo";
 import { syncCatalog } from "@/lib/server/store";
 
-export const metadata = pageMeta({ title: "Sale — Final Pieces", description: "Final pieces from previous seasons at reduced prices. Limited sizes, same Threads Ware quality.", path: "/sale" });
+export const metadata = pageMeta({ title: "Sale — Final Pieces", description: "Final pieces from previous seasons at reduced prices. Limited sizes, same Threads Wear quality.", path: "/sale" });
 
 export default async function SalePage() {
   await syncCatalog();

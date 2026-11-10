@@ -9,5 +9,5 @@ export async function GET() {
   const rows = await read((db) => db.newsletter.map((s) => [s.email, s.source, s.createdAt]));
   const cell = (v: string) => (/[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
   const csv = [["email", "source", "signed_up"], ...rows].map((r) => r.map((v) => cell(String(v))).join(",")).join("\n");
-  return new Response(csv, { headers: { "content-type": "text/csv; charset=utf-8", "content-disposition": `attachment; filename="threadsware-subscribers-${new Date().toISOString().slice(0, 10)}.csv"` } });
+  return new Response(csv, { headers: { "content-type": "text/csv; charset=utf-8", "content-disposition": `attachment; filename="threadswear-subscribers-${new Date().toISOString().slice(0, 10)}.csv"` } });
 }

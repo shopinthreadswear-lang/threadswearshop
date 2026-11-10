@@ -12,7 +12,7 @@ export default async function AdminLogin({ searchParams }: { searchParams: Promi
     <main id="main" className="grid min-h-svh place-items-center bg-ivory px-4 py-12">
       <div className="w-full max-w-[400px]">
         <p className="text-center">
-          <span className="font-serif text-[22px] font-black uppercase italic tracking-[-0.04em] text-burgundy">Threads Ware</span>
+          <span className="font-serif text-[22px] font-black uppercase italic tracking-[-0.04em] text-burgundy">Threads Wear</span>
           <span className="ml-2 text-[12px] font-bold uppercase tracking-[0.14em] text-muted">Admin</span>
         </p>
         <div className="mt-6 rounded-card border border-line bg-paper p-6 shadow-card sm:p-8">
